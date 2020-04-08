@@ -1,0 +1,3 @@
+services:
+  Andreo\Component\Messaging\Configurator\ConfiguratorFactoryFactory:
+

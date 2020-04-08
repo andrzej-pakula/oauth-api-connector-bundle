@@ -1,0 +1,30 @@
+{
+    "name": "andreo/oauth-api-connector-bundle",
+    "description": "OAuth api connector.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrzej Pakula",
+            "email": "andrze.pakula@gmail.com"
+        }
+    ],
+    "repositories": [
+    ],
+    "require": {
+        "php": ">=7.4",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/http-kernel": "^5.0",
+        "symfony/config": "^5.0",
+        "guzzlehttp/guzzle": "^6.5",
+        "symfony/framework-bundle": "^5.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "phpspec/phpspec": "^6.1",
+        "phpstan/phpstan": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": { "Andreo\\OAuthApiConnectorBundle\\": "" }
+    }
+}
