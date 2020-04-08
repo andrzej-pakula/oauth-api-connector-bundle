@@ -6,9 +6,6 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Security;
 
 
-use Andreo\OAuthApiConnectorBundle\AccessToken;
-use Symfony\Component\Routing\RouterInterface;
-
 interface ApiConnectorInterface
 {
     public function getCode(): string;

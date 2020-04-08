@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthApiConnectorBundle\Util;
 
-
+use Andreo\OAuthApiConnectorBundle\Security\StateGeneratorInterface;
 use Andreo\OAuthApiConnectorBundle\Provider\ApiConnectorProviderInterface;
 
 class ApiURLBuilder

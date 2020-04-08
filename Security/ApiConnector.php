@@ -6,10 +6,8 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Security;
 
 
-use Andreo\OAuthApiConnectorBundle\AccessToken;
 use Andreo\OAuthApiConnectorBundle\Provider\ApiConnectorProviderInterface;
-use Andreo\OAuthApiConnectorBundle\ApiURLBuilder;
-use Andreo\OAuthApiConnectorBundle\StateGeneratorInterface;
+use Andreo\OAuthApiConnectorBundle\Util\ApiURLBuilder;
 use GuzzleHttp\Client;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
