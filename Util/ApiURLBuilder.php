@@ -8,7 +8,7 @@ namespace Andreo\OAuthApiConnectorBundle\Util;
 use Andreo\OAuthApiConnectorBundle\Security\StateGeneratorInterface;
 use Andreo\OAuthApiConnectorBundle\Provider\ApiConnectorProviderInterface;
 
-class ApiURLBuilder
+final class ApiURLBuilder
 {
     private ApiConnectorProviderInterface $provider;
     private string $clientId;

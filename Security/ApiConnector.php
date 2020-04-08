@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use GuzzleHttp\ClientInterface as GuzzleClient;
 
-class ApiConnector implements ApiConnectorInterface
+final class ApiConnector implements ApiConnectorInterface
 {
     private RequestStack $requestStack;
     private ApiConnectorProviderInterface $provider;

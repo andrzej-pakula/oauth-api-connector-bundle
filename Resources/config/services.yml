@@ -1,2 +1,12 @@
 services:
+  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorController:
+    class: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorController
+    tags: [ controller.service_arguments ]
+    alias: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllerInterface
 
+  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry:
+
+  Andreo\OAuthApiConnectorBundle\ArgumentResolver\ApiConnectorResolver:
+    arguments:
+      - Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry
+    tags: [ controller.argument_value_resolver ]

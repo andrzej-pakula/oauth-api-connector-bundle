@@ -25,6 +25,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('client_id')->end()
                             ->scalarNode('client_secret')->end()
                             ->scalarNode('redirect_route')->end()
+                            ->scalarNode('guzzle_client')->defaultValue(null)->end()
                         ->end()
                     ->end()
                 ->end()
