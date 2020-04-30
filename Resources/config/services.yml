@@ -1,8 +1,9 @@
 services:
   Andreo\OAuthApiConnectorBundle\Security\ApiConnectorController:
-    class: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorController
     tags: [ controller.service_arguments ]
-    alias: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllerInterface
+
+  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllerInterface:
+    alias: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllere
 
   Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry:
 

@@ -13,7 +13,7 @@ final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('andreo_oauth_api_connector');
+        $treeBuilder = new TreeBuilder('andreo_o_auth_api_connector');
         $rootNode = $treeBuilder->getRootNode();
 
         $clientsNode = new ArrayNodeDefinition('clients');
