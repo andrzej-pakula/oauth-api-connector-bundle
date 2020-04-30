@@ -10,3 +10,5 @@ services:
     arguments:
       - Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry
     tags: [ controller.argument_value_resolver ]
+
+  Andreo\OAuthApiConnectorBundle\Provider\FBApiConnectorProvider:

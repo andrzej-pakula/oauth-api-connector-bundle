@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
 
-use Andreo\Component\Messaging\Configurator\ConfiguratorFactoryFactory;
+use Andreo\OAuthApiConnectorBundle\Provider\FBApiConnectorProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 
@@ -32,6 +34,20 @@ class AndreoOAuthApiConnectorExtension extends Extension
     {
         foreach ($clientsConfigs as $clientsConfig) {
             foreach ($clientsConfig as $name => $clientConfig) {
+                $guzzleClient = $clientConfig['client'];
+                if (null === $guzzleClient) {
+
+                }
+
+                $apiConnectorDef = (new Definition($clientConfig['api_connector_id']))
+                    ->setArguments([
+                        RequestStack::class,
+                        FBApiConnectorProvider::class.
+                        null,
+                        $clientConfig['client_id'],
+                        $clientConfig['client_secret'],
+                        $clientConfig['redirect_route'],
+                    ]);
 
             }
         }

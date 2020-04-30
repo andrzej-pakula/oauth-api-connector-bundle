@@ -10,6 +10,7 @@
         }
     ],
     "repositories": [
+        { "type": "git", "url": "https://github.com/andrzej-pakula/guzzle-bundle.git" }
     ],
     "require": {
         "php": ">=7.4",
@@ -17,14 +18,34 @@
         "symfony/http-kernel": "^5.0",
         "symfony/config": "^5.0",
         "guzzlehttp/guzzle": "^6.5",
-        "symfony/framework-bundle": "^5.0"
+        "symfony/serializer": "^5.0",
+        "andreo/guzzle-bundle": "dev-master"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
         "phpspec/phpspec": "^6.1",
-        "phpstan/phpstan": "^0.12.0"
+        "phpstan/phpstan": "^0.12.0",
+        "sensio/framework-extra-bundle": "^5.1",
+        "symfony/console": "5.0.*",
+        "symfony/dotenv": "5.0.*",
+        "symfony/framework-bundle": "5.0.*",
+        "symfony/intl": "5.0.*",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/security-bundle": "5.0.*",
+        "symfony/string": "5.0.*",
+        "symfony/web-link": "5.0.*",
+        "symfony/twig-pack": "*",
+        "symfony/yaml": "5.0.*",
+        "symfony/debug-pack": "*",
+        "symfony/profiler-pack": "*"
     },
     "autoload": {
-        "psr-4": { "Andreo\\OAuthApiConnectorBundle\\": "" }
+        "psr-4": {
+            "Andreo\\OAuthApiConnectorBundle\\": "",
+            "Tests\\Andreo\\OAuthApiConnectorBundle\\App\\": "tests/Application/src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": ["tests/Application/src/Kernel.php"]
     }
 }

@@ -8,26 +8,24 @@ namespace Andreo\OAuthApiConnectorBundle\Security;
 
 use Andreo\OAuthApiConnectorBundle\Provider\ApiConnectorProviderInterface;
 use Andreo\OAuthApiConnectorBundle\Util\ApiURLBuilder;
-use GuzzleHttp\Client;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use GuzzleHttp\ClientInterface as GuzzleClient;
+use GuzzleHttp\ClientInterface;
 
 final class ApiConnector implements ApiConnectorInterface
 {
     private RequestStack $requestStack;
     private ApiConnectorProviderInterface $provider;
     private StateGeneratorInterface $stateGeneratorInterface;
-    /** @var Client&GuzzleClient */
-    private GuzzleClient $guzzle;
+    private ClientInterface $client;
     private ApiURLBuilder $urlBuilder;
     private string $redirectRoute;
 
     public function __construct(
         RequestStack $requestStack,
         ApiConnectorProviderInterface $provider,
-        GuzzleClient $guzzle,
+        ClientInterface $client,
         string $clientId,
         string $clientSecret,
         string $connectURL,
@@ -35,7 +33,7 @@ final class ApiConnector implements ApiConnectorInterface
     ){
         $this->requestStack = $requestStack;
         $this->provider = $provider;
-        $this->guzzle = $guzzle;
+        $this->client = $client;
         $this->redirectRoute = $redirectRoute;
         $this->urlBuilder = new ApiURLBuilder($provider, $clientId, $clientSecret, $connectURL);
     }
@@ -64,8 +62,9 @@ final class ApiConnector implements ApiConnectorInterface
         $accessTokenPath = $this->provider->getAccessTokenPath();
 
         /** @var AccessToken $accessToken */
-        $accessToken = $this->guzzle->get($accessTokenPath, [
-            'query' =>  $this->urlBuilder->buildAccessTokenQuery($this->getCode())
+        $accessToken = $this->client->get($accessTokenPath, [
+            'query' =>  $this->urlBuilder->buildAccessTokenQuery($this->getCode()),
+            'dto' => null
         ]);
 
         return $accessToken;
