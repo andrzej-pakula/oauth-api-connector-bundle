@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/andrzej-pakula/guzzle-bundle.git",
-                "reference": "1273df174532df0f9acb34111841f0c3ca354988"
+                "reference": "c61f1dd31a1d3bccd9696e4067a99b3dec1b51a5"
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.5",
@@ -62,7 +62,7 @@
                 }
             ],
             "description": "Guzzle bundle.",
-            "time": "2020-04-30T17:15:21+00:00"
+            "time": "2020-09-30T20:06:18+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -5253,5 +5253,6 @@
     "platform": {
         "php": ">=7.4"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

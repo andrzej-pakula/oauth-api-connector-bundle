@@ -1,3 +1,0 @@
-andreo_oauth_api_connector_routes:
-  resource: 'Andreo\OAuthApiConnectorBundle\Routing\ClientRoutingLoader::loadRoutes'
-  type: service

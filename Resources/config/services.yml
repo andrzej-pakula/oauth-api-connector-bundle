@@ -1,15 +1,1 @@
 services:
-  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorController:
-    tags: [ controller.service_arguments ]
-
-  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllerInterface:
-    alias: Andreo\OAuthApiConnectorBundle\Security\ApiConnectorControllere
-
-  Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry:
-
-  Andreo\OAuthApiConnectorBundle\ArgumentResolver\ApiConnectorResolver:
-    arguments:
-      - Andreo\OAuthApiConnectorBundle\Security\ApiConnectorRegistry
-    tags: [ controller.argument_value_resolver ]
-
-  Andreo\OAuthApiConnectorBundle\Provider\FBApiConnectorProvider:
