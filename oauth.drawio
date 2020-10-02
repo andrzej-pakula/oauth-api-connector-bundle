@@ -1,118 +1,79 @@
-<mxfile host="app.diagrams.net" modified="2020-09-26T18:26:01.407Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36" etag="yh0mHQN_P6C3ZGXhBotx" version="13.7.5" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2020-10-02T17:48:34.618Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36" etag="lfH3JWqjCAQ-cp35jgPg" version="13.7.7" type="github" pages="3">
   <diagram id="qrGcWWRsO0BOdbryA6Jo" name="Page-1">
     <mxGraphModel dx="1372" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="8NeAwoeYT95xqPQiHcfP-7" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;MiddlewareInterface&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;Attributes&lt;/span&gt;&lt;span&gt;,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;MiddlewareStackInterface&lt;/span&gt;&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;&amp;nbsp;&amp;nbsp;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry x="220" y="40" width="320" height="80" as="geometry" />
+        <mxCell id="8NeAwoeYT95xqPQiHcfP-7" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;MiddlewareInterface&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;Request&lt;/span&gt;&lt;span&gt;,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;MiddlewareStackInterface&lt;/span&gt;&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;&amp;nbsp;&amp;nbsp;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="8NeAwoeYT95xqPQiHcfP-14" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;GetAccessTokenMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;# httpClient: ClientInterface&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="520" width="320" height="80" as="geometry" />
+        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;CreateAuthorizationUrlMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="440" y="360" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="dH7i99eDoG9-ZAs9Vy-J-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;StoreAccessTokenMiddleware&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;# tokenStorage: StorageInterface&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;, MiddlewareStackInterface): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="640" width="320" height="80" as="geometry" />
+        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;StoreStateMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="440" y="480" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;CreateRedirectURIMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry x="440" y="160" width="320" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;StoreStateMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry x="440" y="280" width="320" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-17" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;" parent="1" edge="1">
+        <mxCell id="437Ta0UJ8jdZ3Wq3ndbt-17" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" edge="1" target="c0_8Wl3W00QT2Rh3ec4e-10">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="379" y="840" as="sourcePoint" />
-            <mxPoint x="379" y="118" as="targetPoint" />
+            <mxPoint x="380" y="720" as="sourcePoint" />
+            <mxPoint x="379" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nZNE6GQDTucfdXVpyQp9-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;ValidateStateMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="400" width="320" height="80" as="geometry" />
+        <mxCell id="nZNE6GQDTucfdXVpyQp9-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;GetAccessTokenMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px ; font-weight: 400&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry y="360" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="c0_8Wl3W00QT2Rh3ec4e-10" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;GetExistingAccessTokenMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;+ tokenStorage: StorageInterface&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(Attributes,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="280" width="320" height="80" as="geometry" />
+        <mxCell id="c0_8Wl3W00QT2Rh3ec4e-10" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;CreateCallbackUrlMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;+ tokenStorage: StorageInterface&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="240" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="c0_8Wl3W00QT2Rh3ec4e-12" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="560" as="sourcePoint" />
-            <mxPoint x="380" y="520" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="380" y="520" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-1" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="680" as="sourcePoint" />
-            <mxPoint x="380" y="640" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="380" y="640" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;SetClientAttributesMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="160" width="320" height="80" as="geometry" />
+        <mxCell id="r6jDAVwYO0hfleiq5wBw-2" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;HandleCallbackParametersMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="120" width="320" height="80" as="geometry" />
         </mxCell>
         <mxCell id="r6jDAVwYO0hfleiq5wBw-3" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="440" as="sourcePoint" />
-            <mxPoint x="380" y="400" as="targetPoint" />
+            <mxPoint x="320" y="400" as="sourcePoint" />
+            <mxPoint x="380" y="360" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="380" y="400" />
+              <mxPoint x="380" y="360" />
             </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-4" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="319" as="sourcePoint" />
-            <mxPoint x="380" y="279" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="380" y="279" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-5" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="199" as="sourcePoint" />
-            <mxPoint x="380" y="159" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="380" y="159" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-7" value="" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="437Ta0UJ8jdZ3Wq3ndbt-1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="380" y="160" as="sourcePoint" />
-            <mxPoint x="430" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r6jDAVwYO0hfleiq5wBw-8" value="" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="380" y="281" as="sourcePoint" />
-            <mxPoint x="440" y="321" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="e-9hSjDoJG54hJrePVRK-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;MiddlewareStackInterface&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;+ next(): MiddlewareInterface&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;+ static create(iterable MiddlewareInerface)&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry x="250" y="920" width="430" height="140" as="geometry" />
+          <mxGeometry x="190" y="910" width="430" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="r052qXKX62Mtbz9yXFSF-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;RedirectToOAuthLoginMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry x="440" y="400" width="320" height="80" as="geometry" />
+        <mxCell id="r052qXKX62Mtbz9yXFSF-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;RedirectToAuthorizationMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;,&amp;nbsp;&lt;/span&gt;MiddlewareStackInterface&lt;span&gt;): ResponseInterface&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="440" y="600" width="320" height="80" as="geometry" />
         </mxCell>
         <mxCell id="r052qXKX62Mtbz9yXFSF-2" value="" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="380" y="401" as="sourcePoint" />
-            <mxPoint x="440" y="441" as="targetPoint" />
+            <mxPoint x="380" y="361" as="sourcePoint" />
+            <mxPoint x="440" y="401" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="r052qXKX62Mtbz9yXFSF-3" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;SuccessfulResponseMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Attributes&lt;span&gt;, MiddlewareStackInterface): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-          <mxGeometry y="761" width="320" height="80" as="geometry" />
+        <mxCell id="r052qXKX62Mtbz9yXFSF-3" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center&quot;&gt;&lt;b&gt;SuccessfulResponseMiddleware&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 4px&quot;&gt;&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; float: none ; display: inline&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; margin: 0px 0px 0px 4px&quot;&gt;&lt;span&gt;+ __invoke(&lt;/span&gt;Request&lt;span&gt;, MiddlewareStackInterface): Response&lt;/span&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="210" y="720" width="320" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="r052qXKX62Mtbz9yXFSF-4" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
+        <mxCell id="W2OG-27qekLgkvWFRp7f-2" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="r6jDAVwYO0hfleiq5wBw-2">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="380" y="240" as="sourcePoint" />
+            <mxPoint x="450" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W2OG-27qekLgkvWFRp7f-3" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="380" y="120" as="sourcePoint" />
+            <mxPoint x="380" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W2OG-27qekLgkvWFRp7f-4" value="" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="800" as="sourcePoint" />
-            <mxPoint x="380" y="760" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="380" y="760" />
-            </Array>
+            <mxPoint x="380" y="480" as="sourcePoint" />
+            <mxPoint x="440" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W2OG-27qekLgkvWFRp7f-5" value="" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="600" as="sourcePoint" />
+            <mxPoint x="440" y="640" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
