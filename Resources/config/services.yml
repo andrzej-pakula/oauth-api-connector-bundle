@@ -1,1 +1,74 @@
+imports:
+  - { resource: ../../ClientType/Facebook/Resources/config/services.yml }
+
+
 services:
+
+### Middleware ###
+
+  Andreo\OAuthApiConnectorBundle\Middleware\HandleCallbackParametersMiddleware:
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 1200 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\CreateCallbackUriMiddleware:
+    arguments:
+      - '@router'
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 1000 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\GetAccessTokenMiddleware:
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 800 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\CreateAuthorizationUriMiddleware:
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 600 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware:
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 400 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\AuthorizationMiddleware:
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 200 }
+
+  Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware:
+    arguments:
+      - '@router'
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 0 }
+
+  ### Client ###
+
+  Andreo\OAuthApiConnectorBundle\Client\ClientFactory:
+    arguments:
+      - '@Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry'
+
+  Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface:
+    alias: Andreo\OAuthApiConnectorBundle\Client\ClientFactory
+
+  Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry:
+    arguments:
+      - !tagged_iterator andreo.oauth_client.meta_data_provider
+
+  ### Controller ###
+
+  Andreo\OAuthApiConnectorBundle\Controller\ClientArgumentResolver:
+    arguments:
+      - !tagged_locator { tag: 'andreo.oauth.client', index_by: 'name' }
+    tags:
+      - { name: controller.argument_value_resolver, priority: 1500 }
+
+  Andreo\OAuthApiConnectorBundle\Controller\AuthorizeController:
+    tags: [controller.service_arguments]
+
+  Andreo\OAuthApiConnectorBundle\Controller\AuthorizeControllerInterface:
+    alias: Andreo\OAuthApiConnectorBundle\Controller\AuthorizeController
+
+  ### HTTP ###
+
+  Andreo\OAuthApiConnectorBundle\Http\Provider\ApiConfigProviderFactory:
+    arguments:
+      - '@Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry'
+
+

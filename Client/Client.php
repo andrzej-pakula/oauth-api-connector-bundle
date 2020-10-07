@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Client;
 
 
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareStack;
 use Symfony\Component\HttpFoundation\Request;

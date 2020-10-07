@@ -1,0 +1,3 @@
+controllers:
+    resource: "@AndreoOAuthApiConnectorBundle/Controller/AuthorizeController.php"
+    type: annotation

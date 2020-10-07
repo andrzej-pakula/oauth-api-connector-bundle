@@ -7,12 +7,13 @@ namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
 use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attributes;
-use Andreo\OAuthApiConnectorBundle\Client\Zone;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\Zone;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 final class SuccessfulResponseMiddleware implements MiddlewareInterface
 {
@@ -21,8 +22,11 @@ final class SuccessfulResponseMiddleware implements MiddlewareInterface
      */
     private iterable $zones;
 
-    public function __construct(iterable $zones)
+    private RouterInterface $router;
+
+    public function __construct(RouterInterface $router, iterable $zones = [])
     {
+        $this->router = $router;
         $this->zones = $zones;
     }
 
@@ -30,7 +34,11 @@ final class SuccessfulResponseMiddleware implements MiddlewareInterface
     {
         $attributes = Attributes::getFromRequest($request);
         if (!AccessToken::existAndValid($attributes->getClientId(), $request->getSession())) {
-            throw new RuntimeException('Unhandled response. Reason: access token does not exist.');
+            throw new RuntimeException('Unhandled response. Reason: access token does not exist or not set.');
+        }
+
+        if (empty($this->zones)) {
+            return new RedirectResponse($request->getBaseUrl());
         }
 
         $zoneId = $attributes->getZoneId()->getId();
@@ -41,6 +49,28 @@ final class SuccessfulResponseMiddleware implements MiddlewareInterface
             throw new RuntimeException("Unhandled response. Zone '$zoneId' is not defined. Please check your configuration.");
         }
 
-        return new RedirectResponse($zone->getSuccessfulResponseUrl());
+        try {
+            $uri = $this->router->generate($zone->getSuccessfulResponseUri());
+        } catch (\Exception $exception) {
+            $uri = $zone->getSuccessfulResponseUri();
+        }
+
+        return new RedirectResponse($uri);
+    }
+
+    /**
+     * @param iterable $zones
+     */
+    public function withZonesConfigs(iterable $configs): self
+    {
+        $zones = [];
+        foreach ($configs as $config) {
+            $zones[] = Zone::fromConfig($config);
+        }
+        $new = clone $this;
+        $new->router = $this->router;
+        $new->zones = $zones;
+
+        return $new;
     }
 }

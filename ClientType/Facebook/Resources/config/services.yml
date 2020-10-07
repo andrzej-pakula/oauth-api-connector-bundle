@@ -1,0 +1,7 @@
+services:
+
+  Andreo\OAuthApiConnectorBundle\ClientType\Facebook\Provider\BaseMetaDataProvider:
+    tags: [andreo.oauth_client.meta_data_provider]
+
+  Andreo\OAuthApiConnectorBundle\ClientType\Facebook\Provider\V8MetaDataProvider:
+    tags: [andreo.oauth_client.meta_data_provider]

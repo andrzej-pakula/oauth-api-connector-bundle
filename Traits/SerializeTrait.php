@@ -34,7 +34,7 @@ trait SerializeTrait
 
     private static function decode(string $str): string
     {
-        $serialized =  base64_decode($str);
+        $serialized = base64_decode($str);
         if (false === $serialized) {
             throw new RuntimeException('Can not decode serialized ' . self::class . ".");
         }

@@ -16,7 +16,7 @@ final class MiddlewareStack implements MiddlewareStackInterface
     /**
      * @param MiddlewareInterface[] $middleware
      */
-    public function __construct(array $middleware)
+    public function __construct(iterable $middleware)
     {
         $this->middleware = $middleware;
     }
@@ -35,9 +35,14 @@ final class MiddlewareStack implements MiddlewareStackInterface
      */
     public static function create(iterable $middleware): self
     {
+        if ($middleware instanceof \IteratorAggregate) {
+            $middleware = $middleware->getIterator();
+        }
+
         if ($middleware instanceof Iterator) {
             $middleware = iterator_to_array($middleware);
         }
+
 
         return new self($middleware);
     }

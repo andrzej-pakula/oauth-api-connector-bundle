@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Andreo\GuzzleBundle\App;
+namespace Tests\Andreo\OAuthApiConnectorBundle\App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;

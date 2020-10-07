@@ -6,7 +6,9 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <a href="{{ path('andreo.oauth.client.authorize', { 'client_name': 'fb', 'zone': 'main' }) }}">Fb</a>
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

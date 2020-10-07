@@ -1,5 +1,5 @@
 {
-    "name": "andreo/guzzle-bundle-test-application",
-    "description": "Andreo guzzle bundle test app",
+    "name": "andreo/oauth-client-test-application",
+    "description": "Andreo o auth client test app",
     "license": "MIT"
 }
