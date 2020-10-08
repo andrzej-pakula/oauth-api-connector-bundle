@@ -7,12 +7,10 @@ namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
 
 
 use Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 final class ClientFactoryPass implements CompilerPassInterface
 {
@@ -45,56 +43,42 @@ final class ClientFactoryPass implements CompilerPassInterface
         foreach ($taggedClientIds as $clientId => $clientTagAttributes) {
             $clientTagAttributes = array_merge(...$clientTagAttributes);
 
+            $clientName = $clientTagAttributes['name'];
+            $clientType = $clientTagAttributes['type'];
+            $clientVersion = $clientTagAttributes['version'] ?? '.';
+
             $excludedMiddleware = [];
             foreach ($taggedMiddlewareIds as $middlewareId => $middlewareTagAttributes) {
                 $middlewareTagAttributes = array_merge(...$middlewareTagAttributes);
 
+                $middlewareClientName = $middlewareTagAttributes['client'] ?? null;
+                $middlewareClientType = $middlewareTagAttributes['type'] ?? null;
+                $middlewareClientVersion = $middlewareTagAttributes['version'] ?? null;
 
-                $middlewareClient = $middlewareTagAttributes['client'] ?? null;
-                $middlewareType = $middlewareTagAttributes['type'] ?? null;
-
-                if (null !== $middlewareClient && $middlewareClient !== $clientTagAttributes['name']) {
-                    $excludedMiddleware[] = $middlewareId;
-
-                } elseif (null !== $middlewareType &&  $middlewareType !== $clientTagAttributes['type']) {
-                    $middlewareVersion = $middlewareTagAttributes['version'] ?? null;
-
-                    if (null !== $clientVersion = $clientTagAttributes['version']) {
-
-                        if (null === $middlewareVersion) {
-                            $excludedMiddleware[] = $middlewareId;
-                        } elseif ($clientVersion !== $middlewareVersion) {
-                            $excludedMiddleware[] = $middlewareId;
-                        }
-
-                    } elseif (null !== $middlewareVersion) {
-                        throw new RuntimeException("Client {$clientTagAttributes['name']} does not have any version.");
+                if (null !== $middlewareClientName) {
+                    if ($middlewareClientName !== $clientName) {
+                        $excludedMiddleware[] = $middlewareId;
                     } else {
+                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
+                    }
+                } elseif (null !== $middlewareClientType) {
+                    if ($middlewareClientType !== $clientType) {
+                        $excludedMiddleware[] = $middlewareId;
+                    } elseif (null === $middlewareClientVersion) {
+                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
+                    } elseif ($middlewareClientVersion === $clientVersion) {
+                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
+                    }
+                } elseif (null !== $middlewareClientVersion) {
+                    if ($middlewareClientVersion !== $clientVersion) {
                         $excludedMiddleware[] = $middlewareId;
                     }
-                }
-
-                $middlewareDef = $container->getDefinition($middlewareId);
-                if (null !== $decoratedServiceData = $middlewareDef->getDecoratedService()) {
-                    $decoratedId = $decoratedServiceData[0];
-
-                    $decoratedDef = $container->getDefinition($decoratedId);
-                    $decoratedTagAttributes = array_merge(...$decoratedDef->getTag($this->middlewareTag));
-
-                    if (null !== $priority = $decoratedTagAttributes['priority'] ?? null) {
-                        $middlewareDef
-                            ->clearTag($this->middlewareTag)
-                            ->addTag($this->middlewareTag, ['priority' => $priority]);
-                    }
-
-                    $excludedMiddleware[] = $decoratedId;
                 }
             }
 
             if (empty($excludedMiddleware)) {
                 continue;
             }
-
 
             $middlewareReferences = $this->findAndSortTaggedServices($this->middlewareTag, $container);
             $clientMiddleware = [];
@@ -109,6 +93,25 @@ final class ClientFactoryPass implements CompilerPassInterface
                 ->replaceArgument(1, new IteratorArgument($clientMiddleware));
 
             $container->setDefinition($clientId, $clientDef);
+        }
+    }
+
+    private function excludeDecoratedMiddlewareIfNeeded(ContainerBuilder $container, string $middlewareId, array &$excludedMiddleware): void
+    {
+        $middlewareDef = $container->getDefinition($middlewareId);
+        if (null !== $decoratedServiceData = $middlewareDef->getDecoratedService()) {
+            $decoratedId = $decoratedServiceData[0];
+
+            $decoratedDef = $container->getDefinition($decoratedId);
+            $decoratedTagAttributes = array_merge(...$decoratedDef->getTag($this->middlewareTag));
+
+            if (null !== $priority = $decoratedTagAttributes['priority'] ?? null) {
+                $middlewareDef
+                    ->clearTag($this->middlewareTag)
+                    ->addTag($this->middlewareTag, ['priority' => $priority]);
+            }
+
+            $excludedMiddleware[] = $decoratedId;
         }
     }
 }

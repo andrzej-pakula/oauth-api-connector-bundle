@@ -46,12 +46,14 @@ final class State
             return null;
         }
 
-        return self::unserialize($state);
+        $serialized = self::decode($state);
+
+        return self::unserialize($serialized);
     }
 
     public function store(ClientId $clientId, SessionInterface $session): void
     {
-        $session->set(StoreKeyGenerator::generate($clientId, self::KEY), $this->serialize());
+        $session->set(StoreKeyGenerator::generate($clientId, self::KEY), $this->encode());
     }
 
     public static function getFromStorage(ClientId $clientId, SessionInterface $session): ?self
@@ -60,13 +62,13 @@ final class State
             return null;
         }
 
-        return self::unserialize($state);
+        return self::unserialize(self::decode($state));
     }
 
 
     public function mapRequestParams(array $requestParams): array
     {
-        $requestParams[self::KEY] = $this->serialize();
+        $requestParams[self::KEY] = $this->encode();
 
         return $requestParams;
     }

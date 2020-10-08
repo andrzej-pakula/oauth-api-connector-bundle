@@ -9,7 +9,7 @@ namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 final class ClientId
 {
     private const KEY_ID = 'client_id';
-    public const KEY_NAME = 'client_name';
+    private const KEY_NAME = 'client_name';
 
     private string $id;
 
@@ -31,9 +31,16 @@ final class ClientId
         return $this->name;
     }
 
-    public function mapRequestParams(array $requestParams, ?string $key = null): array
+    public function mapId(array $requestParams): array
     {
-        $requestParams[$key ?? self::KEY_ID] = $this->getId();
+        $requestParams[self::KEY_ID] = $this->getId();
+
+        return $requestParams;
+    }
+
+    public function mapName(array $requestParams): array
+    {
+        $requestParams[self::KEY_NAME] = $this->getName();
 
         return $requestParams;
     }

@@ -57,20 +57,4 @@ final class SuccessfulResponseMiddleware implements MiddlewareInterface
 
         return new RedirectResponse($uri);
     }
-
-    /**
-     * @param iterable $zones
-     */
-    public function withZonesConfigs(iterable $configs): self
-    {
-        $zones = [];
-        foreach ($configs as $config) {
-            $zones[] = Zone::fromConfig($config);
-        }
-        $new = clone $this;
-        $new->router = $this->router;
-        $new->zones = $zones;
-
-        return $new;
-    }
 }

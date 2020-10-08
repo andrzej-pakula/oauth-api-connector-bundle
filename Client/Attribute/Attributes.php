@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
+use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -115,13 +116,18 @@ final class Attributes
         return $this->callbackParameters->getZoneId();
     }
 
-    public static function fromConfig(array $config): self
+    public static function createFrom(array $config, MetaDataProviderRegistry $metaDataProviderRegistry): self
     {
+        $metaDataProvider = $metaDataProviderRegistry->get(
+            $config['type'],
+            $config['version']
+        );
+
         return new self(
             new ClientId((string)$config['client_id'], $config['client_name']),
             new ClientSecret($config['client_secret']),
             new CallbackUri($config['callback_uri']),
-            new AuthorizationUri($config['authorization_uri'])
+            AuthorizationUri::fromProvider($metaDataProvider)
         );
     }
 }

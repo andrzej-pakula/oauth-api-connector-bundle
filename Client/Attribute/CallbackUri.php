@@ -20,7 +20,7 @@ final class CallbackUri
     public function generate(RouterInterface $router, ClientId $clientId, ZoneId $zoneId): self
     {
         $params = $zoneId->mapRequestParams();
-        $params = $clientId->mapRequestParams($params, ClientId::KEY_NAME);
+        $params = $clientId->mapName($params);
 
         $new = clone $this;
         $new->uri = $router->generate(

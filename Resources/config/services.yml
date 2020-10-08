@@ -1,7 +1,6 @@
 imports:
   - { resource: ../../ClientType/Facebook/Resources/config/services.yml }
 
-
 services:
 
 ### Middleware ###

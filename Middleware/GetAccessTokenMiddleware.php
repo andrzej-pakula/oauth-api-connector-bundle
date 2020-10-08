@@ -29,6 +29,7 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
         }
 
         $query = AccessTokenQuery::fromAttributes($attributes);
+
         $accessToken = $this->httpClient->getAccessToken($query);
 
         $accessToken->store($attributes->getClientId(), $request->getSession());

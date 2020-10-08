@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\Zone;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\ZoneId;
 use Andreo\OAuthApiConnectorBundle\Client\Client;
 use Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface;
 use Andreo\OAuthApiConnectorBundle\Client\ClientInterface;
 use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderInterface;
+use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry;
 use Andreo\OAuthApiConnectorBundle\Http\Provider\ApiConfigProviderFactory;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware;
@@ -36,16 +38,26 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
         foreach ($config as $type => $options) {
             foreach ($options['clients'] ?? [] as $name => $config) {
                 $version = $config['version'] ?? null;
-                $clientDef = (new Definition(Client::class))
-                    ->setFactory(new Reference(ClientFactoryInterface::class))
+
+                $attributeDef = (new Definition(Attributes::class))
+                    ->setPublic(true)
+                    ->setFactory([Attributes::class, 'createFrom'])
                     ->setArguments([
                         [
                             'client_id' => $config['auth']['id'],
                             'client_name' => $name,
                             'client_secret' => $config['auth']['secret'],
                             'type' => $type,
-                            'version' => $version
+                            'version' => $version,
+                            'callback_uri' => 'andreo.oauth.client.authorize'
                         ],
+                        new Reference(MetaDataProviderRegistry::class)
+                    ]);
+
+                $clientDef = (new Definition(Client::class))
+                    ->setFactory(new Reference(ClientFactoryInterface::class))
+                    ->setArguments([
+                        $attributeDef,
                         new TaggedIteratorArgument('andreo.oauth_client.middleware'),
                     ])
                     ->addTag('andreo.oauth.client', [
@@ -58,22 +70,32 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
 
                 $zones = [];
                 foreach ($config['zones'] ?? [] as $id => $zoneConfig) {
-                    $zones[] = [
-                        'zone_id' => $id,
-                        'successful_response_uri' => $zoneConfig['successful_response_uri']
-                    ];
+                    $zoneDef = (new Definition(Zone::class))
+                        ->setFactory([Zone::class, 'fromConfig'])
+                        ->addArgument(
+                            [
+                                'zone_id' => $id,
+                                'successful_response_uri' => $zoneConfig['successful_response_uri']
+                            ]
+                        );
+
+                    $zones[] = $zoneDef;
                 }
 
                 if (!empty($zones)) {
+                    $successfulResponseMiddlewareDefId = SuccessfulResponseMiddleware::class . '_' . $name;
+
                     $successfulResponseMiddlewareDef = (new Definition(SuccessfulResponseMiddleware::class))
-                        ->setFactory([new Reference(SuccessfulResponseMiddleware::class), 'withZonesConfigs'])
-                        ->addArgument($zones)
+                        ->setDecoratedService(SuccessfulResponseMiddleware::class)
+                        ->setArguments([
+                            new Reference('router'),
+                            $zones
+                        ])
                         ->addTag('andreo.oauth_client.middleware', [
                             'client' => $name,
-                            'priority' => 100
                         ]);
 
-                    $container->setDefinition(SuccessfulResponseMiddleware::class . '_' . $name, $successfulResponseMiddlewareDef);
+                    $container->setDefinition($successfulResponseMiddlewareDefId, $successfulResponseMiddlewareDef);
                 }
             }
         }
@@ -98,7 +120,7 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                     ->setFactory(new Reference(ApiConfigProviderFactory::class))
                     ->setArguments([
                         $type,
-                        $client['ver'] ?? null
+                        $client['version'] ?? null
                     ]);
                 $guzzleConfigProviderId = "andreo.guzzle.oauth.client.$name.config_provider";
                 $container->setDefinition($guzzleConfigProviderId, $guzzleConfigProviderDef);

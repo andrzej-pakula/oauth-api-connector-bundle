@@ -15,7 +15,7 @@ trait SerializeTrait
 
     public static function unserialize(string $str): self
     {
-        /** @var self|bool $state */
+        /** @var self|bool $object */
         $object = unserialize($str, [
             'allowed_classes' => [self::class]
         ]);
@@ -24,7 +24,7 @@ trait SerializeTrait
             throw new RuntimeException("Can not unserialize " . self::class . ".");
         }
 
-        return $state;
+        return $object;
     }
 
     private function encode(): string

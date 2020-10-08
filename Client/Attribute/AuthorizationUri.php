@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
 
+use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderInterface;
+
 final class AuthorizationUri
 {
     private string $uri;
@@ -40,9 +42,9 @@ final class AuthorizationUri
     private function getQuery(CallbackUri $callbackUrl, ClientId $clientId): string
     {
         $params =  [];
-        $callbackUrl->mapRequestParams($params);
-        $clientId->mapRequestParams($params);
-        $this->state->mapRequestParams($params);
+        $params = $callbackUrl->mapRequestParams($params);
+        $params = $clientId->mapId($params);
+        $params = $this->state->mapRequestParams($params);
 
         return http_build_query($params);
     }
@@ -50,5 +52,10 @@ final class AuthorizationUri
     public function serializeState(): string
     {
         return $this->getState()->serialize();
+    }
+
+    public static function fromProvider(MetaDataProviderInterface $metaDataProvider): self
+    {
+        return new self($metaDataProvider::getAuthorizationUri());
     }
 }
