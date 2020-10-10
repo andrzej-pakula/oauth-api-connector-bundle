@@ -27,7 +27,7 @@ final class CallbackParameters
     public static function fromRequest(Request $request): self
     {
         if (null === $zoneId = ZoneId::fromRequest($request)) {
-            throw new RuntimeException('Missing selected zone.');
+            throw new RuntimeException('Missing zone parameter.');
         }
 
         return new self(

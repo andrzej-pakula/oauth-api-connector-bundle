@@ -11,7 +11,7 @@ use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
 use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 
 final class AccessTokenQuery implements DataTransferInterface
 {
@@ -31,7 +31,7 @@ final class AccessTokenQuery implements DataTransferInterface
         $this->code = $code;
     }
 
-    public static function fromAttributes(Attributes $attributes): self
+    public static function fromAttributes(AttributeBag $attributes): self
     {
         return new self(
             $attributes->getClientID()->getId(),

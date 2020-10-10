@@ -7,12 +7,14 @@ namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
 
 
 use Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface;
+use Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class ClientFactoryPass implements CompilerPassInterface
+final class ClientMiddlewarePass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
@@ -25,8 +27,8 @@ final class ClientFactoryPass implements CompilerPassInterface
      */
     public function __construct(
         string $clientTag = 'andreo.oauth.client',
-        string $middlewareTag = 'andreo.oauth_client.middleware')
-    {
+        string $middlewareTag = 'andreo.oauth_client.middleware'
+    ){
         $this->clientTag = $clientTag;
         $this->middlewareTag = $middlewareTag;
     }
@@ -51,6 +53,7 @@ final class ClientFactoryPass implements CompilerPassInterface
             foreach ($taggedMiddlewareIds as $middlewareId => $middlewareTagAttributes) {
                 $middlewareTagAttributes = array_merge(...$middlewareTagAttributes);
 
+
                 $middlewareClientName = $middlewareTagAttributes['client'] ?? null;
                 $middlewareClientType = $middlewareTagAttributes['type'] ?? null;
                 $middlewareClientVersion = $middlewareTagAttributes['version'] ?? null;
@@ -59,20 +62,16 @@ final class ClientFactoryPass implements CompilerPassInterface
                     if ($middlewareClientName !== $clientName) {
                         $excludedMiddleware[] = $middlewareId;
                     } else {
-                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
+                        $this->excludeDecoratedMiddlewareIfNeeded($container, [$middlewareId, $middlewareTagAttributes], $excludedMiddleware);
                     }
                 } elseif (null !== $middlewareClientType) {
-                    if ($middlewareClientType !== $clientType) {
+                    if ($middlewareClientType !== $clientType || (null !== $middlewareClientVersion && $middlewareClientVersion !== $clientVersion)) {
                         $excludedMiddleware[] = $middlewareId;
-                    } elseif (null === $middlewareClientVersion) {
-                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
-                    } elseif ($middlewareClientVersion === $clientVersion) {
-                        $this->excludeDecoratedMiddlewareIfNeeded($container, $middlewareId, $excludedMiddleware);
+                    } else {
+                        $this->excludeDecoratedMiddlewareIfNeeded($container, [$middlewareId, $middlewareTagAttributes], $excludedMiddleware);
                     }
-                } elseif (null !== $middlewareClientVersion) {
-                    if ($middlewareClientVersion !== $clientVersion) {
-                        $excludedMiddleware[] = $middlewareId;
-                    }
+                } else {
+                    $this->excludeDecoratedMiddlewareIfNeeded($container, [$middlewareId, $middlewareTagAttributes], $excludedMiddleware);
                 }
             }
 
@@ -96,13 +95,21 @@ final class ClientFactoryPass implements CompilerPassInterface
         }
     }
 
-    private function excludeDecoratedMiddlewareIfNeeded(ContainerBuilder $container, string $middlewareId, array &$excludedMiddleware): void
+    private function excludeDecoratedMiddlewareIfNeeded(ContainerBuilder $container, array $middlewareDefConfig, array &$excludedMiddleware): void
     {
+        [$middlewareId, $middlewareTagAttributes] = $middlewareDefConfig;
+
         $middlewareDef = $container->getDefinition($middlewareId);
         if (null !== $decoratedServiceData = $middlewareDef->getDecoratedService()) {
+            $override = $middlewareTagAttributes['override'] ?? true;
+            if (!$override) {
+                return;
+            }
+
             $decoratedId = $decoratedServiceData[0];
 
             $decoratedDef = $container->getDefinition($decoratedId);
+
             $decoratedTagAttributes = array_merge(...$decoratedDef->getTag($this->middlewareTag));
 
             if (null !== $priority = $decoratedTagAttributes['priority'] ?? null) {

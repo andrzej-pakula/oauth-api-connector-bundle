@@ -8,6 +8,7 @@ namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
 use Andreo\OAuthApiConnectorBundle\Traits\SerializeTrait;
 use Andreo\OAuthApiConnectorBundle\Util\StoreKeyGenerator;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -56,11 +57,27 @@ final class State
         $session->set(StoreKeyGenerator::generate($clientId, self::KEY), $this->encode());
     }
 
-    public static function getFromStorage(ClientId $clientId, SessionInterface $session): ?self
+    public static function isStored(ClientId $clientId, SessionInterface $session): bool
     {
-        if (null === $state = $session->get(StoreKeyGenerator::generate($clientId, self::KEY))) {
-            return null;
+        return $session->has(StoreKeyGenerator::generate($clientId, self::KEY));
+    }
+
+    public static function delete(ClientId $clientId, SessionInterface $session): void
+    {
+        if (!self::isStored($clientId, $session)) {
+            throw new RuntimeException('Unable to delete non-stored state.');
         }
+
+        $session->remove(StoreKeyGenerator::generate($clientId, self::KEY));
+    }
+
+    public static function get(ClientId $clientId, SessionInterface $session): self
+    {
+        if (!self::isStored($clientId, $session)) {
+            throw new RuntimeException('State does not stored.');
+        }
+
+        $state = $session->get(StoreKeyGenerator::generate($clientId, self::KEY));
 
         return self::unserialize(self::decode($state));
     }

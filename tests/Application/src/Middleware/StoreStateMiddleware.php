@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Tests\Andreo\OAuthApiConnectorBundle\App\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareStackInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ final class StoreStateMiddleware implements MiddlewareInterface
 
     public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
     {
-        $attributes = Attributes::getFromRequest($request);
+        $attributes = AttributeBag::get($request);
         if ($attributes->hasCallbackResponse()) {
             return $stack->next()($request, $stack);
         }

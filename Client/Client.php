@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Client;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareStack;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,12 +19,12 @@ final class Client implements ClientInterface
      */
     private iterable $middleware;
 
-    private Attributes $attributes;
+    private AttributeBag $attributes;
 
     /**
      * @param iterable<MiddlewareInterface> $middleware
      */
-    public function __construct(iterable $middleware, Attributes $attributes)
+    public function __construct(iterable $middleware, AttributeBag $attributes)
     {
         $this->middleware = $middleware;
         $this->attributes = $attributes;

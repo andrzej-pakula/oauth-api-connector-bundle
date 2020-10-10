@@ -2,8 +2,17 @@ imports:
   - { resource: ../../ClientType/Facebook/Resources/config/services.yml }
 
 services:
+  _defaults:
+    public: false
 
 ### Middleware ###
+
+  Andreo\OAuthApiConnectorBundle\Middleware\GetStoredAccessTokenMiddleware:
+    decorates: 'Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware'
+    arguments:
+      - '@.inner'
+    tags:
+      - { name: andreo.oauth_client.middleware, priority: 1400, override: false }
 
   Andreo\OAuthApiConnectorBundle\Middleware\HandleCallbackParametersMiddleware:
     tags:
@@ -14,10 +23,6 @@ services:
       - '@router'
     tags:
       - { name: andreo.oauth_client.middleware, priority: 1000 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\GetAccessTokenMiddleware:
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 800 }
 
   Andreo\OAuthApiConnectorBundle\Middleware\CreateAuthorizationUriMiddleware:
     tags:
@@ -40,8 +45,6 @@ services:
   ### Client ###
 
   Andreo\OAuthApiConnectorBundle\Client\ClientFactory:
-    arguments:
-      - '@Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry'
 
   Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface:
     alias: Andreo\OAuthApiConnectorBundle\Client\ClientFactory

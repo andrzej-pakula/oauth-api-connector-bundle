@@ -6,8 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Http\OAuthClientInterface;
 use Andreo\OAuthApiConnectorBundle\Http\Query\AccessTokenQuery;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,22 +16,24 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
 {
     private OAuthClientInterface $httpClient;
 
+    public function __construct(OAuthClientInterface $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
     public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
     {
-        $attributes = Attributes::getFromRequest($request);
-        if (!$attributes->hasCallbackResponse()) {
+        $attributeBag = AttributeBag::get($request);
+
+        if (!$attributeBag->hasCallbackResponse()) {
             return $stack->next()($request, $stack);
         }
 
-        if (AccessToken::existAndValid($attributes->getClientId(), $request->getSession())) {
-            return $stack->next()($request, $stack);
-        }
-
-        $query = AccessTokenQuery::fromAttributes($attributes);
+        $query = AccessTokenQuery::fromAttributes($attributeBag);
 
         $accessToken = $this->httpClient->getAccessToken($query);
 
-        $accessToken->store($attributes->getClientId(), $request->getSession());
+        $accessToken->store($attributeBag->getClientId(), $request->getSession());
 
         return $stack->next()($request, $stack);
     }

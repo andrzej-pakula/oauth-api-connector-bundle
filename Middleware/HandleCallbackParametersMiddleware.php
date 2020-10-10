@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\State;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,19 +17,20 @@ final class HandleCallbackParametersMiddleware implements MiddlewareInterface
 {
     public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
     {
-        $attributes = Attributes::getFromRequest($request);
-        $attributes = $attributes->handleCallback($request)->save($request);
+        $attributeBag = AttributeBag::get($request);
+        $attributeBag = $attributeBag->handleCallback($request)->save($request);
 
-        if (!$attributes->hasCallbackResponse()) {
+        if (!$attributeBag->hasCallbackResponse()) {
             return $stack->next()($request, $stack);
         }
 
-        $sessionState = State::getFromStorage($attributes->getClientId(), $request->getSession());
-        if (null === $sessionState) {
+        if (!State::isStored($attributeBag->getClientId(), $request->getSession())) {
             throw new BadRequestHttpException('Missing state in current session.');
         }
 
-        if ($sessionState->equals($attributes->getCallbackParameters()->getState())) {
+        $sessionState = State::get($attributeBag->getClientId(), $request->getSession());
+
+        if ($sessionState->equals($attributeBag->getCallbackParameters()->getState())) {
             return $stack->next()($request, $stack);
         }
 

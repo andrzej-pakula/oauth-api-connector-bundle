@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\Zone;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\ZoneId;
-use Andreo\OAuthApiConnectorBundle\Client\Client;
 use Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface;
 use Andreo\OAuthApiConnectorBundle\Client\ClientInterface;
 use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderInterface;
 use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry;
 use Andreo\OAuthApiConnectorBundle\Http\Provider\ApiConfigProviderFactory;
+use Andreo\OAuthApiConnectorBundle\Middleware\GetAccessTokenMiddleware;
 use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware;
 use RuntimeException;
@@ -39,9 +38,9 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
             foreach ($options['clients'] ?? [] as $name => $config) {
                 $version = $config['version'] ?? null;
 
-                $attributeDef = (new Definition(Attributes::class))
-                    ->setPublic(true)
-                    ->setFactory([Attributes::class, 'createFrom'])
+                $attributeDef = (new Definition(AttributeBag::class))
+                    ->setPublic(false)
+                    ->setFactory([AttributeBag::class, 'createFrom'])
                     ->setArguments([
                         [
                             'client_id' => $config['auth']['id'],
@@ -54,7 +53,8 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                         new Reference(MetaDataProviderRegistry::class)
                     ]);
 
-                $clientDef = (new Definition(Client::class))
+                $clientDef = (new Definition(ClientInterface::class))
+                    ->setPublic(false)
                     ->setFactory(new Reference(ClientFactoryInterface::class))
                     ->setArguments([
                         $attributeDef,
@@ -72,6 +72,7 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                 foreach ($config['zones'] ?? [] as $id => $zoneConfig) {
                     $zoneDef = (new Definition(Zone::class))
                         ->setFactory([Zone::class, 'fromConfig'])
+                        ->setPublic(false)
                         ->addArgument(
                             [
                                 'zone_id' => $id,
@@ -79,14 +80,13 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                             ]
                         );
 
-                    $zones[] = $zoneDef;
+                    $zones[$id] = $zoneDef;
                 }
 
                 if (!empty($zones)) {
-                    $successfulResponseMiddlewareDefId = SuccessfulResponseMiddleware::class . '_' . $name;
-
                     $successfulResponseMiddlewareDef = (new Definition(SuccessfulResponseMiddleware::class))
                         ->setDecoratedService(SuccessfulResponseMiddleware::class)
+                        ->setPublic(false)
                         ->setArguments([
                             new Reference('router'),
                             $zones
@@ -95,8 +95,17 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                             'client' => $name,
                         ]);
 
-                    $container->setDefinition($successfulResponseMiddlewareDefId, $successfulResponseMiddlewareDef);
+                    $container->setDefinition(SuccessfulResponseMiddleware::class . '_' . $name, $successfulResponseMiddlewareDef);
                 }
+
+                $getAccessTokenMiddlewareDef = (new Definition(GetAccessTokenMiddleware::class))
+                    ->addArgument(new Reference($this->getHttpClientId($name)))
+                    ->addTag('andreo.oauth_client.middleware', [
+                        'client' => $name,
+                        'priority' => 800
+                    ]);
+
+                $container->setDefinition(GetAccessTokenMiddleware::class. '_' . $name, $getAccessTokenMiddlewareDef);
             }
         }
 
@@ -117,16 +126,19 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
         foreach ($config as $type => $options) {
             foreach ($options['clients'] ?? [] as $name => $config) {
                 $guzzleConfigProviderDef = (new Definition(ConfigProviderInterface::class))
+                    ->setPublic(false)
                     ->setFactory(new Reference(ApiConfigProviderFactory::class))
                     ->setArguments([
                         $type,
                         $client['version'] ?? null
                     ]);
+
                 $guzzleConfigProviderId = "andreo.guzzle.oauth.client.$name.config_provider";
                 $container->setDefinition($guzzleConfigProviderId, $guzzleConfigProviderDef);
 
-                $httpClientDef = (new Definition($config['http_client_id']));
-                $httpClientId = "andreo.oauth.http_client_$name";
+                $httpClientDef = (new Definition($config['http_client_id']))
+                    ->setPublic(false);
+                $httpClientId = $this->getHttpClientId($name);
                 $container->setDefinition($httpClientId, $httpClientDef);
 
                 $guzzleClientConfigs['clients'][$name] = [
@@ -137,6 +149,11 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
         }
 
         $container->prependExtensionConfig('andreo_guzzle', $guzzleClientConfigs);
+    }
+
+    private function getHttpClientId(string $clientName): string
+    {
+        return "andreo.oauth.http_client_$clientName";
     }
 
     private function registerAutoconfiguration(ContainerBuilder $container): void

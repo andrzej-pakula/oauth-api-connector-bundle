@@ -10,7 +10,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
-final class Attributes
+final class AttributeBag
 {
     private const KEY = 'o_auth';
 
@@ -36,7 +36,7 @@ final class Attributes
         $this->authorizationUri = $authorizationUri;
     }
 
-    public static function getFromRequest(Request $request): self
+    public static function get(Request $request): self
     {
         return $request->attributes->get(self::KEY);
     }

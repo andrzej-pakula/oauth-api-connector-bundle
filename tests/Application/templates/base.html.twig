@@ -7,7 +7,7 @@
     </head>
     <body>
         {% block body %}
-            <a href="{{ path('andreo.oauth.client.authorize', { 'client_name': 'fb', 'zone': 'main' }) }}">Fb</a>
+            {% include '@AndreoOAuthApiConnector/authorization_url.html.twig' with { 'client_name': 'fb', 'zone_id': 'main', 'text': 'Zaloguj z facebook'  } %}
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

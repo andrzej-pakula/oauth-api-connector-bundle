@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\Attributes;
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,8 +22,8 @@ final class CreateCallbackUriMiddleware implements MiddlewareInterface
 
     public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
     {
-        $attributes = Attributes::getFromRequest($request);
-        $attributes->createCallbackUri($this->router)->save($request);
+        $attributeBag = AttributeBag::get($request);
+        $attributeBag->createCallbackUri($this->router)->save($request);
 
         return $stack->next()($request, $stack);
     }

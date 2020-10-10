@@ -66,10 +66,10 @@ final class AccessToken
         $session->set(StoreKeyGenerator::generate($clientId, self::KEY), $this->encode());
     }
 
-    public static function getFromStorage(ClientId $clientId, SessionInterface $session): self
+    public static function get(ClientId $clientId, SessionInterface $session): self
     {
-        if (!self::inStorage($clientId, $session)) {
-            throw new RuntimeException('Access Token does not exist in storage.');
+        if (!self::isStored($clientId, $session)) {
+            throw new RuntimeException('Access Token does not stored.');
         }
 
         $state = $session->get(StoreKeyGenerator::generate($clientId, self::KEY));
@@ -77,18 +77,18 @@ final class AccessToken
         return self::unserialize(self::decode($state));
     }
 
-    public static function inStorage(ClientId $clientId, SessionInterface $session): bool
+    public static function isStored(ClientId $clientId, SessionInterface $session): bool
     {
         return $session->has(StoreKeyGenerator::generate($clientId, self::KEY));
     }
 
-    public static function existAndValid(ClientId $clientId, SessionInterface $session): bool
+    public static function isStoredAndValid(ClientId $clientId, SessionInterface $session): bool
     {
-        if (!self::inStorage($clientId, $session)) {
+        if (!self::isStored($clientId, $session)) {
             return false;
         }
 
-        $token = self::getFromStorage($clientId, $session);
+        $token = self::get($clientId, $session);
 
         return $token->isValid();
     }
