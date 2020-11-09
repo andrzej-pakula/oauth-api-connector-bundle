@@ -2,75 +2,54 @@ imports:
   - { resource: ../../ClientType/Facebook/Resources/config/services.yml }
 
 services:
-  _defaults:
-    public: false
-
-### Middleware ###
-
-  Andreo\OAuthApiConnectorBundle\Middleware\GetStoredAccessTokenMiddleware:
-    decorates: 'Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware'
-    arguments:
-      - '@.inner'
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 1400, override: false }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\HandleCallbackParametersMiddleware:
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 1200 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\CreateCallbackUriMiddleware:
-    arguments:
-      - '@router'
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 1000 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\CreateAuthorizationUriMiddleware:
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 600 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware:
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 400 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\AuthorizationMiddleware:
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 200 }
-
-  Andreo\OAuthApiConnectorBundle\Middleware\SuccessfulResponseMiddleware:
-    arguments:
-      - '@router'
-    tags:
-      - { name: andreo.oauth_client.middleware, priority: 0 }
-
-  ### Client ###
-
-  Andreo\OAuthApiConnectorBundle\Client\ClientFactory:
-
-  Andreo\OAuthApiConnectorBundle\Client\ClientFactoryInterface:
-    alias: Andreo\OAuthApiConnectorBundle\Client\ClientFactory
-
-  Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry:
-    arguments:
-      - !tagged_iterator andreo.oauth_client.meta_data_provider
 
   ### Controller ###
 
   Andreo\OAuthApiConnectorBundle\Controller\ClientArgumentResolver:
+    public: false
     arguments:
-      - !tagged_locator { tag: 'andreo.oauth.client', index_by: 'name' }
+      - !tagged_locator { tag: andreo.oauth_client.client, index_by: name }
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }
 
-  Andreo\OAuthApiConnectorBundle\Controller\AuthorizeController:
+  Andreo\OAuthApiConnectorBundle\Controller\AuthenticationController:
+    public: false
     tags: [controller.service_arguments]
 
-  Andreo\OAuthApiConnectorBundle\Controller\AuthorizeControllerInterface:
-    alias: Andreo\OAuthApiConnectorBundle\Controller\AuthorizeController
+  Andreo\OAuthApiConnectorBundle\Controller\AuthenticationControllerInterface:
+    alias: Andreo\OAuthApiConnectorBundle\Controller\AuthenticationController
 
-  ### HTTP ###
 
-  Andreo\OAuthApiConnectorBundle\Http\Provider\ApiConfigProviderFactory:
+  ### Middleware ###
+
+  Andreo\OAuthApiConnectorBundle\Middleware\HandleZoneResponseMiddleware:
+    public: false
     arguments:
-      - '@Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry'
+      - '@router'
 
+  Andreo\OAuthApiConnectorBundle\Middleware\ValidateReturningStateMiddleware:
+    public: false
 
+  Andreo\OAuthApiConnectorBundle\Middleware\BuildURIsMiddleware:
+    public: false
+    arguments:
+      - '@router'
+
+  Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware:
+    public: false
+
+  Andreo\OAuthApiConnectorBundle\Middleware\AuthenticationRedirectMiddleware:
+    public: false
+
+  Andreo\OAuthApiConnectorBundle\Middleware\CheckCookieAccessTokenMiddleware:
+    public: false
+
+  Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate:
+    public: false
+    arguments:
+      -
+        - ['@Andreo\OAuthApiConnectorBundle\Middleware\HandleZoneResponseMiddleware', 4000]
+        - ['@Andreo\OAuthApiConnectorBundle\Middleware\ValidateReturningStateMiddleware', 3000]
+        - ['@Andreo\OAuthApiConnectorBundle\Middleware\BuildURIsMiddleware', 2000]
+        - ['@Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware', 1000]
+        - ['@Andreo\OAuthApiConnectorBundle\Middleware\AuthenticationRedirectMiddleware', 0]

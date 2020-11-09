@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AuthorizationMiddleware implements MiddlewareInterface
+final class AuthenticationRedirectMiddleware implements MiddlewareInterface
 {
-    public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
+    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
         $attributeBag = AttributeBag::get($request);
         if ($attributeBag->hasCallbackResponse()) {
-            return $stack->next()($request, $stack);
+            return $stack->next()($request, $response, $stack);
         }
 
         return new RedirectResponse($attributeBag->getAuthorizationUri()->getUri());

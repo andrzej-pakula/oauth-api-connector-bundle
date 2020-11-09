@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType\Facebook\Provider;
+namespace Andreo\OAuthApiConnectorBundle\ClientType\Facebook;
 
 
 final class Versions

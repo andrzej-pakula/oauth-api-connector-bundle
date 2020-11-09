@@ -4,16 +4,34 @@
 namespace Andreo\OAuthApiConnectorBundle\Traits;
 
 
+use Andreo\OAuthApiConnectorBundle\Client\Attribute\ClientId;
+use Andreo\OAuthApiConnectorBundle\Util\StoreKeyGenerator;
 use RuntimeException;
 
 trait SerializeTrait
 {
-    public function serialize(): string
+    public function encrypt(): string
+    {
+        return base64_encode($this->serialize());
+    }
+
+    private function serialize(): string
     {
         return serialize($this);
     }
 
-    public static function unserialize(string $str): self
+    public static function decrypt(string $str): self
+    {
+        $serialized = base64_decode($str);
+
+        if (false === $serialized) {
+            throw new RuntimeException('Can not decode serialized ' . self::class . ".");
+        }
+
+        return self::unserialize($serialized);
+    }
+
+    private static function unserialize(string $str): self
     {
         /** @var self|bool $object */
         $object = unserialize($str, [
@@ -27,18 +45,8 @@ trait SerializeTrait
         return $object;
     }
 
-    private function encode(): string
+    public static function getKey(ClientId $clientId): string
     {
-        return base64_encode($this->serialize());
-    }
-
-    private static function decode(string $str): string
-    {
-        $serialized = base64_decode($str);
-        if (false === $serialized) {
-            throw new RuntimeException('Can not decode serialized ' . self::class . ".");
-        }
-
-        return $serialized;
+        return StoreKeyGenerator::generate($clientId, self::KEY);
     }
 }

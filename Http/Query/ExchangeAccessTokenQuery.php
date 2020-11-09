@@ -13,31 +13,30 @@ use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
 use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 
-final class AccessTokenQuery implements DataTransferInterface
+final class ExchangeAccessTokenQuery implements DataTransferInterface
 {
     private string $clientId;
 
-    private string $redirectUri;
+    private string $grantType;
 
     private string $clientSecret;
 
-    private string $code;
+    private string $fbExchangeToken;
 
-    public function __construct(string $clientId, string $redirectUri, string $clientSecret, string $code)
+    public function __construct(string $clientId, string $clientSecret, string $fbExchangeToken, string $grantType = 'fb_exchange_token')
     {
         $this->clientId = $clientId;
-        $this->redirectUri = $redirectUri;
         $this->clientSecret = $clientSecret;
-        $this->code = $code;
+        $this->fbExchangeToken = $fbExchangeToken;
+        $this->grantType = $grantType;
     }
 
-    public static function from(AttributeBag $attributeBag): self
+    public static function from(AttributeBag $attributeBag, AccessToken $accessToken): self
     {
         return new self(
             $attributeBag->getClientId()->getId(),
-            $attributeBag->getCallbackUri()->getUri(),
             $attributeBag->getClientSecret()->getSecret(),
-            $attributeBag->getParameters()->getCode()->getCode()
+            $accessToken->getAccessToken()
         );
     }
 
@@ -46,19 +45,19 @@ final class AccessTokenQuery implements DataTransferInterface
         return $this->clientId;
     }
 
-    public function getRedirectUri(): string
-    {
-        return $this->redirectUri;
-    }
-
     public function getClientSecret(): string
     {
         return $this->clientSecret;
     }
 
-    public function getCode(): string
+    public function getGrantType(): string
     {
-        return $this->code;
+        return $this->grantType;
+    }
+
+    public function getFbExchangeToken(): string
+    {
+        return $this->fbExchangeToken;
     }
 
     public function transfer(RequestTransformerInterface $transformer): RequestTransformerInterface

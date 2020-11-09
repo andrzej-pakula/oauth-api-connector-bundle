@@ -28,11 +28,19 @@ final class Zone
         return $this->successfulResponseUri;
     }
 
-    public static function fromConfig(array $options): self
+    /**
+     * @return self[]
+     */
+    public static function createRegistryByConfig(array $config): array
     {
-        return new self(
-            new ZoneId($options['zone_id']),
-            $options['successful_response_uri']
-        );
+        $zones = [];
+        foreach ($config['zones'] as $zone) {
+            $zones[$zone['zone_id']] = new self(
+                new ZoneId($zone['zone_id']),
+                $zone['successful_response_uri']
+            );
+        }
+
+        return $zones;
     }
 }

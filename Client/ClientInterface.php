@@ -11,5 +11,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface ClientInterface
 {
-    public function connect(Request $request): Response;
+    public function handle(Request $request): Response;
 }

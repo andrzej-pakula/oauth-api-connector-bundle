@@ -26,6 +26,7 @@ final class TestController extends AbstractController
      */
     public function successful(Request $request): Response
     {
-        return new Response('ok');
+
+        return $this->render('base.html.twig');
     }
 }

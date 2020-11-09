@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
+use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
 use Andreo\OAuthApiConnectorBundle\Http\OAuthClientInterface;
 use Andreo\OAuthApiConnectorBundle\Http\Query\AccessTokenQuery;
@@ -21,20 +22,20 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
         $this->httpClient = $httpClient;
     }
 
-    public function __invoke(Request $request, MiddlewareStackInterface $stack): Response
+    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
         $attributeBag = AttributeBag::get($request);
-
         if (!$attributeBag->hasCallbackResponse()) {
-            return $stack->next()($request, $stack);
+            return $stack->next()($request, $response, $stack);
         }
 
-        $query = AccessTokenQuery::fromAttributes($attributeBag);
+        $query = AccessTokenQuery::from($attributeBag);
 
         $accessToken = $this->httpClient->getAccessToken($query);
 
-        $accessToken->store($attributeBag->getClientId(), $request->getSession());
+        $request->attributes->set(AccessToken::getKey($attributeBag->getClientId()), $accessToken);
 
-        return $stack->next()($request, $stack);
+        return $stack->next()($request, $response, $stack);
     }
+
 }

@@ -11,5 +11,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface MiddlewareInterface
 {
-    public function __invoke(Request $request, MiddlewareStackInterface $stack): Response;
+    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response;
 }

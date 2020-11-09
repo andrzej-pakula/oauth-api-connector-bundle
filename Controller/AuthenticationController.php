@@ -11,13 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class AuthorizeController implements AuthorizeControllerInterface
+final class AuthenticationController implements AuthenticationControllerInterface
 {
     /**
-     * @Route("oauth/authorize/{client_name}/{zone}", name="andreo.oauth.client.authorize")
+     * @Route(
+     *     "oauth/authentication/{client_name}/{zone}",
+     *     name="andreo.oauth.client.authentication",
+     *     defaults={"zone": null},
+     *     methods={Request::METHOD_GET}
+     * )
      */
     public function handle(Request $request, ClientInterface $client): Response
     {
-        return $client->connect($request);
+        return $client->handle($request);
     }
 }

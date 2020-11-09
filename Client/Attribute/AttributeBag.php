@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
-use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderRegistry;
+use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,18 +22,25 @@ final class AttributeBag
 
     private CallbackUri $callbackUri;
 
-    private ?CallbackParameters $callbackParameters;
+    private Parameters $parameters;
+
+    /**
+     * @var iterable<string, Zone>
+     */
+    private iterable $zones;
 
     public function __construct(
         ClientId $clientId,
         ClientSecret $clientSecret,
         CallbackUri $callbackUri,
-        AuthorizationUri $authorizationUri
+        AuthorizationUri $authorizationUri,
+        iterable $zones
     ){
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->callbackUri = $callbackUri;
         $this->authorizationUri = $authorizationUri;
+        $this->zones = $zones;
     }
 
     public static function get(Request $request): self
@@ -61,7 +68,7 @@ final class AttributeBag
         return $this->callbackUri;
     }
 
-    public function createAuthorizationUri(): self
+    public function buildAuthorizationUri(): self
     {
         $new = clone $this;
         $new->authorizationUri = $this->authorizationUri->create($this->callbackUri, $this->clientId);
@@ -69,10 +76,10 @@ final class AttributeBag
         return $new;
     }
 
-    public function createCallbackUri(RouterInterface $router): self
+    public function buildCallbackUri(RouterInterface $router): self
     {
         $new = clone $this;
-        $new->callbackUri = $this->callbackUri->generate($router, $this->clientId, $this->callbackParameters->getZoneId());
+        $new->callbackUri = $this->callbackUri->generate($router, $this->clientId, $this->parameters->getZoneId());
 
         return $new;
     }
@@ -84,20 +91,25 @@ final class AttributeBag
         return $this;
     }
 
-    public function getCallbackParameters(): CallbackParameters
+    public function getParameters(): Parameters
     {
-        return $this->callbackParameters;
+        return $this->parameters;
     }
 
     public function hasCallbackResponse(): bool
     {
-        return $this->callbackParameters->hasCallbackResponse();
+        return $this->parameters->isCallback();
     }
 
-    public function handleCallback(Request $request): self
+    public function handleRequest(Request $request): self
     {
+        $parameters = Parameters::from($request);
+        if (!$this->isEmptyZones() && !$parameters->isZoneDefined()) {
+            throw new RuntimeException('Request requires zone parameter.');
+        }
+
         $new = clone $this;
-        $new->callbackParameters = CallbackParameters::fromRequest($request);
+        $new->parameters = $parameters;
 
         return $new;
     }
@@ -107,27 +119,33 @@ final class AttributeBag
         return $this->authorizationUri->getState();
     }
 
-    public function getZoneId(): ZoneId
+    public function hasZone(): bool
     {
-        if (null === $this->callbackParameters) {
-            throw new RuntimeException('Unhandled callback.');
-        }
-
-        return $this->callbackParameters->getZoneId();
+        return !empty($this->zones[$this->parameters->getZoneId()->getId()]);
     }
 
-    public static function createFrom(array $config, MetaDataProviderRegistry $metaDataProviderRegistry): self
+    public function isEmptyZones(): bool
     {
-        $metaDataProvider = $metaDataProviderRegistry->get(
-            $config['type'],
-            $config['version']
-        );
+        return empty($this->zones);
+    }
 
+    public function getZone(): Zone
+    {
+        if (!$this->hasZone()) {
+            throw new RuntimeException("Zone={$this->parameters->getZoneId()->getId()} is not defined.");
+        }
+
+        return $this->zones[$this->parameters->getZoneId()->getId()];
+    }
+
+    public static function fromConfig(array $config): self
+    {
         return new self(
             new ClientId((string)$config['client_id'], $config['client_name']),
             new ClientSecret($config['client_secret']),
             new CallbackUri($config['callback_uri']),
-            AuthorizationUri::fromProvider($metaDataProvider)
+            AuthorizationUri::fromConfig($config),
+            Zone::createRegistryByConfig($config)
         );
     }
 }

@@ -5,12 +5,9 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
-
 use Andreo\OAuthApiConnectorBundle\Traits\SerializeTrait;
-use Andreo\OAuthApiConnectorBundle\Util\StoreKeyGenerator;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class State
 {
@@ -28,6 +25,27 @@ final class State
         $this->ds = $ds;
     }
 
+    public function equals(self $other): bool
+    {
+        return $other->st === $this->st && $other->ds === $this->ds;
+    }
+
+    public static function isInRequest(Request $request): bool
+    {
+        return $request->query->has(self::KEY);
+    }
+
+    public static function from(Request $request): self
+    {
+        if (!self::isInRequest($request)) {
+            throw new RuntimeException('Missing state parameter.');
+        }
+
+        $state = $request->query->get(self::KEY);
+
+        return self::decrypt($state);
+    }
+
     public static function create(): self
     {
         return new self(
@@ -36,56 +54,9 @@ final class State
         );
     }
 
-    public function equals(self $other): bool
-    {
-        return $other->st === $this->st && $other->ds === $this->ds;
-    }
-
-    public static function fromRequest(Request $request): ?self
-    {
-        if (null === $state = $request->query->get(self::KEY)) {
-            return null;
-        }
-
-        $serialized = self::decode($state);
-
-        return self::unserialize($serialized);
-    }
-
-    public function store(ClientId $clientId, SessionInterface $session): void
-    {
-        $session->set(StoreKeyGenerator::generate($clientId, self::KEY), $this->encode());
-    }
-
-    public static function isStored(ClientId $clientId, SessionInterface $session): bool
-    {
-        return $session->has(StoreKeyGenerator::generate($clientId, self::KEY));
-    }
-
-    public static function delete(ClientId $clientId, SessionInterface $session): void
-    {
-        if (!self::isStored($clientId, $session)) {
-            throw new RuntimeException('Unable to delete non-stored state.');
-        }
-
-        $session->remove(StoreKeyGenerator::generate($clientId, self::KEY));
-    }
-
-    public static function get(ClientId $clientId, SessionInterface $session): self
-    {
-        if (!self::isStored($clientId, $session)) {
-            throw new RuntimeException('State does not stored.');
-        }
-
-        $state = $session->get(StoreKeyGenerator::generate($clientId, self::KEY));
-
-        return self::unserialize(self::decode($state));
-    }
-
-
     public function mapRequestParams(array $requestParams): array
     {
-        $requestParams[self::KEY] = $this->encode();
+        $requestParams[self::KEY] = $this->encrypt();
 
         return $requestParams;
     }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
 
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class Code
@@ -24,12 +25,19 @@ final class Code
         return $this->code;
     }
 
-    public static function fromRequest(Request $request): ?self
+    public static function from(Request $request): self
     {
-        if (null === $code = $request->query->get(self::KEY)) {
-            return null;
+        if (!self::isInRequest($request)) {
+            throw new RuntimeException('Missing code parameter.');
         }
 
+        $code = $request->query->get(self::KEY);
+
         return new self($code);
+    }
+
+    public static function isInRequest(Request $request): bool
+    {
+        return $request->query->has(self::KEY);
     }
 }

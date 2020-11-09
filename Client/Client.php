@@ -7,34 +7,29 @@ namespace Andreo\OAuthApiConnectorBundle\Client;
 
 
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
-use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareInterface;
-use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareStack;
+use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class Client implements ClientInterface
 {
-    /**
-     * @var iterable<MiddlewareInterface>
-     */
-    private iterable $middleware;
+    private AttributeBag $attributeBag;
 
-    private AttributeBag $attributes;
+    private MiddlewareAggregate $middlewareAggregate;
 
-    /**
-     * @param iterable<MiddlewareInterface> $middleware
-     */
-    public function __construct(iterable $middleware, AttributeBag $attributes)
+    public function __construct(AttributeBag $attributeBag, MiddlewareAggregate $middlewareAggregate)
     {
-        $this->middleware = $middleware;
-        $this->attributes = $attributes;
+        $this->attributeBag = $attributeBag;
+        $this->middlewareAggregate = $middlewareAggregate;
     }
 
-    public function connect(Request $request): Response
+    public function handle(Request $request): Response
     {
-        $this->attributes->save($request);
-        $stack = MiddlewareStack::create($this->middleware);
+        $this->attributeBag->handleRequest($request)->save($request);
 
-        return $stack->next()($request, $stack);
+        $stack = $this->middlewareAggregate->getStack();
+
+        return $stack->next()($request, new RedirectResponse('/'), $stack);
     }
 }

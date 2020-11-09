@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
 
 
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ZoneId
@@ -24,14 +25,20 @@ final class ZoneId
         return $this->id;
     }
 
-    public static function fromRequest(Request $request): ?self
+    public static function from(Request $request): self
     {
-        $id = $request->attributes->get(self::KEY);
-        if (null === $id) {
-            return null;
+        if (!self::isInRequest($request)) {
+            throw new RuntimeException('Missing zone parameter.');
         }
 
+        $id = $request->attributes->get(self::KEY);
+
         return new self($id);
+    }
+
+    public static function isInRequest(Request $request): bool
+    {
+        return $request->attributes->has(self::KEY);
     }
 
     public function mapRequestParams(array $requestParams = []): array

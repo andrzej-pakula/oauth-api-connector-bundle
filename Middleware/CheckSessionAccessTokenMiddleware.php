@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace Andreo\OAuthApiConnectorBundle\Middleware;
 
 
+use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
 use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\State;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class StoreStateMiddleware implements MiddlewareInterface
+final class CheckSessionAccessTokenMiddleware implements MiddlewareInterface
 {
     public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
@@ -20,11 +20,16 @@ final class StoreStateMiddleware implements MiddlewareInterface
             return $stack->next()($request, $response, $stack);
         }
 
-        $request->getSession()->set(
-            State::getKey($attributeBag->getClientId()),
-            $attributeBag->getState()->encrypt()
-        );
+        $accessTokenStorageKey = AccessToken::getKey($attributeBag->getClientId());
 
-        return $stack->next()($request, $response, $stack);
+
+        if (!$request->getSession()->has($accessTokenStorageKey)) {
+            return $stack->next()($request, $response, $stack);
+        }
+
+        $accessTokenCookie = $request->getSession()->get($accessTokenStorageKey);
+        AccessToken::decrypt($accessTokenCookie);
+
+        return $response;
     }
 }
