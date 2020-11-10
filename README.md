@@ -1,1 +1,1 @@
-# oauth-api-connector-bundle
+# oauth-client-bundle
