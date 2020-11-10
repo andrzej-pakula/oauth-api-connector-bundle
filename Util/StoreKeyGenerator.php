@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Util;
+namespace Andreo\OAuthClientBundle\Util;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\ClientId;
+use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
 
 final class StoreKeyGenerator
 {

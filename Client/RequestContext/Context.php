@@ -3,14 +3,13 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
+namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
-final class AttributeBag
+final class Context
 {
     private const KEY = 'o_auth';
 
@@ -18,7 +17,7 @@ final class AttributeBag
 
     private ClientSecret $clientSecret;
 
-    private AuthorizationUri $authorizationUri;
+    private AuthenticationUri $authenticationUri;
 
     private CallbackUri $callbackUri;
 
@@ -33,13 +32,13 @@ final class AttributeBag
         ClientId $clientId,
         ClientSecret $clientSecret,
         CallbackUri $callbackUri,
-        AuthorizationUri $authorizationUri,
+        AuthenticationUri $authenticationUri,
         iterable $zones
     ){
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->callbackUri = $callbackUri;
-        $this->authorizationUri = $authorizationUri;
+        $this->authenticationUri = $authenticationUri;
         $this->zones = $zones;
     }
 
@@ -58,9 +57,9 @@ final class AttributeBag
         return $this->clientSecret;
     }
 
-    public function getAuthorizationUri(): AuthorizationUri
+    public function getAuthorizationUri(): AuthenticationUri
     {
-        return $this->authorizationUri;
+        return $this->authenticationUri;
     }
 
     public function getCallbackUri(): CallbackUri
@@ -71,7 +70,7 @@ final class AttributeBag
     public function buildAuthorizationUri(): self
     {
         $new = clone $this;
-        $new->authorizationUri = $this->authorizationUri->create($this->callbackUri, $this->clientId);
+        $new->authenticationUri = $this->authenticationUri->create($this->callbackUri, $this->clientId);
 
         return $new;
     }
@@ -116,7 +115,7 @@ final class AttributeBag
 
     public function getState(): State
     {
-        return $this->authorizationUri->getState();
+        return $this->authenticationUri->getState();
     }
 
     public function hasZone(): bool
@@ -144,7 +143,7 @@ final class AttributeBag
             new ClientId((string)$config['client_id'], $config['client_name']),
             new ClientSecret($config['client_secret']),
             new CallbackUri($config['callback_uri']),
-            AuthorizationUri::fromConfig($config),
+            AuthenticationUri::fromConfig($config),
             Zone::createRegistryByConfig($config)
         );
     }

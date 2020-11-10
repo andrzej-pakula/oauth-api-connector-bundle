@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Http;
+namespace Andreo\OAuthClientBundle\Http;
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
 
 interface OAuthClientInterface
 {

@@ -1,5 +1,5 @@
 services:
   andreo.oauth_client.middleware_aggregate.facebook:
-    class: Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate
+    class: Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate
     arguments:
-      - '@Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate'
+      - '@Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate'

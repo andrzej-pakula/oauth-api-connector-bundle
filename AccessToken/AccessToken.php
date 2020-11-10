@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\AccessToken;
+namespace Andreo\OAuthClientBundle\AccessToken;
 
 
-use Andreo\OAuthApiConnectorBundle\Traits\SerializeTrait;
+use Andreo\OAuthClientBundle\Traits\SerializeTrait;
 
 
 final class AccessToken implements AccessTokenInterface

@@ -1,20 +1,20 @@
 <?php
 
 
-namespace Andreo\OAuthApiConnectorBundle\Middleware;
+namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessTokenInterface;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\AccessToken\AccessTokenInterface;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
-trait StoreAccessTokenTrait
+trait AccessTokenAttributeTrait
 {
-    private function getAccessToken(Request $request, AttributeBag $attributeBag): AccessTokenInterface
+    private function fromAttributes(Request $request, Context $context): AccessTokenInterface
     {
-        $accessTokenStorageKey = AccessToken::getKey($attributeBag->getClientId());
+        $accessTokenStorageKey = AccessToken::getKey($context->getClientId());
         if (!$request->attributes->has($accessTokenStorageKey)) {
             throw new RuntimeException('Can not save access token because it not exist.');
         }

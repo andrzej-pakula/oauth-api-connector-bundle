@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Middleware;
+namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,13 +26,13 @@ final class HandleZoneResponseMiddleware implements MiddlewareInterface
 
     public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
-        $attributeBag = AttributeBag::get($request);
+        $context = Context::get($request);
 
-        if ($attributeBag->isEmptyZones()) {
+        if ($context->isEmptyZones()) {
             return $stack->next()($request, $response, $stack);
         }
 
-        $uri = $this->router->generate($attributeBag->getZone()->getSuccessfulResponseUri());
+        $uri = $this->router->generate($context->getZone()->getSuccessfulResponseUri());
 
         return $stack->next()($request, new RedirectResponse($uri), $stack);
     }

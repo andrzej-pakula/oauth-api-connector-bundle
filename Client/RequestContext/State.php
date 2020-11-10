@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
+namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
-use Andreo\OAuthApiConnectorBundle\Traits\SerializeTrait;
+use Andreo\OAuthClientBundle\Traits\SerializeTrait;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 

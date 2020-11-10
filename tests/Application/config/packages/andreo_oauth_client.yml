@@ -1,4 +1,4 @@
-andreo_o_auth_api_connector:
+andreo_o_auth_client:
     facebook:
       clients:
         foo:
@@ -7,6 +7,7 @@ andreo_o_auth_api_connector:
             id: 1571736652977798
             secret: 3b36c168393dc5e236a626900238165c
           access_token:
+            long_live: true
             storage: cookie
           zones:
             main:

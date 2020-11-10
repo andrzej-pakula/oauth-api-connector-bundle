@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType\GitHub\Http;
+namespace Andreo\OAuthClientBundle\ClientType\GitHub\Http;
 
 
 use Andreo\GuzzleBundle\Client\ClientDecoratorTrait;
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Http\OAuthClientInterface;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Http\OAuthClientInterface;
 use GuzzleHttp\ClientInterface;
 
 final class OAuthHTTPClient implements OAuthClientInterface, ClientInterface

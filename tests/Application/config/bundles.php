@@ -10,5 +10,5 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Andreo\GuzzleBundle\AndreoGuzzleBundle::class => ['all' => true],
-    Andreo\OAuthApiConnectorBundle\AndreoOAuthApiConnectorBundle::class => ['all' => true]
+    Andreo\OAuthClientBundle\AndreoOAuthClientBundle::class => ['all' => true]
 ];

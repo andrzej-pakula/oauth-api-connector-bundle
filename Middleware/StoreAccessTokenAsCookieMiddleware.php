@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Middleware;
+namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -17,27 +17,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class StoreAccessTokenAsCookieMiddleware implements MiddlewareInterface
 {
-    use StoreAccessTokenTrait;
+    use AccessTokenAttributeTrait;
 
     public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
-        $attributeBag = AttributeBag::get($request);
-        if (!$attributeBag->hasCallbackResponse()) {
+        $context = Context::get($request);
+        if (!$context->hasCallbackResponse()) {
             return $stack->next()($request, $response, $stack);
         }
 
         /** @var AccessToken $accessToken */
-        $accessToken = $this->getAccessToken($request, $attributeBag);
+        $accessToken = $this->fromAttributes($request, $context);
 
         $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Warsaw'));
         $expiredAt = $now->add(new DateInterval("PT{$accessToken->getExpiresIn()}S"));
 
-        $cookie =  Cookie::create($accessToken::getKey($attributeBag->getClientId()))
+        $accessTokenStorageKey = $accessToken::getKey($context->getClientId());
+        $cookie = Cookie::create($accessTokenStorageKey)
             ->withSecure(true)
             ->withValue($accessToken->encrypt())
             ->withExpires($expiredAt);
 
         $response->headers->setCookie($cookie);
+
+        $request->attributes->remove($accessTokenStorageKey);
 
         return $response;
     }

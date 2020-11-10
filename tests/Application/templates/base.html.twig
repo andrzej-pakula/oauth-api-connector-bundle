@@ -7,7 +7,7 @@
     </head>
     <body>
         {% block body %}
-            {% include '@AndreoOAuthApiConnector/authorization_url.html.twig' with { 'client_name': 'foo', 'zone_id': 'main', 'text': 'Zaloguj z facebook'  } %}
+            {% include '@AndreoOAuthClient/login_btn.html.twig' with { 'client_name': 'foo', 'zone_id': 'main', 'text': 'Zaloguj z facebook'  } %}
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

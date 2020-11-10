@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Tests\Andreo\OAuthApiConnectorBundle\App\Controller;
+namespace Tests\Andreo\OAuthClientBundle\App\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

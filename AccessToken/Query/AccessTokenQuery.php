@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Http\Query;
+namespace Andreo\OAuthClientBundle\AccessToken\Query;
 
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 
 final class AccessTokenQuery implements DataTransferInterface
 {
@@ -31,13 +31,13 @@ final class AccessTokenQuery implements DataTransferInterface
         $this->code = $code;
     }
 
-    public static function from(AttributeBag $attributeBag): self
+    public static function from(Context $context): self
     {
         return new self(
-            $attributeBag->getClientId()->getId(),
-            $attributeBag->getCallbackUri()->getUri(),
-            $attributeBag->getClientSecret()->getSecret(),
-            $attributeBag->getParameters()->getCode()->getCode()
+            $context->getClientId()->getId(),
+            $context->getCallbackUri()->getUri(),
+            $context->getClientSecret()->getSecret(),
+            $context->getParameters()->getCode()->getCode()
         );
     }
 

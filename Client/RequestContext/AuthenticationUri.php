@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
+namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
 
-final class AuthorizationUri
+final class AuthenticationUri
 {
     private string $uri;
 

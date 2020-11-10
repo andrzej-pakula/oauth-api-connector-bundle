@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Middleware;
+namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,13 +22,13 @@ final class BuildURIsMiddleware implements MiddlewareInterface
 
     public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
     {
-        $attributeBag = AttributeBag::get($request);
-        $attributeBag = $attributeBag->buildCallbackUri($this->router)->save($request);
-        if ($attributeBag->hasCallbackResponse()) {
+        $context = Context::get($request);
+        $context = $context->buildCallbackUri($this->router)->save($request);
+        if ($context->hasCallbackResponse()) {
             return $stack->next()($request, $response, $stack);
         }
 
-        $attributeBag->buildAuthorizationUri()->save($request);
+        $context->buildAuthorizationUri()->save($request);
 
         return $stack->next()($request, $response, $stack);
     }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType;
+namespace Andreo\OAuthClientBundle\ClientType;
 
 
 final class SupportedType

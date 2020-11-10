@@ -1,2 +1,2 @@
 andreo.oauth:
-  resource: '@AndreoOAuthApiConnectorBundle/Resources/config/routing.yml'
+  resource: '@AndreoOAuthClientBundle/Resources/config/routing.yml'

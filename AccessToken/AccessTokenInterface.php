@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\AccessToken;
+namespace Andreo\OAuthClientBundle\AccessToken;
 
 
 interface AccessTokenInterface

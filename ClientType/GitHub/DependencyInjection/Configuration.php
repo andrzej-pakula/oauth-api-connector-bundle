@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType\GitHub\DependencyInjection;
+namespace Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection;
 
 
-use Andreo\OAuthApiConnectorBundle\ClientType\GitHub\Http\OAuthHTTPClient;
-use Andreo\OAuthApiConnectorBundle\ClientType\SupportedType;
+use Andreo\OAuthClientBundle\ClientType\GitHub\Http\OAuthHTTPClient;
+use Andreo\OAuthClientBundle\ClientType\SupportedType;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

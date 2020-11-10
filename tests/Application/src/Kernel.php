@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Andreo\OAuthApiConnectorBundle\App;
+namespace Tests\Andreo\OAuthClientBundle\App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;

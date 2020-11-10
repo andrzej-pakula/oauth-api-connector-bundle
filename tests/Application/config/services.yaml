@@ -14,12 +14,12 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    Tests\Andreo\OAuthApiConnectorBundle\App\:
+    Tests\Andreo\OAuthClientBundle\App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Middleware,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    Tests\Andreo\OAuthApiConnectorBundle\App\Controller\:
+    Tests\Andreo\OAuthClientBundle\App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']

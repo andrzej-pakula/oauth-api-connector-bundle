@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client;
+namespace Andreo\OAuthClientBundle\Client;
 
 
 use Symfony\Component\HttpFoundation\Request;

@@ -1,6 +1,6 @@
 {
-    "name": "andreo/oauth-api-connector-bundle",
-    "description": "OAuth api connector.",
+    "name": "andreo/oauth-client",
+    "description": "OAuth client.",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
@@ -41,8 +41,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Andreo\\OAuthApiConnectorBundle\\": "",
-            "Tests\\Andreo\\OAuthApiConnectorBundle\\App\\": "tests/Application/src/"
+            "Andreo\\OAuthClientBundle\\": "",
+            "Tests\\Andreo\\OAuthClientBundle\\App\\": "tests/Application/src/"
         }
     },
     "autoload-dev": {

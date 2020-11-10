@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
+namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
-use Andreo\OAuthApiConnectorBundle\Client\Client;
-use Andreo\OAuthApiConnectorBundle\Http\Provider\HttpClientConfigProvider;
-use Andreo\OAuthApiConnectorBundle\Middleware\CheckSessionAccessTokenMiddleware;
-use Andreo\OAuthApiConnectorBundle\Middleware\GetAccessTokenMiddleware;
-use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate;
-use Andreo\OAuthApiConnectorBundle\Middleware\StoreAccessTokenAsSessionAttributeMiddleware;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Client\Client;
+use Andreo\OAuthClientBundle\ClientType\Facebook\Middleware\ExchangeAccessTokenMiddleware;
+use Andreo\OAuthClientBundle\ClientType\SupportedType;
+use Andreo\OAuthClientBundle\Http\Provider\HttpClientConfigProvider;
+use Andreo\OAuthClientBundle\Middleware\GetAccessTokenMiddleware;
+use Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 
-class AndreoOAuthApiConnectorExtension extends Extension implements PrependExtensionInterface
+class AndreoOAuthClientExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -42,7 +42,7 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                         'successful_response_uri' => $zoneConfig['successful_response_uri']
                     ];
                 }
-                $attributeDef = (new Definition(AttributeBag::class, [[
+                $attributeDef = (new Definition(Context::class, [[
                     'client_id' => $config['credentials']['id'],
                     'client_name' => $clientName,
                     'client_secret' => $config['credentials']['secret'],
@@ -51,9 +51,9 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                     'zones' => $zoneConfigs
                 ]]))
                 ->setPublic(false)
-                ->setFactory([AttributeBag::class, 'fromConfig']);
+                ->setFactory([Context::class, 'fromConfig']);
 
-                $clientMiddlewares = [];
+                $clientMiddleware = [];
 
                 $getAccessTokenMiddlewarePerClientDef = (new Definition(GetAccessTokenMiddleware::class, [
                     new Reference("andreo.oauth.http_client.$type.$version")
@@ -65,21 +65,38 @@ class AndreoOAuthApiConnectorExtension extends Extension implements PrependExten
                     $getAccessTokenMiddlewarePerClientDef
                 );
 
-                $clientMiddlewares[] = [new Reference($getAccessTokenMiddlewarePerClientId), 1500];
+                $clientMiddleware[] = [new Reference($getAccessTokenMiddlewarePerClientId), 1500];
 
-                $accessTokenStorage = $config['access_token']['storage'];
+                $accessTokenConfig = $config['access_token'];
+
+                if ($type === SupportedType::FACEBOOK && $accessTokenConfig['long_live']) {
+                    $exchangeAccessTokenMiddlewarePerClientDef = (new Definition(ExchangeAccessTokenMiddleware::class, [
+                        new Reference("andreo.oauth.http_client.$type.$version")
+                    ]))
+                    ->setPublic(false);
+
+                    $container->setDefinition(
+                        $exchangeAccessTokenMiddlewarePerClientId = "andreo.oauth_client.middleware.exchange_access_token.$clientName",
+                        $exchangeAccessTokenMiddlewarePerClientDef
+                    );
+
+                    $clientMiddleware[] = [new Reference($exchangeAccessTokenMiddlewarePerClientId), 1300];
+                }
+
+                $accessTokenStorage = $accessTokenConfig['storage'];
                 foreach ($accessTokenStorage['middleware'] as [$id, $priority]) {
                     if (!$container->hasDefinition($id)) {
                         $container->register($id);
                     }
-                    $clientMiddlewares[] = [new Reference($id), $priority];
+
+                    $clientMiddleware[] = [new Reference($id), $priority];
                 }
 
                 $middlewareAggregatePerClientDef = (new Definition(MiddlewareAggregate::class, [
                     new Reference("andreo.oauth_client.middleware_aggregate.$type")
                 ]))
                 ->setPublic(false)
-                ->addMethodCall('merge', [$clientMiddlewares]);
+                ->addMethodCall('merge', [$clientMiddleware]);
 
                 $container->setDefinition(
                     $middlewareAggregatePerClientId = "andreo.oauth_client.middleware_aggregate.$type.$clientName",

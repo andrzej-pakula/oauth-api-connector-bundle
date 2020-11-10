@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Http\Query;
+namespace Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken;
 
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
-use Andreo\OAuthApiConnectorBundle\AccessToken\AccessToken;
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
+use Andreo\OAuthClientBundle\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 
 final class ExchangeAccessTokenQuery implements DataTransferInterface
 {
@@ -31,11 +31,11 @@ final class ExchangeAccessTokenQuery implements DataTransferInterface
         $this->grantType = $grantType;
     }
 
-    public static function from(AttributeBag $attributeBag, AccessToken $accessToken): self
+    public static function from(Context $context, AccessToken $accessToken): self
     {
         return new self(
-            $attributeBag->getClientId()->getId(),
-            $attributeBag->getClientSecret()->getSecret(),
+            $context->getClientId()->getId(),
+            $context->getClientSecret()->getSecret(),
             $accessToken->getAccessToken()
         );
     }

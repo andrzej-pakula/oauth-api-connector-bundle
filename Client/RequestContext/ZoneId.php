@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client\Attribute;
+namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
 
 use RuntimeException;

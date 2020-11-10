@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Andreo\OAuthApiConnectorBundle\DependencyInjection;
+namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Andreo\OAuthApiConnectorBundle\ClientType\Facebook\DependencyInjection\Configuration as FacebookConfiguration;
-use Andreo\OAuthApiConnectorBundle\ClientType\GitHub\DependencyInjection\Configuration as GithubConfiguration;
+use Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection\Configuration as FacebookConfiguration;
+use Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection\Configuration as GithubConfiguration;
 
 final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('andreo_o_auth_api_connector');
+        $treeBuilder = new TreeBuilder('andreo_o_auth_client');
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addFacebookSection($rootNode);

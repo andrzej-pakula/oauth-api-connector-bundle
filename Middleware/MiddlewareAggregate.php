@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Middleware;
+namespace Andreo\OAuthClientBundle\Middleware;
 
 use ArrayIterator;
 use Iterator;

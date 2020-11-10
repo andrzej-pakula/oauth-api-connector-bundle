@@ -5,51 +5,51 @@ services:
 
   ### Controller ###
 
-  Andreo\OAuthApiConnectorBundle\Controller\ClientArgumentResolver:
+  Andreo\OAuthClientBundle\Controller\ClientArgumentResolver:
     public: false
     arguments:
       - !tagged_locator { tag: andreo.oauth_client.client, index_by: name }
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }
 
-  Andreo\OAuthApiConnectorBundle\Controller\AuthenticationController:
+  Andreo\OAuthClientBundle\Controller\AuthenticationController:
     public: false
     tags: [controller.service_arguments]
 
-  Andreo\OAuthApiConnectorBundle\Controller\AuthenticationControllerInterface:
-    alias: Andreo\OAuthApiConnectorBundle\Controller\AuthenticationController
+  Andreo\OAuthClientBundle\Controller\AuthenticationControllerInterface:
+    alias: Andreo\OAuthClientBundle\Controller\AuthenticationController
 
 
   ### Middleware ###
 
-  Andreo\OAuthApiConnectorBundle\Middleware\HandleZoneResponseMiddleware:
+  Andreo\OAuthClientBundle\Middleware\HandleZoneResponseMiddleware:
     public: false
     arguments:
       - '@router'
 
-  Andreo\OAuthApiConnectorBundle\Middleware\ValidateReturningStateMiddleware:
+  Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware:
     public: false
 
-  Andreo\OAuthApiConnectorBundle\Middleware\BuildURIsMiddleware:
+  Andreo\OAuthClientBundle\Middleware\BuildURIsMiddleware:
     public: false
     arguments:
       - '@router'
 
-  Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware:
+  Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware:
     public: false
 
-  Andreo\OAuthApiConnectorBundle\Middleware\AuthenticationRedirectMiddleware:
+  Andreo\OAuthClientBundle\Middleware\AuthenticationRedirectMiddleware:
     public: false
 
-  Andreo\OAuthApiConnectorBundle\Middleware\CheckCookieAccessTokenMiddleware:
+  Andreo\OAuthClientBundle\Middleware\CheckCookieAccessTokenMiddleware:
     public: false
 
-  Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate:
+  Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate:
     public: false
     arguments:
       -
-        - ['@Andreo\OAuthApiConnectorBundle\Middleware\HandleZoneResponseMiddleware', 4000]
-        - ['@Andreo\OAuthApiConnectorBundle\Middleware\ValidateReturningStateMiddleware', 3000]
-        - ['@Andreo\OAuthApiConnectorBundle\Middleware\BuildURIsMiddleware', 2000]
-        - ['@Andreo\OAuthApiConnectorBundle\Middleware\StoreStateMiddleware', 1000]
-        - ['@Andreo\OAuthApiConnectorBundle\Middleware\AuthenticationRedirectMiddleware', 0]
+        - ['@Andreo\OAuthClientBundle\Middleware\HandleZoneResponseMiddleware', 4000]
+        - ['@Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware', 3000]
+        - ['@Andreo\OAuthClientBundle\Middleware\BuildURIsMiddleware', 2000]
+        - ['@Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware', 1000]
+        - ['@Andreo\OAuthClientBundle\Middleware\AuthenticationRedirectMiddleware', 0]

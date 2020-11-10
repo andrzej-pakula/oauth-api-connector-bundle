@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType\GitHub\Provider;
+namespace Andreo\OAuthClientBundle\ClientType\GitHub\Provider;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\MetaDataProviderInterface;
-use Andreo\OAuthApiConnectorBundle\ClientType\SupportedType;
+use Andreo\OAuthClientBundle\Client\MetaDataProviderInterface;
+use Andreo\OAuthClientBundle\ClientType\SupportedType;
 
 final class MetaDataProvider implements MetaDataProviderInterface
 {

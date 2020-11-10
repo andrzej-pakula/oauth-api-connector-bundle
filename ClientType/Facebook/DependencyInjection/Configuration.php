@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\ClientType\Facebook\DependencyInjection;
+namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
 
 
-use Andreo\OAuthApiConnectorBundle\ClientType\Facebook\Http\OAuthHTTPClient;
-use Andreo\OAuthApiConnectorBundle\ClientType\Facebook\Versions;
-use Andreo\OAuthApiConnectorBundle\ClientType\SupportedType;
-use Andreo\OAuthApiConnectorBundle\Middleware\CheckCookieAccessTokenMiddleware;
-use Andreo\OAuthApiConnectorBundle\Middleware\CheckSessionAccessTokenMiddleware;
-use Andreo\OAuthApiConnectorBundle\Middleware\StoreAccessTokenAsCookieMiddleware;
-use Andreo\OAuthApiConnectorBundle\Middleware\StoreAccessTokenAsSessionAttributeMiddleware;
+use Andreo\OAuthClientBundle\ClientType\Facebook\Http\OAuthHTTPClient;
+use Andreo\OAuthClientBundle\ClientType\Facebook\Versions;
+use Andreo\OAuthClientBundle\ClientType\SupportedType;
+use Andreo\OAuthClientBundle\Middleware\CheckCookieAccessTokenMiddleware;
+use Andreo\OAuthClientBundle\Middleware\CheckSessionAccessTokenMiddleware;
+use Andreo\OAuthClientBundle\Middleware\StoreAccessTokenAsCookieMiddleware;
+use Andreo\OAuthClientBundle\Middleware\StoreAccessTokenAsSessionAttributeMiddleware;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -49,6 +49,7 @@ final class Configuration implements ConfigurationInterface
                                     ->arrayNode('access_token')
                                         ->addDefaultsIfNotSet()
                                         ->children()
+                                            ->booleanNode('long_live')->defaultFalse()->end()
                                             ->append($this->getStorageNode())
                                         ->end()
                                     ->end()

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Controller;
+namespace Andreo\OAuthClientBundle\Controller;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\ClientInterface;
+use Andreo\OAuthClientBundle\Client\ClientInterface;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;

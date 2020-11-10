@@ -3,30 +3,30 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthApiConnectorBundle\Client;
+namespace Andreo\OAuthClientBundle\Client;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\AttributeBag;
-use Andreo\OAuthApiConnectorBundle\Middleware\MiddlewareAggregate;
+use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class Client implements ClientInterface
 {
-    private AttributeBag $attributeBag;
+    private Context $context;
 
     private MiddlewareAggregate $middlewareAggregate;
 
-    public function __construct(AttributeBag $attributeBag, MiddlewareAggregate $middlewareAggregate)
+    public function __construct(Context $context, MiddlewareAggregate $middlewareAggregate)
     {
-        $this->attributeBag = $attributeBag;
+        $this->context = $context;
         $this->middlewareAggregate = $middlewareAggregate;
     }
 
     public function handle(Request $request): Response
     {
-        $this->attributeBag->handleRequest($request)->save($request);
+        $this->context->handleRequest($request)->save($request);
 
         $stack = $this->middlewareAggregate->getStack();
 

@@ -2,7 +2,7 @@
 
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Andreo\OAuthApiConnectorBundle\App\Kernel;
+use Tests\Andreo\OAuthClientBundle\App\Kernel;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 

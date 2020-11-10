@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Andreo\OAuthApiConnectorBundle\Traits;
+namespace Andreo\OAuthClientBundle\Traits;
 
 
-use Andreo\OAuthApiConnectorBundle\Client\Attribute\ClientId;
-use Andreo\OAuthApiConnectorBundle\Util\StoreKeyGenerator;
+use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
+use Andreo\OAuthClientBundle\Util\StoreKeyGenerator;
 use RuntimeException;
 
 trait SerializeTrait
