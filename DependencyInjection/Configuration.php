@@ -21,6 +21,27 @@ final class Configuration implements ConfigurationInterface
         $this->addFacebookSection($rootNode);
         $this->addGithubSection($rootNode);
 
+        $rootNode
+            ->validate()
+                ->ifTrue(function (array $configs) {
+                    if (count($configs) === 1) {
+                        return false;
+                    }
+
+                    $clientNames = [];
+                    foreach ($configs as $key => $config) {
+                        $clientNames[] = array_keys($config['clients']);
+                    }
+
+                    $clientNames = array_merge(...$clientNames);
+                    $originCount = count($clientNames);
+                    $uniqueClientNames = array_unique($clientNames, SORT_REGULAR);
+
+                    return $originCount !== count($uniqueClientNames);
+                })
+                ->thenInvalid('Client names must be unique.')
+            ->end();
+
         return $treeBuilder;
     }
 

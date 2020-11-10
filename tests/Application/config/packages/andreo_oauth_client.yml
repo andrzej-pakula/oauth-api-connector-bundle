@@ -12,4 +12,3 @@ andreo_o_auth_client:
           zones:
             main:
               successful_response_uri: 'app.auth_test_successful'
-

@@ -35,7 +35,7 @@ final class Configuration implements ConfigurationInterface
                                 ->addDefaultsIfNotSet()
                                     ->children()
                                         ->scalarNode('http_client_id')->defaultValue(OAuthHTTPClient::class)->cannotBeEmpty()->end()
-                                        ->arrayNode('auth')
+                                        ->arrayNode('credentials')
                                             ->children()
                                                 ->scalarNode('id')->end()
                                                 ->scalarNode('secret')->end()
