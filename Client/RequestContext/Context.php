@@ -112,7 +112,7 @@ final class Context
         return $this->parameters->isCallback();
     }
 
-    public function handleRequest(Request $request): self
+    public function handleParameters(Request $request): self
     {
         $parameters = Parameters::from($request);
         if (!$this->isEmptyZones() && !$parameters->isZoneDefined()) {

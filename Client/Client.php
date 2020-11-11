@@ -26,7 +26,7 @@ final class Client implements ClientInterface
 
     public function handle(Request $request): Response
     {
-        $this->context->handleRequest($request)->save($request);
+        $this->context->handleParameters($request)->save($request);
 
         $stack = $this->middlewareAggregate->getStack();
 
