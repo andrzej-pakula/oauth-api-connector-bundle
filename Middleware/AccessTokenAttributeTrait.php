@@ -7,7 +7,7 @@ namespace Andreo\OAuthClientBundle\Middleware;
 use Andreo\OAuthClientBundle\AccessToken\AccessToken;
 use Andreo\OAuthClientBundle\AccessToken\AccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\RequestContext\Context;
-use Andreo\OAuthClientBundle\Exception\InvalidAccessTokenException;
+use Andreo\OAuthClientBundle\Exception\MissingAccessTokenException;
 use Symfony\Component\HttpFoundation\Request;
 
 trait AccessTokenAttributeTrait
@@ -16,16 +16,9 @@ trait AccessTokenAttributeTrait
     {
         $accessTokenStorageKey = AccessToken::getKey($context->getClientId());
         if (!$request->attributes->has($accessTokenStorageKey)) {
-            throw new InvalidAccessTokenException('Can not save access token because it not exist.');
-
+            throw new MissingAccessTokenException('Can not save access token because it not exist.');
         }
 
-        /** @var AccessToken $accessToken */
-        $accessToken = $request->attributes->get($accessTokenStorageKey);
-        if (!$accessToken instanceof AccessTokenInterface) {
-            throw new InvalidAccessTokenException();
-        }
-
-        return $accessToken;
+        return  $request->attributes->get($accessTokenStorageKey);
     }
 }
