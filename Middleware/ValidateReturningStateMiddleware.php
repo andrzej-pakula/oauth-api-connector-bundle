@@ -26,10 +26,11 @@ final class ValidateReturningStateMiddleware implements MiddlewareInterface
             throw new RuntimeException('Missing state in current session.');
         }
 
-        /** @var State $sessionState */
         $sessionState = State::decrypt($request->getSession()->get($stateStorageKey));
 
         if ($sessionState->equals($context->getParameters()->getState())) {
+            $request->getSession()->remove($sessionState::getKey($context->getClientId()));
+
             return $stack->next()($request, $response, $stack);
         }
 

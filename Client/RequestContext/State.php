@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
-use Andreo\OAuthClientBundle\Traits\SerializeTrait;
+use Andreo\OAuthClientBundle\Traits\EncodingTrait;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class State
 {
-    use SerializeTrait;
+    use EncodingTrait;
 
     private const KEY = 'state';
 
@@ -30,14 +30,14 @@ final class State
         return $other->st === $this->st && $other->ds === $this->ds;
     }
 
-    public static function isInRequest(Request $request): bool
+    public static function inRequest(Request $request): bool
     {
         return $request->query->has(self::KEY);
     }
 
-    public static function from(Request $request): self
+    public static function fromRequest(Request $request): self
     {
-        if (!self::isInRequest($request)) {
+        if (!self::inRequest($request)) {
             throw new RuntimeException('Missing state parameter.');
         }
 

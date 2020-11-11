@@ -26,9 +26,9 @@ final class Parameters
 
     public static function from(Request $request): self
     {
-        $code = Code::isInRequest($request) ? Code::from($request) : null;
-        $state = State::isInRequest($request) ? State::from($request) : null;
-        $zone = ZoneId::isInRequest($request) ? ZoneId::from($request) : null;
+        $code = Code::inRequest($request) ? Code::fromRequest($request) : null;
+        $state = State::inRequest($request) ? State::fromRequest($request) : null;
+        $zone = ZoneId::inRequest($request) ? ZoneId::fromRequest($request) : null;
 
         return new self(
             $code,

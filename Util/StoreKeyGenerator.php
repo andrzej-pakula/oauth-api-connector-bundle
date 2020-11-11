@@ -12,6 +12,6 @@ final class StoreKeyGenerator
 {
     public static function generate(ClientId $clientId, string $key): string
     {
-        return $clientId->getId() . '_'  . $key;
+        return base64_encode($clientId->getName() . $key);
     }
 }

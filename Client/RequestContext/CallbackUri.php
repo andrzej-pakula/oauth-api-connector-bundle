@@ -10,6 +10,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class CallbackUri
 {
+    private const KEY = 'redirect_uri';
+
     private string $uri;
 
     public function __construct(string $uri)
@@ -34,7 +36,7 @@ final class CallbackUri
 
     public function mapRequestParams(array $requestParams = []): array
     {
-        $requestParams['redirect_uri'] = $this->uri;
+        $requestParams[self::KEY] = $this->uri;
 
         return $requestParams;
     }

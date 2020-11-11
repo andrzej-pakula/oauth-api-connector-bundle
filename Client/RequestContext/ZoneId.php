@@ -25,9 +25,9 @@ final class ZoneId
         return $this->id;
     }
 
-    public static function from(Request $request): self
+    public static function fromRequest(Request $request): self
     {
-        if (!self::isInRequest($request)) {
+        if (!self::inRequest($request)) {
             throw new RuntimeException('Missing zone parameter.');
         }
 
@@ -36,7 +36,7 @@ final class ZoneId
         return new self($id);
     }
 
-    public static function isInRequest(Request $request): bool
+    public static function inRequest(Request $request): bool
     {
         return $request->attributes->has(self::KEY);
     }

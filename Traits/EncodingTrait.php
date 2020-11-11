@@ -8,7 +8,7 @@ use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
 use Andreo\OAuthClientBundle\Util\StoreKeyGenerator;
 use RuntimeException;
 
-trait SerializeTrait
+trait EncodingTrait
 {
     public function encrypt(): string
     {

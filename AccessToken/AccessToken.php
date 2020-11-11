@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\AccessToken;
 
 
-use Andreo\OAuthClientBundle\Traits\SerializeTrait;
+use Andreo\OAuthClientBundle\Traits\EncodingTrait;
 
 
 final class AccessToken implements AccessTokenInterface
 {
-    use SerializeTrait;
+    use EncodingTrait;
 
     public const KEY = 'access_token';
 

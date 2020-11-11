@@ -25,9 +25,9 @@ final class Code
         return $this->code;
     }
 
-    public static function from(Request $request): self
+    public static function fromRequest(Request $request): self
     {
-        if (!self::isInRequest($request)) {
+        if (!self::inRequest($request)) {
             throw new RuntimeException('Missing code parameter.');
         }
 
@@ -36,7 +36,7 @@ final class Code
         return new self($code);
     }
 
-    public static function isInRequest(Request $request): bool
+    public static function inRequest(Request $request): bool
     {
         return $request->query->has(self::KEY);
     }
