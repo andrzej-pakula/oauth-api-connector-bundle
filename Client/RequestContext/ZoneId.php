@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
 
-use RuntimeException;
+use Andreo\OAuthClientBundle\Exception\MissingZoneException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ZoneId
@@ -28,7 +28,7 @@ final class ZoneId
     public static function fromRequest(Request $request): self
     {
         if (!self::inRequest($request)) {
-            throw new RuntimeException('Missing zone parameter.');
+            throw new MissingZoneException();
         }
 
         $id = $request->attributes->get(self::KEY);

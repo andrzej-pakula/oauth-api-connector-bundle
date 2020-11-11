@@ -126,7 +126,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (!isset($bundles['AndreoGuzzleBundle'])) {
-            throw new RuntimeException('');
+            throw new RuntimeException('Andreo guzzle bundle is required in this bundle.');
         }
 
         $configs = $container->getExtensionConfig($this->getAlias());

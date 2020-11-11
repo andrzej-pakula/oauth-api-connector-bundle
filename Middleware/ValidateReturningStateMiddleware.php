@@ -8,7 +8,7 @@ namespace Andreo\OAuthClientBundle\Middleware;
 
 use Andreo\OAuthClientBundle\Client\RequestContext\Context;
 use Andreo\OAuthClientBundle\Client\RequestContext\State;
-use RuntimeException;
+use Andreo\OAuthClientBundle\Exception\InvalidStateException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,17 +23,16 @@ final class ValidateReturningStateMiddleware implements MiddlewareInterface
 
         $stateStorageKey = State::getKey($context->getClientId());
         if (!$request->getSession()->has($stateStorageKey)) {
-            throw new RuntimeException('Missing state in current session.');
+            throw new InvalidStateException('Missing state in current session.');
         }
 
         $sessionState = State::decrypt($request->getSession()->get($stateStorageKey));
-
         if ($sessionState->equals($context->getParameters()->getState())) {
             $request->getSession()->remove($sessionState::getKey($context->getClientId()));
 
             return $stack->next()($request, $response, $stack);
         }
 
-        throw new RuntimeException('Invalid state.');
+        throw new InvalidStateException();
     }
 }

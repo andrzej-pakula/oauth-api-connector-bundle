@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
 
+use Andreo\OAuthClientBundle\Exception\InvalidCallbackResponseException;
+use Andreo\OAuthClientBundle\Exception\MissingZoneException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,7 +42,7 @@ final class Parameters
     public function getCode(): Code
     {
         if (!$this->isCallback()) {
-            throw new RuntimeException('Callback parameters are not complete.');
+            throw new InvalidCallbackResponseException();
         }
         return $this->code;
     }
@@ -48,7 +50,7 @@ final class Parameters
     public function getState(): State
     {
         if (!$this->isCallback()) {
-            throw new RuntimeException('Callback parameters are not complete.');
+            throw new InvalidCallbackResponseException();
         }
 
         return $this->state;
@@ -57,7 +59,7 @@ final class Parameters
     public function getZoneId(): ZoneId
     {
         if (!$this->isZoneDefined()) {
-            throw new RuntimeException('Zone is not defined.');
+            throw new MissingZoneException();
         }
 
         return $this->zoneId;

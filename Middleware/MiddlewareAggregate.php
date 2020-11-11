@@ -6,10 +6,10 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 use ArrayIterator;
+use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
 use LogicException;
-use RuntimeException;
 
 final class MiddlewareAggregate implements IteratorAggregate
 {
@@ -45,7 +45,7 @@ final class MiddlewareAggregate implements IteratorAggregate
         }
 
         if (null === $searchPriority && count($trash) > 1) {
-            throw new RuntimeException('More than one middleware of the same instance found. Priority parameter is required');
+            throw new InvalidArgumentException('Priority parameter is required because more than one middleware instance was found.');
         }
 
         foreach ($trash as $priority => $handler) {
