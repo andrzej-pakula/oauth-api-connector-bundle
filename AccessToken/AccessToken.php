@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\AccessToken;
 
 
-use Andreo\OAuthClientBundle\Traits\EncodingTrait;
+use Andreo\OAuthClientBundle\Storage\EncodingTrait;
 
 
 final class AccessToken implements AccessTokenInterface

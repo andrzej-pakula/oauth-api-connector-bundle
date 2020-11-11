@@ -1,11 +1,10 @@
 <?php
 
 
-namespace Andreo\OAuthClientBundle\Traits;
+namespace Andreo\OAuthClientBundle\Storage;
 
 
 use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
-use Andreo\OAuthClientBundle\Util\StoreKeyGenerator;
 use RuntimeException;
 
 trait EncodingTrait

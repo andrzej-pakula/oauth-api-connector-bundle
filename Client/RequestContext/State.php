@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client\RequestContext;
 
-use Andreo\OAuthClientBundle\Traits\EncodingTrait;
+use Andreo\OAuthClientBundle\Storage\EncodingTrait;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
