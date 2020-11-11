@@ -25,11 +25,11 @@ final class ClientArgumentResolver implements ArgumentValueResolverInterface
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         return $argument->getType() === ClientInterface::class &&
-            $request->attributes->has('client_name');
+            $request->attributes->has('client');
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield $this->clientLocator->get($request->attributes->get('client_name'));
+        yield $this->clientLocator->get($request->attributes->get('client'));
     }
 }

@@ -15,7 +15,7 @@ final class AuthenticationController implements AuthenticationControllerInterfac
 {
     /**
      * @Route(
-     *     "oauth/authentication/{client_name}/{zone}",
+     *     "oauth/authentication/{client}/{zone}",
      *     name="andreo.oauth.client.authentication",
      *     defaults={"zone": null},
      *     methods={Request::METHOD_GET}
