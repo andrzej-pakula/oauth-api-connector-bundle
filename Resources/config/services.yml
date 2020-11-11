@@ -22,7 +22,7 @@ services:
 
   ### Middleware ###
 
-  Andreo\OAuthClientBundle\Middleware\HandleZoneResponseMiddleware:
+  Andreo\OAuthClientBundle\Middleware\SetZoneResponseMiddleware:
     public: false
     arguments:
       - '@router'
@@ -48,7 +48,7 @@ services:
     public: false
     arguments:
       -
-        - ['@Andreo\OAuthClientBundle\Middleware\HandleZoneResponseMiddleware', 4000]
+        - ['@Andreo\OAuthClientBundle\Middleware\SetZoneResponseMiddleware', 4000]
         - ['@Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware', 3000]
         - ['@Andreo\OAuthClientBundle\Middleware\BuildURIsMiddleware', 2000]
         - ['@Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware', 1000]

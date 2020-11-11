@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
-final class HandleZoneResponseMiddleware implements MiddlewareInterface
+final class SetZoneResponseMiddleware implements MiddlewareInterface
 {
     private RouterInterface $router;
 
