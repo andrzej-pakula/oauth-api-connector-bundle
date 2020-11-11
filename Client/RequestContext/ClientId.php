@@ -31,14 +31,14 @@ final class ClientId
         return $this->name;
     }
 
-    public function mapId(array $requestParams): array
+    public function mapQueryId(array $requestParams): array
     {
         $requestParams[self::KEY_ID] = $this->getId();
 
         return $requestParams;
     }
 
-    public function mapName(array $requestParams): array
+    public function mapQueryName(array $requestParams): array
     {
         $requestParams[self::KEY_NAME] = $this->getName();
 

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
 
 
+use Andreo\OAuthClientBundle\Client\RequestContext\Scope;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Http\OAuthHTTPClient;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Versions;
 use Andreo\OAuthClientBundle\ClientType\SupportedType;
@@ -46,8 +47,12 @@ final class Configuration implements ConfigurationInterface
                                             ->scalarNode('secret')->cannotBeEmpty()->end()
                                             ->arrayNode('scope')
                                                 ->beforeNormalization()
-                                                    ->castToArray()
+                                                    ->ifString()
+                                                    ->then(static function(string $scope) {
+                                                        return Scope::fromString($scope)->getParts();
+                                                    })
                                                 ->end()
+                                                ->scalarPrototype()->end()
                                             ->end()
                                         ->end()
                                     ->end()

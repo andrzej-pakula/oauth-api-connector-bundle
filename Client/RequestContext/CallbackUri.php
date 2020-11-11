@@ -21,8 +21,8 @@ final class CallbackUri
 
     public function generate(RouterInterface $router, ClientId $clientId, ZoneId $zoneId): self
     {
-        $params = $zoneId->mapRequestParams();
-        $params = $clientId->mapName($params);
+        $params = $zoneId->mapQuery();
+        $params = $clientId->mapQueryName($params);
 
         $new = clone $this;
         $new->uri = $router->generate(
@@ -34,7 +34,7 @@ final class CallbackUri
         return $new;
     }
 
-    public function mapRequestParams(array $requestParams = []): array
+    public function mapQuery(array $requestParams = []): array
     {
         $requestParams[self::KEY] = $this->uri;
 

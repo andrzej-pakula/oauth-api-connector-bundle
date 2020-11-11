@@ -54,7 +54,7 @@ final class State
         );
     }
 
-    public function mapRequestParams(array $requestParams): array
+    public function mapQuery(array $requestParams): array
     {
         $requestParams[self::KEY] = $this->encrypt();
 

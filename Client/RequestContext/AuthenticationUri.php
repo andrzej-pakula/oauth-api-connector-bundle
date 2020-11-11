@@ -17,12 +17,18 @@ final class AuthenticationUri
         $this->uri = $uri;
     }
 
-    public function create(CallbackUri $callbackUrl, ClientId $clientId): self
+    public function create(CallbackUri $callbackUri, ClientId $clientId, Scope $scope): self
     {
         $new = clone $this;
+
         $new->state = State::create();
 
-        $new->uri = $this->uri . '?' . $new->getQuery($callbackUrl, $clientId);
+        $params = $callbackUri->mapQuery();
+        $params = $scope->mapQuery($params);
+        $params = $new->state->mapQuery($params);
+        $params = $clientId->mapQueryId($params);
+
+        $new->uri = $this->uri . '?' . http_build_query($params);
 
         return $new;
     }
@@ -35,20 +41,5 @@ final class AuthenticationUri
     public function getUri(): string
     {
         return $this->uri;
-    }
-
-    private function getQuery(CallbackUri $callbackUrl, ClientId $clientId): string
-    {
-        $params =  [];
-        $params = $callbackUrl->mapRequestParams($params);
-        $params = $clientId->mapId($params);
-        $params = $this->state->mapRequestParams($params);
-
-        return http_build_query($params);
-    }
-
-    public static function fromConfig(array $config): self
-    {
-        return new self($config['auth_uri']);
     }
 }

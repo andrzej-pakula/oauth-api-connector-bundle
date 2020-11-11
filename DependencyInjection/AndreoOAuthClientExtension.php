@@ -34,6 +34,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
             foreach ($options['clients'] ?? [] as $clientName => $config) {
                 $api = $config['api'];
                 $version = $config['version'] ?? 'default';
+                $credentials = $config['credentials'];
 
                 $zoneConfigs = [];
                 foreach ($config['zones'] ?? [] as $id => $zoneConfig) {
@@ -43,9 +44,10 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                     ];
                 }
                 $attributeDef = (new Definition(Context::class, [[
-                    'client_id' => $config['credentials']['id'],
+                    'client_id' => $credentials['id'],
+                    'client_secret' => $credentials['secret'],
+                    'scope' => $credentials['scope'],
                     'client_name' => $clientName,
-                    'client_secret' => $config['credentials']['secret'],
                     'callback_uri' => 'andreo.oauth.client.authentication',
                     'auth_uri' => $api['auth_uri'],
                     'zones' => $zoneConfigs

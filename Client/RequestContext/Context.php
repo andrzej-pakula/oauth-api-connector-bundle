@@ -23,6 +23,8 @@ final class Context
 
     private Parameters $parameters;
 
+    private Scope $scope;
+
     /**
      * @var iterable<string, Zone>
      */
@@ -33,12 +35,14 @@ final class Context
         ClientSecret $clientSecret,
         CallbackUri $callbackUri,
         AuthenticationUri $authenticationUri,
+        Scope $scope,
         iterable $zones
     ){
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->callbackUri = $callbackUri;
         $this->authenticationUri = $authenticationUri;
+        $this->scope = $scope;
         $this->zones = $zones;
     }
 
@@ -70,7 +74,11 @@ final class Context
     public function buildAuthorizationUri(): self
     {
         $new = clone $this;
-        $new->authenticationUri = $this->authenticationUri->create($this->callbackUri, $this->clientId);
+        $new->authenticationUri = $this->authenticationUri->create(
+            $this->callbackUri,
+            $this->clientId,
+            $this->scope
+        );
 
         return $new;
     }
@@ -78,7 +86,11 @@ final class Context
     public function buildCallbackUri(RouterInterface $router): self
     {
         $new = clone $this;
-        $new->callbackUri = $this->callbackUri->generate($router, $this->clientId, $this->parameters->getZoneId());
+        $new->callbackUri = $this->callbackUri->generate(
+            $router,
+            $this->clientId,
+            $this->parameters->getZoneId()
+        );
 
         return $new;
     }
@@ -143,8 +155,9 @@ final class Context
             new ClientId((string)$config['client_id'], $config['client_name']),
             new ClientSecret($config['client_secret']),
             new CallbackUri($config['callback_uri']),
-            AuthenticationUri::fromConfig($config),
-            Zone::createRegistryByConfig($config)
+            new AuthenticationUri($config['auth_uri']),
+            new Scope($config['scope']),
+            Zone::createRegistryByConfig($config),
         );
     }
 }

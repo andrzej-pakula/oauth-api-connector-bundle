@@ -41,7 +41,7 @@ final class ZoneId
         return $request->attributes->has(self::KEY);
     }
 
-    public function mapRequestParams(array $requestParams = []): array
+    public function mapQuery(array $requestParams = []): array
     {
         $requestParams[self::KEY] = $this->getId();
 

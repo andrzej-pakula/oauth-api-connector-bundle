@@ -2,13 +2,14 @@ andreo_o_auth_client:
     facebook:
       clients:
         foo:
-          api: v8.0
+          api: v9.0
           credentials:
             id: 1571736652977798
             secret: 3b36c168393dc5e236a626900238165c
+            scope: email,user_friends
           access_token:
             long_live: true
-            storage: cookie
+            storage: session
           zones:
             main:
               successful_response_uri: 'app.auth_test_successful'
