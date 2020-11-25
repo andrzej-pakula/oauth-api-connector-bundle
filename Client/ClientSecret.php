@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client;
 
 
 final class ClientSecret

@@ -6,9 +6,10 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\HTTPContext;
+use Andreo\OAuthClientBundle\Exception\MissingZoneException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -16,24 +17,27 @@ final class SetZoneResponseMiddleware implements MiddlewareInterface
 {
     private RouterInterface $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
 
-    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
+    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
-        $context = Context::get($request);
-
-        if ($context->isEmptyZones()) {
-            return $stack->next()($request, $response, $stack);
+        if (!$clientContext->hasZones()) {
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $uri = $this->router->generate($context->getZone()->getSuccessfulResponseUri());
+        $parameters = $httpContext->getParameters();
+        if (!$parameters->hasZoneId()) {
+            throw new MissingZoneException();
+        }
 
-        return $stack->next()($request, new RedirectResponse($uri), $stack);
+        $zone = $clientContext->getZone($parameters->getZoneId());
+        $uri = $this->router->generate($zone->getSuccessfulResponseUri());
+
+        $httpContext = $httpContext->withResponse(new RedirectResponse($uri));
+
+        return $stack->next()($httpContext, $clientContext, $stack);
     }
 }

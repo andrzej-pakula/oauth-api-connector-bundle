@@ -10,8 +10,8 @@ use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
-use Andreo\OAuthClientBundle\AccessToken\AccessToken;
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\ClientContext;
 
 final class ExchangeAccessTokenQuery implements DataTransferInterface
 {
@@ -31,11 +31,11 @@ final class ExchangeAccessTokenQuery implements DataTransferInterface
         $this->grantType = $grantType;
     }
 
-    public static function from(Context $context, AccessToken $accessToken): self
+    public static function from(ClientContext $clientContext, AccessToken $accessToken): self
     {
         return new self(
-            $context->getClientId()->getId(),
-            $context->getClientSecret()->getSecret(),
+            $clientContext->getClientId()->getId(),
+            $clientContext->getClientSecret()->getSecret(),
             $accessToken->getAccessToken()
         );
     }

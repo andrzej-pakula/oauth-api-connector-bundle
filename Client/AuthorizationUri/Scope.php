@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 
 
-final class Scope
+use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
+
+final class Scope implements AggregateHTTPParamInterface
 {
     private const KEY = 'scope';
 
@@ -34,11 +36,11 @@ final class Scope
         return new self($parts);
     }
 
-    public function mapQuery(array $requestParams = []): array
+    public function aggregateParam(array $httpParams = []): array
     {
-        $requestParams[self::KEY] = (string)$this;
+        $httpParams[self::KEY] = (string)$this;
 
-        return $requestParams;
+        return $httpParams;
     }
 
     public function __toString(): string

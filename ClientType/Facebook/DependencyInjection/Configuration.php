@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
 
 
-use Andreo\OAuthClientBundle\Client\RequestContext\Scope;
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Http\OAuthHTTPClient;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Versions;
 use Andreo\OAuthClientBundle\ClientType\SupportedType;

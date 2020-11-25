@@ -4,7 +4,8 @@
 namespace Andreo\OAuthClientBundle\Storage;
 
 
-use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
+use Andreo\OAuthClientBundle\Client\ClientId;
+use Andreo\OAuthClientBundle\Client\ClientName;
 use RuntimeException;
 
 trait EncodingTrait
@@ -44,8 +45,8 @@ trait EncodingTrait
         return $object;
     }
 
-    public static function getKey(ClientId $clientId): string
+    public static function getKey(ClientName $clientName): string
     {
-        return StoreKeyGenerator::generate($clientId, self::KEY);
+        return StoreKeyGenerator::generate($clientName, self::KEY);
     }
 }

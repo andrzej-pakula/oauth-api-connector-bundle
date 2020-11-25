@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client\RedirectUri;
 
 
+use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
 use Andreo\OAuthClientBundle\Exception\MissingZoneException;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ZoneId
+final class ZoneId implements AggregateHTTPParamInterface
 {
     private const KEY = 'zone';
 
@@ -41,10 +42,15 @@ final class ZoneId
         return $request->attributes->has(self::KEY);
     }
 
-    public function mapQuery(array $requestParams = []): array
+    public function aggregateParam(array $httpParams = []): array
     {
-        $requestParams[self::KEY] = $this->getId();
+        $httpParams[self::KEY] = $this->getId();
 
-        return $requestParams;
+        return $httpParams;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 }

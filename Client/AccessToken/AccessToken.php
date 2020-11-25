@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\AccessToken;
+namespace Andreo\OAuthClientBundle\Client\AccessToken;
 
 
 use Andreo\OAuthClientBundle\Storage\EncodingTrait;
@@ -12,8 +12,6 @@ use Andreo\OAuthClientBundle\Storage\EncodingTrait;
 final class AccessToken implements AccessTokenInterface
 {
     use EncodingTrait;
-
-    public const KEY = 'access_token';
 
     private string $accessToken;
 

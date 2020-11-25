@@ -6,12 +6,13 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Storage;
 
 
-use Andreo\OAuthClientBundle\Client\RequestContext\ClientId;
+
+use Andreo\OAuthClientBundle\Client\ClientName;
 
 final class StoreKeyGenerator
 {
-    public static function generate(ClientId $clientId, string $key): string
+    public static function generate(ClientName $clientName, string $key): string
     {
-        return base64_encode($clientId->getName() . $key);
+        return base64_encode($clientName->getName() . $key);
     }
 }

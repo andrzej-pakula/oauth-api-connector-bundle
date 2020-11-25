@@ -8,7 +8,7 @@ andreo_o_auth_client:
             secret: 3b36c168393dc5e236a626900238165c
             scope: email,user_friends
           access_token:
-            long_live: true
+            long_live: false
             storage: session
           zones:
             main:

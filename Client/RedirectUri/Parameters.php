@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client\RedirectUri;
 
 
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Exception\InvalidCallbackResponseException;
 use Andreo\OAuthClientBundle\Exception\MissingZoneException;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class Parameters
@@ -58,14 +58,14 @@ final class Parameters
 
     public function getZoneId(): ZoneId
     {
-        if (!$this->isZoneDefined()) {
+        if (!$this->hasZoneId()) {
             throw new MissingZoneException();
         }
 
         return $this->zoneId;
     }
 
-    public function isZoneDefined(): bool
+    public function hasZoneId(): bool
     {
         return null !== $this->zoneId;
     }

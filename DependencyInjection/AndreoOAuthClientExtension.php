@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Client\AccessToken\Query\AccessTokenQuery;
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\AuthorizationUri;
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
+use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\ClientId;
 use Andreo\OAuthClientBundle\Client\Client;
+use Andreo\OAuthClientBundle\Client\ClientName;
+use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
+use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
+use Andreo\OAuthClientBundle\Client\Zone;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Middleware\ExchangeAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\ClientType\SupportedType;
 use Andreo\OAuthClientBundle\Http\Provider\HttpClientConfigProvider;
@@ -36,31 +44,57 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 $version = $config['version'] ?? 'default';
                 $credentials = $config['credentials'];
 
-                $zoneConfigs = [];
+                $clientIdDef = (new Definition(ClientId::class, [$credentials['id']]))
+                    ->setPrivate(true);
+                $clientNameDef = (new Definition(ClientName::class, [$clientName]))
+                    ->setPrivate(true);
+                $scopeDef = (new Definition(Scope::class, [$credentials['scope']]))
+                    ->setPrivate(true);
+
+                $authorizationUriDef = (new Definition(AuthorizationUri::class, [
+                    $api['auth_uri'],
+                ]))
+                ->setMethodCalls([
+                    ['addHTTPParameter', [$clientIdDef], true],
+                    ['addHTTPParameter', [$scopeDef], true],
+                ])
+                ->setPrivate(true);
+
+                $redirectUriDef = (new Definition(RedirectUri::class, [
+                    'andreo.oauth.authorization'
+                ]))
+                ->addMethodCall('addHTTPParameter', [$clientNameDef], true)
+                ->setPrivate(true);
+
+                $zoneRegistry = [];
                 foreach ($config['zones'] ?? [] as $id => $zoneConfig) {
-                    $zoneConfigs[] =  [
-                        'zone_id' => $id,
-                        'successful_response_uri' => $zoneConfig['successful_response_uri']
-                    ];
+                    $zoneRegistry[$id] = (new Definition(Zone::class, [
+                        (new Definition(ZoneId::class, [$id]))->setPrivate(true),
+                        $zoneConfig['successful_response_uri']
+                    ]))->setPrivate(true);
                 }
-                $attributeDef = (new Definition(Context::class, [[
-                    'client_id' => $credentials['id'],
-                    'client_secret' => $credentials['secret'],
-                    'scope' => $credentials['scope'],
-                    'client_name' => $clientName,
-                    'callback_uri' => 'andreo.oauth.client.authentication',
-                    'auth_uri' => $api['auth_uri'],
-                    'zones' => $zoneConfigs
-                ]]))
-                ->setPublic(false)
-                ->setFactory([Context::class, 'fromConfig']);
+
+                $clientContextDef = (new Definition(ClientContext::class, [
+                    $clientNameDef,
+                    $redirectUriDef,
+                    $authorizationUriDef,
+                    $zoneRegistry
+                ]))
+                ->setPrivate(true);
 
                 $clientMiddleware = [];
 
-                $getAccessTokenMiddlewarePerClientDef = (new Definition(GetAccessTokenMiddleware::class, [
-                    new Reference("andreo.oauth.http_client.$type.$version")
+                $accessTokenQueryDef = (new Definition(AccessTokenQuery::class, [
+                    $credentials['id'],
+                    $credentials['secret'],
                 ]))
-                ->setPublic(false);
+                ->setPrivate(true);
+
+                $getAccessTokenMiddlewarePerClientDef = (new Definition(GetAccessTokenMiddleware::class, [
+                    new Reference("andreo.oauth.http_client.$type.$version"),
+                    $accessTokenQueryDef
+                ]))
+                ->setPrivate(true);
 
                 $container->setDefinition(
                     $getAccessTokenMiddlewarePerClientId = "andreo.oauth_client.middleware.get_access_token.$clientName",
@@ -75,7 +109,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                     $exchangeAccessTokenMiddlewarePerClientDef = (new Definition(ExchangeAccessTokenMiddleware::class, [
                         new Reference("andreo.oauth.http_client.$type.$version")
                     ]))
-                    ->setPublic(false);
+                    ->setPrivate(true);
 
                     $container->setDefinition(
                         $exchangeAccessTokenMiddlewarePerClientId = "andreo.oauth_client.middleware.exchange_access_token.$clientName",
@@ -106,9 +140,8 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 );
 
                 $clientDef = (new Definition(Client::class, [
-                    $attributeDef,
                     new Reference($middlewareAggregatePerClientId),
-                    new Reference('router')
+                    $clientContextDef
                 ]))
                 ->setPublic(false)
                 ->addTag('andreo.oauth_client.client', [

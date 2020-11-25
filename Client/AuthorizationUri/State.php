@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 
+use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
 use Andreo\OAuthClientBundle\Storage\EncodingTrait;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
-final class State
+final class State implements AggregateHTTPParamInterface
 {
     use EncodingTrait;
 
@@ -54,10 +55,10 @@ final class State
         );
     }
 
-    public function mapQuery(array $requestParams): array
+    public function aggregateParam(array $httpParams = []): array
     {
-        $requestParams[self::KEY] = $this->encrypt();
+        $httpParams[self::KEY] = $this->encrypt();
 
-        return $requestParams;
+        return $httpParams;
     }
 }

@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class AuthenticationController implements AuthenticationControllerInterface
+final class AuthorizationController implements AuthorizationControllerInterface
 {
     /**
      * @Route(
-     *     "oauth/authentication/{client}/{zone}",
-     *     name="andreo.oauth.client.authentication",
+     *     "oauth/{client}/{zone}",
+     *     name="andreo.oauth.authorization",
      *     defaults={"zone": null},
      *     methods={Request::METHOD_GET}
      * )

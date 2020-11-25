@@ -6,32 +6,33 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
-use Andreo\OAuthClientBundle\Client\RequestContext\State;
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
+use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\HTTPContext;
 use Andreo\OAuthClientBundle\Exception\InvalidStateException;
 use Andreo\OAuthClientBundle\Exception\MissingStateException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ValidateReturningStateMiddleware implements MiddlewareInterface
 {
-    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
+    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
-        $context = Context::get($request);
-        if (!$context->hasCallbackResponse()) {
-            return $stack->next()($request, $response, $stack);
+        if (!$httpContext->isCallback()) {
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $stateStorageKey = State::getKey($context->getClientId());
+        $request = $httpContext->getRequest();
+
+        $stateStorageKey = State::getKey($clientContext->getClientName());
         if (!$request->getSession()->has($stateStorageKey)) {
             throw new MissingStateException();
         }
 
         $sessionState = State::decrypt($request->getSession()->get($stateStorageKey));
-        if ($sessionState->equals($context->getParameters()->getState())) {
-            $request->getSession()->remove($sessionState::getKey($context->getClientId()));
+        if ($sessionState->equals($httpContext->getParameters()->getState())) {
+            $request->getSession()->remove($sessionState::getKey($clientContext->getClientName()));
 
-            return $stack->next()($request, $response, $stack);
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
         throw new InvalidStateException();

@@ -6,37 +6,39 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthClientBundle\AccessToken\AccessToken;
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
+use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\HTTPContext;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class StoreAccessTokenAsCookieMiddleware implements MiddlewareInterface
 {
-    use AccessTokenAttributeTrait;
+    use GetAccessTokenFromAttributesTrait;
 
-    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
+    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
-        $context = Context::get($request);
-        if (!$context->hasCallbackResponse()) {
-            return $stack->next()($request, $response, $stack);
+        if (!$httpContext->isCallback()) {
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
         /** @var AccessToken $accessToken */
-        $accessToken = $this->fromAttributes($request, $context);
+        $accessToken = $this->fromAttributes($httpContext, $clientContext);
 
         $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Warsaw'));
         $expiredAt = $now->add(new DateInterval("PT{$accessToken->getExpiresIn()}S"));
 
-        $accessTokenStorageKey = $accessToken::getKey($context->getClientId());
+        $accessTokenStorageKey = $accessToken::getKey($clientContext->getClientName());
         $cookie = Cookie::create($accessTokenStorageKey)
             ->withSecure(true)
             ->withValue($accessToken->encrypt())
             ->withExpires($expiredAt);
+
+        $response = $httpContext->getResponse();
+        $request = $httpContext->getRequest();
 
         $response->headers->setCookie($cookie);
 

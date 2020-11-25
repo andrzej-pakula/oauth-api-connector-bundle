@@ -12,12 +12,12 @@ services:
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }
 
-  Andreo\OAuthClientBundle\Controller\AuthenticationController:
+  Andreo\OAuthClientBundle\Controller\AuthorizationController:
     public: false
     tags: [controller.service_arguments]
 
-  Andreo\OAuthClientBundle\Controller\AuthenticationControllerInterface:
-    alias: Andreo\OAuthClientBundle\Controller\AuthenticationController
+  Andreo\OAuthClientBundle\Controller\AuthorizationControllerInterface:
+    alias: Andreo\OAuthClientBundle\Controller\AuthorizationController
 
 
   ### Middleware ###
@@ -30,7 +30,7 @@ services:
   Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware:
     public: false
 
-  Andreo\OAuthClientBundle\Middleware\BuildURIsMiddleware:
+  Andreo\OAuthClientBundle\Middleware\CreateURIsMiddleware:
     public: false
     arguments:
       - '@router'
@@ -38,7 +38,7 @@ services:
   Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware:
     public: false
 
-  Andreo\OAuthClientBundle\Middleware\AuthenticationRedirectMiddleware:
+  Andreo\OAuthClientBundle\Middleware\AuthorizationMiddleware:
     public: false
 
   Andreo\OAuthClientBundle\Middleware\CheckCookieAccessTokenMiddleware:
@@ -50,6 +50,6 @@ services:
       -
         - ['@Andreo\OAuthClientBundle\Middleware\SetZoneResponseMiddleware', 4000]
         - ['@Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware', 3000]
-        - ['@Andreo\OAuthClientBundle\Middleware\BuildURIsMiddleware', 2000]
+        - ['@Andreo\OAuthClientBundle\Middleware\CreateURIsMiddleware', 2000]
         - ['@Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware', 1000]
-        - ['@Andreo\OAuthClientBundle\Middleware\AuthenticationRedirectMiddleware', 0]
+        - ['@Andreo\OAuthClientBundle\Middleware\AuthorizationMiddleware', 0]

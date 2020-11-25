@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Client\RequestContext;
+namespace Andreo\OAuthClientBundle\Client;
 
+
+use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
 
 final class Zone
 {
@@ -26,21 +28,5 @@ final class Zone
     public function getSuccessfulResponseUri(): string
     {
         return $this->successfulResponseUri;
-    }
-
-    /**
-     * @return self[]
-     */
-    public static function createRegistryByConfig(array $config): array
-    {
-        $zones = [];
-        foreach ($config['zones'] as $zone) {
-            $zones[$zone['zone_id']] = new self(
-                new ZoneId($zone['zone_id']),
-                $zone['successful_response_uri']
-            );
-        }
-
-        return $zones;
     }
 }

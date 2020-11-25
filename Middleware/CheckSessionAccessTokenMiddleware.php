@@ -6,30 +6,29 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthClientBundle\AccessToken\AccessToken;
-use Andreo\OAuthClientBundle\Client\RequestContext\Context;
-use Symfony\Component\HttpFoundation\Request;
+use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
+use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\HTTPContext;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CheckSessionAccessTokenMiddleware implements MiddlewareInterface
 {
-    public function __invoke(Request $request, Response $response, MiddlewareStackInterface $stack): Response
+    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
-        $context = Context::get($request);
-        if ($context->hasCallbackResponse()) {
-            return $stack->next()($request, $response, $stack);
+        if ($httpContext->isCallback()) {
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $accessTokenStorageKey = AccessToken::getKey($context->getClientId());
+        $accessTokenStorageKey = AccessToken::getKey($clientContext->getClientName());
 
-
+        $request = $httpContext->getRequest();
         if (!$request->getSession()->has($accessTokenStorageKey)) {
-            return $stack->next()($request, $response, $stack);
+            return $stack->next()($httpContext, $clientContext, $stack);
         }
 
         $accessTokenCookie = $request->getSession()->get($accessTokenStorageKey);
         AccessToken::decrypt($accessTokenCookie);
 
-        return $response;
+        return $httpContext->getResponse();
     }
 }
