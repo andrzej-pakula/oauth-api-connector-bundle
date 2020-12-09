@@ -8,7 +8,7 @@ namespace Andreo\OAuthClientBundle\ClientType\Facebook\Http;
 
 use Andreo\GuzzleBundle\Client\ClientDecoratorTrait;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
-use Andreo\OAuthClientBundle\Client\AccessToken\Query\AccessTokenQueryInterface;
+use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 use Andreo\OAuthClientBundle\Http\OAuthClientInterface;
 use GuzzleHttp\ClientInterface;
 
@@ -16,7 +16,7 @@ final class OAuthHTTPClient implements OAuthClientInterface, ClientInterface
 {
     use ClientDecoratorTrait;
 
-    public function getAccessToken(AccessTokenQueryInterface $accessTokenQuery): AccessTokenInterface
+    public function getAccessToken(GetAccessTokenInterface $accessTokenQuery): AccessTokenInterface
     {
         return $this->get('oauth/access_token', [
             'data' => $accessTokenQuery

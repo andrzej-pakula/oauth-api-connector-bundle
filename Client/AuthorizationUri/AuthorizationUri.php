@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 
-
-use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
+use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Client\UriComposingInterface;
 
 final class AuthorizationUri implements UriComposingInterface
@@ -16,7 +14,7 @@ final class AuthorizationUri implements UriComposingInterface
     private State $state;
 
     /**
-     * @var AggregateHTTPParamInterface[]
+     * @var HttpParameterInterface[]
      */
     private array $httpParameters;
 
@@ -35,7 +33,7 @@ final class AuthorizationUri implements UriComposingInterface
         return $new;
     }
 
-    public function addHTTPParameter(AggregateHTTPParamInterface $httpParam): self
+    public function addHttpParameter(HttpParameterInterface $httpParam): self
     {
         $new = clone $this;
         $new->httpParameters[] = $httpParam;
@@ -53,10 +51,10 @@ final class AuthorizationUri implements UriComposingInterface
         $new = clone $this;
         $parameters = [];
         foreach ($this->httpParameters as $httpParam) {
-            $parameters = $httpParam->aggregateParam($parameters);
+            $parameters = $httpParam->set($parameters);
         }
 
-        $new->uri = $this->uri . '?' . http_build_query($parameters);
+        $new->uri = $this->uri.'?'.http_build_query($parameters);
 
         return $new;
     }

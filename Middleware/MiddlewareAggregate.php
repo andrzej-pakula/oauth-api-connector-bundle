@@ -5,51 +5,48 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Middleware;
 
+use Andreo\OAuthClientBundle\Exception\UnhandledResponseException;
 use ArrayIterator;
-use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
-use LogicException;
 
-final class MiddlewareAggregate implements IteratorAggregate
+final class MiddlewareAggregate implements MiddlewareAggregateInterface, IteratorAggregate
 {
     private ArrayIterator $middleware;
 
-    public function __construct(iterable $middleware)
+    public function __construct(iterable $middleware = [])
     {
         $this->middleware = new ArrayIterator();
-        $this->doMerge($middleware);
-    }
 
-    public function merge(iterable $middleware): self
-    {
-        $this->doMerge($middleware);
-
-        return $this;
+        $this->merge($middleware);
     }
 
     public function add(MiddlewareInterface $middleware, int $priority = 0): self
     {
-        $this->middleware[$priority] = $middleware;
+        $this->middleware->append([$middleware, $priority]);
 
         return $this;
     }
 
-    public function remove(MiddlewareInterface $middleware, ?int $searchPriority = null): self
+    public function remove(MiddlewareInterface $middleware, ?int $priority = null): self
     {
-        $trash = [];
-        foreach ($this->middleware as $priority => $handler) {
-            if ($middleware === $handler) {
-                $trash[$priority] = $handler;
+        foreach ($this->middleware as $index => [$handler, $handlerPriority]) {
+            if ($middleware === $handler && (null === $priority || $priority === $handlerPriority)) {
+                unset($this->middleware[$index]);
             }
         }
 
-        if (null === $searchPriority && count($trash) > 1) {
-            throw new InvalidArgumentException('Priority parameter is required because more than one middleware instance was found.');
+        return $this;
+    }
+
+    public function merge(iterable $middlewareIterator): self
+    {
+        if ($middlewareIterator instanceof IteratorAggregate) {
+            $middlewareIterator = $middlewareIterator->getIterator();
         }
 
-        foreach ($trash as $priority => $handler) {
-            unset($this->middleware[$priority]);
+        foreach ($middlewareIterator as $middleware) {
+            $this->middleware->append($middleware);
         }
 
         return $this;
@@ -57,45 +54,37 @@ final class MiddlewareAggregate implements IteratorAggregate
 
     public function getStack(): MiddlewareStackInterface
     {
-         return new class($this->middleware) implements MiddlewareStackInterface {
-             private ArrayIterator $middleware;
+        return new class($this->middleware) implements MiddlewareStackInterface {
+            private ArrayIterator $middleware;
 
-             public function __construct(ArrayIterator $middleware)
-             {
-                 $middleware->uksort(static function (int $a, int $b) {
-                     return $a === $b ? 0 : ($a > $b ? -1 : 1);
-                 });
+            public function __construct(ArrayIterator $middleware)
+            {
+                $middleware->uasort(static function (array $first, array $second) {
+                    [,$a] = $first;
+                    [,$b] = $second;
 
-                 $this->middleware  = $middleware;
-             }
+                    return $a === $b ? 0 : ($a > $b ? -1 : 1);
+                });
 
-             public function next(): MiddlewareInterface
-             {
-                 if ($this->middleware->valid()) {
-                     $current = $this->middleware->current();
-                     $this->middleware->next();
+                $this->middleware  = $middleware;
+            }
 
-                     return $current;
-                 }
+            public function next(): MiddlewareInterface
+            {
+                if ($this->middleware->valid()) {
+                    [$current] = $this->middleware->current();
+                    $this->middleware->next();
 
-                 throw new LogicException('Unhandled response.');
-             }
-         };
+                    return $current;
+                }
+
+                throw new UnhandledResponseException();
+            }
+        };
     }
 
     public function getIterator(): Iterator
     {
         return $this->middleware;
-    }
-
-    private function doMerge(iterable $middleware): void
-    {
-        if (is_array($middleware)) {
-            foreach ($middleware as [$handler, $priority]) {
-                $this->add($handler, $priority);
-            }
-        } elseif ($middleware instanceof IteratorAggregate) {
-            $this->middleware = $middleware->getIterator();
-        }
     }
 }

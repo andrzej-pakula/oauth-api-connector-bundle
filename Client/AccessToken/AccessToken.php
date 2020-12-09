@@ -5,25 +5,23 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client\AccessToken;
 
+use Andreo\OAuthClientBundle\Storage\StorableInterface;
+use DateInterval;
+use DateTimeImmutable;
 
-use Andreo\OAuthClientBundle\Storage\EncodingTrait;
-
-
-final class AccessToken implements AccessTokenInterface
+final class AccessToken implements AccessTokenInterface, StorableInterface
 {
-    use EncodingTrait;
-
     private string $accessToken;
 
     private string $tokenType;
 
-    private int $expiresIn;
+    private DateTimeImmutable $expiredAt;
 
     public function __construct(string $accessToken, string $tokenType, int $expiresIn)
     {
         $this->accessToken = $accessToken;
         $this->tokenType = $tokenType;
-        $this->expiresIn = $expiresIn;
+        $this->expiredAt = (new DateTimeImmutable())->add(new DateInterval("PT{$expiresIn}S"));
     }
 
     public function getAccessToken(): string
@@ -36,8 +34,8 @@ final class AccessToken implements AccessTokenInterface
         return $this->tokenType;
     }
 
-    public function getExpiresIn(): int
+    public function getExpiredAt(): DateTimeImmutable
     {
-        return $this->expiresIn;
+        return $this->expiredAt;
     }
 }

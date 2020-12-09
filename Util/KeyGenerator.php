@@ -3,15 +3,14 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\Storage;
-
+namespace Andreo\OAuthClientBundle\Util;
 
 
 use Andreo\OAuthClientBundle\Client\ClientName;
 
-final class StoreKeyGenerator
+final class KeyGenerator
 {
-    public static function generate(ClientName $clientName, string $key): string
+    public static function get(ClientName $clientName, string $key): string
     {
         return base64_encode($clientName->getName() . $key);
     }

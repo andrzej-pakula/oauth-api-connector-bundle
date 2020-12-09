@@ -4,10 +4,9 @@
 namespace Andreo\OAuthClientBundle\Client\AccessToken\Query;
 
 
-use Andreo\OAuthClientBundle\Client\RedirectUri\Code;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 
-trait AccessTokenQueryTrait
+trait GetAccessTokenTrait
 {
     private string $clientId;
 
@@ -43,18 +42,18 @@ trait AccessTokenQueryTrait
         return $this->redirectUri;
     }
 
-    public function withCode(Code $code): AccessTokenQueryInterface
+    public function withCode(string $code): GetAccessTokenInterface
     {
-        /** @var self&AccessTokenQueryInterface $new */
+        /** @var self&GetAccessTokenInterface $new */
         $new = clone $this;
-        $new->code = $code->getCode();
+        $new->code = $code;
 
         return $new;
     }
 
-    public function withRedirectUri(RedirectUri $redirectUri): AccessTokenQueryInterface
+    public function withRedirectUri(RedirectUri $redirectUri): GetAccessTokenInterface
     {
-        /** @var self&AccessTokenQueryInterface $new */
+        /** @var self&GetAccessTokenInterface $new */
         $new = clone $this;
         $new->redirectUri = $redirectUri->getUri();
 

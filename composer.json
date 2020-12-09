@@ -19,7 +19,8 @@
         "symfony/config": "^5.0",
         "guzzlehttp/guzzle": "^6.5",
         "symfony/serializer": "^5.0",
-        "andreo/guzzle-bundle": "dev-master"
+        "andreo/guzzle-bundle": "dev-master",
+        "zumba/json-serializer": "^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
@@ -37,7 +38,8 @@
         "symfony/twig-pack": "*",
         "symfony/yaml": "5.0.*",
         "symfony/debug-pack": "*",
-        "symfony/profiler-pack": "*"
+        "symfony/profiler-pack": "*",
+        "friendsofphp/php-cs-fixer": "^2.17"
     },
     "autoload": {
         "psr-4": {

@@ -12,9 +12,9 @@ use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
 
-final class AccessTokenQuery implements AccessTokenQueryInterface, DataTransferInterface
+final class GetAccessToken implements GetAccessTokenInterface, DataTransferInterface
 {
-    use AccessTokenQueryTrait;
+    use GetAccessTokenTrait;
 
     public function transfer(RequestTransformerInterface $transformer): RequestTransformerInterface
     {

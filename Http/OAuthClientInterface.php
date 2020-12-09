@@ -7,9 +7,9 @@ namespace Andreo\OAuthClientBundle\Http;
 
 
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
-use Andreo\OAuthClientBundle\Client\AccessToken\Query\AccessTokenQueryInterface;
+use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 
 interface OAuthClientInterface
 {
-    public function getAccessToken(AccessTokenQueryInterface $accessTokenQuery): AccessTokenInterface;
+    public function getAccessToken(GetAccessTokenInterface $accessTokenQuery): AccessTokenInterface;
 }

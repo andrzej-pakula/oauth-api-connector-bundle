@@ -8,7 +8,7 @@ namespace Andreo\OAuthClientBundle\Client;
 
 interface UriComposingInterface
 {
-    public function addHTTPParameter(AggregateHTTPParamInterface $httpParam): self;
+    public function addHttpParameter(HttpParameterInterface $httpParam): self;
 
     public function getUri(): string;
 }

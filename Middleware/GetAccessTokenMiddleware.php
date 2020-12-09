@@ -6,10 +6,9 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Middleware;
 
 
-use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
-use Andreo\OAuthClientBundle\Client\AccessToken\Query\AccessTokenQueryInterface;
+use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\ClientContext;
-use Andreo\OAuthClientBundle\Client\HTTPContext;
+use Andreo\OAuthClientBundle\Client\HttpContext;
 use Andreo\OAuthClientBundle\Http\OAuthClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,15 +16,15 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
 {
     private OAuthClientInterface $httpClient;
 
-    private AccessTokenQueryInterface $accessTokenQuery;
+    private GetAccessTokenInterface $accessTokenQuery;
 
-    public function __construct(OAuthClientInterface $httpClient, AccessTokenQueryInterface $accessTokenQuery)
+    public function __construct(OAuthClientInterface $httpClient, GetAccessTokenInterface $accessTokenQuery)
     {
         $this->httpClient = $httpClient;
         $this->accessTokenQuery = $accessTokenQuery;
     }
 
-    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
+    public function __invoke(HttpContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
         if (!$httpContext->isCallback()) {
             return $stack->next()($httpContext, $clientContext, $stack);
@@ -33,14 +32,12 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
 
         $query = $this->accessTokenQuery
             ->withRedirectUri($clientContext->getRedirectUri())
-            ->withCode($httpContext->getParameters()->getCode());
+            ->withCode($httpContext->getCode());
 
         $accessToken = $this->httpClient->getAccessToken($query);
 
-        $request = $httpContext->getRequest();
-        $request->attributes->set(AccessToken::getKey($clientContext->getClientName()), $accessToken);
+        $httpContext->saveAccessToken($clientContext->getTokenStorageKey(), $accessToken);
 
         return $stack->next()($httpContext, $clientContext, $stack);
     }
-
 }

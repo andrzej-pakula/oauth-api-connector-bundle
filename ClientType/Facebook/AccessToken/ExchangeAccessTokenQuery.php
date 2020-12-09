@@ -34,8 +34,8 @@ final class ExchangeAccessTokenQuery implements DataTransferInterface
     public static function from(ClientContext $clientContext, AccessToken $accessToken): self
     {
         return new self(
-            $clientContext->getClientId()->getId(),
-            $clientContext->getClientSecret()->getSecret(),
+            $clientContext->getId()->getId(),
+            $clientContext->getSecret()->getSecret(),
             $accessToken->getAccessToken()
         );
     }

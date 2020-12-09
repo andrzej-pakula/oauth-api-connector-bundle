@@ -6,15 +6,22 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client;
 
 
+use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\AuthorizationUri;
+use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
 use Andreo\OAuthClientBundle\Exception\UndefinedZoneException;
+use Andreo\OAuthClientBundle\Util\KeyGenerator;
 use Symfony\Component\Routing\RouterInterface;
 
 final class ClientContext
 {
-    private ClientName $clientName;
+    private ClientId $id;
+
+    private ClientSecret $secret;
+
+    private ClientName $name;
 
     private RedirectUri $redirectUri;
 
@@ -26,12 +33,16 @@ final class ClientContext
     private iterable $zones;
 
     public function __construct(
-        ClientName $clientName,
+        ClientId $id,
+        ClientSecret $secret,
+        ClientName $name,
         RedirectUri $redirectUri,
         AuthorizationUri $authorizationUri,
         array $zones
     ){
-        $this->clientName = $clientName;
+        $this->id = $id;
+        $this->secret = $secret;
+        $this->name = $name;
         $this->redirectUri = $redirectUri;
         $this->authorizationUri = $authorizationUri;
         $this->zones = $zones;
@@ -56,9 +67,19 @@ final class ClientContext
         return $this->zones[$zoneId->getId()];
     }
 
-    public function getClientName(): ClientName
+    public function getId(): ClientId
     {
-        return $this->clientName;
+        return $this->id;
+    }
+
+    public function getSecret(): ClientSecret
+    {
+        return $this->secret;
+    }
+
+    public function getName(): ClientName
+    {
+        return $this->name;
     }
 
     public function getRedirectUri(): RedirectUri
@@ -75,8 +96,8 @@ final class ClientContext
     {
         $new = clone $this;
         $new->authorizationUri  = $this->authorizationUri
-            ->addHTTPParameter($redirectUri)
             ->createState()
+            ->addHttpParameter($redirectUri)
             ->createUri();
 
         return $new;
@@ -86,7 +107,7 @@ final class ClientContext
     {
         $new = clone $this;
         if (null !== $zoneId) {
-            $redirectUri = $this->redirectUri->addHTTPParameter($zoneId);
+            $redirectUri = $this->redirectUri->addHttpParameter($zoneId);
         } else {
             $redirectUri = $this->redirectUri;
         }
@@ -94,6 +115,16 @@ final class ClientContext
         $new->redirectUri = $redirectUri->createUri($router);
 
         return $new;
+    }
+
+    public function getTokenStorageKey(): string
+    {
+        return KeyGenerator::get($this->name, AccessTokenInterface::KEY);
+    }
+
+    public function getStateStorageKey(): string
+    {
+        return KeyGenerator::get($this->name, State::KEY);
     }
 
     public function getZones(): array

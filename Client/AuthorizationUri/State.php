@@ -2,63 +2,47 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 
-use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
-use Andreo\OAuthClientBundle\Storage\EncodingTrait;
-use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
+use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
+use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
+use Andreo\OAuthClientBundle\Storage\StorableInterface;
+use DateInterval;
+use DateTimeImmutable;
 
-final class State implements AggregateHTTPParamInterface
+final class State implements HttpParameterInterface, StorableInterface
 {
-    use EncodingTrait;
+    public const KEY = 'state';
 
-    private const KEY = 'state';
+    private string $state;
 
-    private string $st;
+    private DateTimeImmutable $expiredAt;
 
-    private int $ds;
-
-    public function __construct(string $st, int $ds)
+    public function __construct(string $state)
     {
-        $this->st = $st;
-        $this->ds = $ds;
-    }
-
-    public function equals(self $other): bool
-    {
-        return $other->st === $this->st && $other->ds === $this->ds;
-    }
-
-    public static function inRequest(Request $request): bool
-    {
-        return $request->query->has(self::KEY);
-    }
-
-    public static function fromRequest(Request $request): self
-    {
-        if (!self::inRequest($request)) {
-            throw new RuntimeException('Missing state parameter.');
-        }
-
-        $state = $request->query->get(self::KEY);
-
-        return self::decrypt($state);
+        $this->state = $state;
+        $this->expiredAt = (new DateTimeImmutable())->add(new DateInterval('PT60S'));
     }
 
     public static function create(): self
     {
-        return new self(
-            bin2hex(random_bytes(7)),
-            random_int(1, 1000000)
-        );
+        return new self(Encoder::encode(random_bytes(16)));
     }
 
-    public function aggregateParam(array $httpParams = []): array
+    public function equals(self $other): bool
     {
-        $httpParams[self::KEY] = $this->encrypt();
+        return $this->state === $other->state;
+    }
+
+    public function set(array $httpParams = []): array
+    {
+        $httpParams[self::KEY] = $this->state;
 
         return $httpParams;
+    }
+
+    public function getExpiredAt(): DateTimeImmutable
+    {
+        return $this->expiredAt;
     }
 }

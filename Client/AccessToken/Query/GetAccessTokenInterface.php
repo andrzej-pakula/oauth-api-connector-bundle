@@ -6,10 +6,9 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client\AccessToken\Query;
 
 
-use Andreo\OAuthClientBundle\Client\RedirectUri\Code;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 
-interface AccessTokenQueryInterface
+interface GetAccessTokenInterface
 {
     public function getClientId(): string;
 
@@ -21,5 +20,5 @@ interface AccessTokenQueryInterface
 
     public function withRedirectUri(RedirectUri $redirectUri): self;
 
-    public function withCode(Code $code): self;
+    public function withCode(string $code): self;
 }

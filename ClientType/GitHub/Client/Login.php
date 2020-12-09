@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\Client;
 
 
-use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
+use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 
-final class Login implements AggregateHTTPParamInterface
+final class Login implements HttpParameterInterface
 {
     private const KEY = 'login';
 
@@ -19,7 +19,7 @@ final class Login implements AggregateHTTPParamInterface
         $this->login = $login;
     }
 
-    public function aggregateParam(array $httpParams = []): array
+    public function set(array $httpParams = []): array
     {
         $httpParams[self::KEY] = $this->login;
 

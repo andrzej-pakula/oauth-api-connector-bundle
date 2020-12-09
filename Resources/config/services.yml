@@ -28,28 +28,43 @@ services:
       - '@router'
 
   Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware:
+    arguments:
+      - '@Andreo\OAuthClientBundle\Storage\SessionStorage'
     public: false
 
   Andreo\OAuthClientBundle\Middleware\CreateURIsMiddleware:
     public: false
     arguments:
       - '@router'
-
-  Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware:
-    public: false
+      - '@Andreo\OAuthClientBundle\Storage\SessionStorage'
 
   Andreo\OAuthClientBundle\Middleware\AuthorizationMiddleware:
-    public: false
-
-  Andreo\OAuthClientBundle\Middleware\CheckCookieAccessTokenMiddleware:
     public: false
 
   Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate:
     public: false
     arguments:
       -
-        - ['@Andreo\OAuthClientBundle\Middleware\SetZoneResponseMiddleware', 4000]
-        - ['@Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware', 3000]
+        - ['@Andreo\OAuthClientBundle\Middleware\SetZoneResponseMiddleware', 6000]
+        - ['@Andreo\OAuthClientBundle\Middleware\ValidateReturningStateMiddleware', 4000]
         - ['@Andreo\OAuthClientBundle\Middleware\CreateURIsMiddleware', 2000]
-        - ['@Andreo\OAuthClientBundle\Middleware\StoreStateMiddleware', 1000]
         - ['@Andreo\OAuthClientBundle\Middleware\AuthorizationMiddleware', 0]
+
+
+  ### Storage ###
+
+  Zumba\JsonSerializer\JsonSerializer:
+
+  Andreo\OAuthClientBundle\Storage\Encoder\Encoder:
+
+  Andreo\OAuthClientBundle\Storage\Serializer\Serializer:
+    arguments:
+      - '@Zumba\JsonSerializer\JsonSerializer'
+
+  Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface:
+    alias: Andreo\OAuthClientBundle\Storage\Serializer\Serializer
+
+  Andreo\OAuthClientBundle\Storage\SessionStorage:
+    arguments:
+      - '@Andreo\OAuthClientBundle\Storage\Encoder\Encoder'
+      - '@Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface'

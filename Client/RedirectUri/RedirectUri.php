@@ -6,16 +6,16 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client\RedirectUri;
 
 
-use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
+use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Client\UriComposingInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-final class RedirectUri implements UriComposingInterface, AggregateHTTPParamInterface
+final class RedirectUri implements UriComposingInterface, HttpParameterInterface
 {
     private const KEY = 'redirect_uri';
 
     /**
-     * @var AggregateHTTPParamInterface[]
+     * @var HttpParameterInterface[]
      */
     private array $httpParameters;
 
@@ -31,7 +31,7 @@ final class RedirectUri implements UriComposingInterface, AggregateHTTPParamInte
     {
         $parameters = [];
         foreach ($this->httpParameters as $parameter) {
-            $parameters = $parameter->aggregateParam($parameters);
+            $parameters = $parameter->set($parameters);
         }
 
         $new = clone $this;
@@ -44,7 +44,7 @@ final class RedirectUri implements UriComposingInterface, AggregateHTTPParamInte
         return $new;
     }
 
-    public function addHTTPParameter(AggregateHTTPParamInterface $httpParam): self
+    public function addHttpParameter(HttpParameterInterface $httpParam): self
     {
         $new = clone $this;
         $new->httpParameters[] = $httpParam;
@@ -52,7 +52,7 @@ final class RedirectUri implements UriComposingInterface, AggregateHTTPParamInte
         return $new;
     }
 
-    public function aggregateParam(array $httpParams = []): array
+    public function set(array $httpParams = []): array
     {
         $httpParams[self::KEY] = $this->uri;
 

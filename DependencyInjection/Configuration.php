@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection\Configuration as FacebookConfiguration;
 use Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection\Configuration as GithubConfiguration;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 final class Configuration implements ConfigurationInterface
 {
@@ -18,9 +19,45 @@ final class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('andreo_o_auth_client');
         $rootNode = $treeBuilder->getRootNode();
 
-        $this->addFacebookSection($rootNode);
-        $this->addGithubSection($rootNode);
+        $this->addTypeSections($rootNode);
+        $this->validateTypes($rootNode);
+        $this->validateClients($rootNode);
 
+        return $treeBuilder;
+    }
+
+    private function addTypeSections(ArrayNodeDefinition $rootNode): void
+    {
+        $rootNode
+            ->append((new FacebookConfiguration())->getConfigTreeBuilder())
+            ->append((new GithubConfiguration())->getConfigTreeBuilder());
+
+    }
+
+    private function validateTypes(NodeDefinition $rootNode): void
+    {
+        $rootNode
+            ->beforeNormalization()
+            ->ifTrue(function (array $configs) {
+                foreach (array_keys($configs) as $type) {
+                    if (!TypeExtensionRegistry::isSupported($type)) {
+                        throw new LogicException(
+                            ucfirst($type) . ' type is not supported.'
+                        );
+                    }
+                    if (!TypeExtensionRegistry::has($type)) {
+                        throw new LogicException(
+                            ucfirst($type) . " type support cannot be enabled as the component is not installed. Try running 'composer require andreo/$type-oauth'."
+                        );
+                    }
+                }
+            })
+            ->thenEmptyArray()
+            ->end();
+    }
+
+    private function validateClients(NodeDefinition $rootNode): void
+    {
         $rootNode
             ->validate()
                 ->ifTrue(function (array $configs) {
@@ -41,35 +78,5 @@ final class Configuration implements ConfigurationInterface
                 })
                 ->thenInvalid('Client names must be unique.')
             ->end();
-
-        return $treeBuilder;
-    }
-
-    /**
-     * @return ArrayNodeDefinition&NodeParentInterface
-     */
-    private function addFacebookSection(ArrayNodeDefinition $rootNode): NodeParentInterface
-    {
-        if (!class_exists(FacebookConfiguration::class)) {
-            return $rootNode;
-        }
-
-        $facebookConfiguration = new FacebookConfiguration($rootNode);
-
-        return $facebookConfiguration->getConfigTreeBuilder();
-    }
-
-    /**
-     * @return ArrayNodeDefinition&NodeParentInterface
-     */
-    private function addGithubSection(ArrayNodeDefinition $rootNode): NodeParentInterface
-    {
-        if (!class_exists(GithubConfiguration::class)) {
-            return $rootNode;
-        }
-
-        $gitHubConfiguration = new GithubConfiguration($rootNode);
-
-        return $gitHubConfiguration->getConfigTreeBuilder();
     }
 }

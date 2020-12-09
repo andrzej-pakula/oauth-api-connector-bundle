@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Andreo\OAuthClientBundle\ClientType;
+namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 
 final class SupportedType

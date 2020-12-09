@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\Client;
 
 
-use Andreo\OAuthClientBundle\Client\AggregateHTTPParamInterface;
+use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 
-final class AllowSignup implements AggregateHTTPParamInterface
+final class AllowSignup implements HttpParameterInterface
 {
     private const KEY = 'allow_signup';
 
@@ -19,7 +19,7 @@ final class AllowSignup implements AggregateHTTPParamInterface
         $this->allow = $allow;
     }
 
-    public function aggregateParam(array $httpParams = []): array
+    public function set(array $httpParams = []): array
     {
         $httpParams[self::KEY] = $this->allow;
 

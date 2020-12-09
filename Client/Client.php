@@ -27,7 +27,7 @@ final class Client implements ClientInterface
     {
         $stack = $this->middlewareAggregate->getStack();
 
-        $httpContext = new HTTPContext($request, new RedirectResponse('/'));
+        $httpContext = new HttpContext($request, new RedirectResponse('/'));
 
         return $stack->next()($httpContext, $this->clientContext, $stack);
     }

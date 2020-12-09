@@ -8,29 +8,38 @@ namespace Andreo\OAuthClientBundle\Middleware;
 
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Client\ClientContext;
-use Andreo\OAuthClientBundle\Client\HTTPContext;
+use Andreo\OAuthClientBundle\Client\HttpContext;
 use Andreo\OAuthClientBundle\Exception\InvalidStateException;
 use Andreo\OAuthClientBundle\Exception\MissingStateException;
+use Andreo\OAuthClientBundle\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ValidateReturningStateMiddleware implements MiddlewareInterface
 {
-    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
+    private StorageInterface $storage;
+
+    public function __construct(StorageInterface $storage)
+    {
+        $this->storage = $storage;
+    }
+
+    public function __invoke(HttpContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
         if (!$httpContext->isCallback()) {
             return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $request = $httpContext->getRequest();
-
-        $stateStorageKey = State::getKey($clientContext->getClientName());
-        if (!$request->getSession()->has($stateStorageKey)) {
+        if (!$this->storage->has($httpContext, $clientContext->getStateStorageKey())) {
             throw new MissingStateException();
         }
 
-        $sessionState = State::decrypt($request->getSession()->get($stateStorageKey));
-        if ($sessionState->equals($httpContext->getParameters()->getState())) {
-            $request->getSession()->remove($sessionState::getKey($clientContext->getClientName()));
+        $state = $this->storage->restore($httpContext, $clientContext->getStateStorageKey());
+        if (!$state instanceof State) {
+            throw new MissingStateException();
+        }
+
+        if ($state->equals($httpContext->getState())) {
+            $this->storage->delete($httpContext, $clientContext->getStateStorageKey());
 
             return $stack->next()($httpContext, $clientContext, $stack);
         }

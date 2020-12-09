@@ -7,7 +7,7 @@ namespace Andreo\OAuthClientBundle\Middleware;
 
 
 use Andreo\OAuthClientBundle\Client\ClientContext;
-use Andreo\OAuthClientBundle\Client\HTTPContext;
+use Andreo\OAuthClientBundle\Client\HttpContext;
 use Andreo\OAuthClientBundle\Exception\MissingZoneException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,18 +22,17 @@ final class SetZoneResponseMiddleware implements MiddlewareInterface
         $this->router = $router;
     }
 
-    public function __invoke(HTTPContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
+    public function __invoke(HttpContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
     {
         if (!$clientContext->hasZones()) {
             return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $parameters = $httpContext->getParameters();
-        if (!$parameters->hasZoneId()) {
+        if (!$httpContext->isZoneSet()) {
             throw new MissingZoneException();
         }
 
-        $zone = $clientContext->getZone($parameters->getZoneId());
+        $zone = $clientContext->getZone($httpContext->getZone());
         $uri = $this->router->generate($zone->getSuccessfulResponseUri());
 
         $httpContext = $httpContext->withResponse(new RedirectResponse($uri));

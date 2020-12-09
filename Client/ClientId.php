@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Client;
 
 
-final class ClientId implements AggregateHTTPParamInterface
+final class ClientId implements HttpParameterInterface
 {
     private const KEY_ID = 'client_id';
 
@@ -22,7 +22,7 @@ final class ClientId implements AggregateHTTPParamInterface
         return $this->id;
     }
 
-    public function aggregateParam(array $httpParams = []): array
+    public function set(array $httpParams = []): array
     {
         $httpParams[self::KEY_ID] = $this->getId();
 
