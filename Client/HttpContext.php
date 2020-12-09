@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client;
 
-use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;

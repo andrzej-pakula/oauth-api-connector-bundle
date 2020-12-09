@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Middleware;
 
-
-use Andreo\OAuthClientBundle\Storage\StorableInterface;
-use Andreo\OAuthClientBundle\Storage\StorageInterface;
 use Andreo\OAuthClientBundle\Client\ClientContext;
 use Andreo\OAuthClientBundle\Client\HttpContext;
+use Andreo\OAuthClientBundle\Storage\StorableInterface;
+use Andreo\OAuthClientBundle\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class StoreAccessTokenMiddleware implements MiddlewareInterface
