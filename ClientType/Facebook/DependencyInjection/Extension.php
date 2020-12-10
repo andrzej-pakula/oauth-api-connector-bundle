@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
-
 
 use Andreo\OAuthClientBundle\ClientType\Facebook\Middleware\ExchangeAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\DependencyInjection\TypeExtensionInterface;
@@ -31,7 +29,7 @@ final class Extension implements TypeExtensionInterface
 
         if ($accessTokenConfig['long_live']) {
             $exchangeAccessTokenMiddlewarePerClientDef = (new Definition(ExchangeAccessTokenMiddleware::class, [
-                new Reference("andreo.oauth.http_client.$clientName")
+                new Reference("andreo.oauth.http_client.$clientName"),
             ]))
             ->setPublic(false);
 

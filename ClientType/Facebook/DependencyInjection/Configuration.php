@@ -1,10 +1,10 @@
-<?php /** @noinspection NullPointerExceptionInspection */
+<?php
+
+/** @noinspection NullPointerExceptionInspection */
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
-
 
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Http\OAuthHTTPClient;
@@ -33,7 +33,7 @@ final class Configuration implements ConfigurationInterface
                                     ->arrayNode('scope')
                                         ->beforeNormalization()
                                             ->ifString()
-                                            ->then(static function(string $scope) {
+                                            ->then(static function (string $scope) {
                                                 return Scope::fromString($scope)->getParts();
                                             })
                                         ->end()
@@ -69,7 +69,7 @@ final class Configuration implements ConfigurationInterface
             return [
                 'version' => $version,
                 'api_uri' => "https://graph.facebook.com/$version",
-                'auth_uri' => "https://www.facebook.com/$version/dialog/oauth"
+                'auth_uri' => "https://www.facebook.com/$version/dialog/oauth",
             ];
         };
 

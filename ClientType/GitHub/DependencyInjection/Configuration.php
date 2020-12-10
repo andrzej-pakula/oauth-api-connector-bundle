@@ -1,14 +1,14 @@
-<?php /** @noinspection NullPointerExceptionInspection */
+<?php
+
+/** @noinspection NullPointerExceptionInspection */
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection;
 
-
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
-use Andreo\OAuthClientBundle\ClientType\GitHub\Versions;
 use Andreo\OAuthClientBundle\ClientType\GitHub\Http\OAuthHTTPClient;
+use Andreo\OAuthClientBundle\ClientType\GitHub\Versions;
 use Andreo\OAuthClientBundle\DependencyInjection\SupportedType;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -35,7 +35,7 @@ final class Configuration implements ConfigurationInterface
                                     ->arrayNode('scope')
                                         ->beforeNormalization()
                                             ->ifString()
-                                            ->then(static function(string $scope) {
+                                            ->then(static function (string $scope) {
                                                 return Scope::fromString($scope)->getParts();
                                             })
                                         ->end()
@@ -69,8 +69,8 @@ final class Configuration implements ConfigurationInterface
         $apiConfigGen = static function (string $version) {
             return [
                 'version' => $version,
-                'api_uri' => "https://api.github.com",
-                'auth_uri' => "https://github.com/login/oauth/authorize"
+                'api_uri' => 'https://api.github.com',
+                'auth_uri' => 'https://github.com/login/oauth/authorize',
             ];
         };
 

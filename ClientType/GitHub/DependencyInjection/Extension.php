@@ -19,15 +19,15 @@ final class Extension implements TypeExtensionInterface
         $credentials = $config['credentials'];
 
         $allowSignupDef = (new Definition(AllowSignup::class, [$credentials['allow_signup']]))
-            ->setPrivate(true);
+            ->setPublic(false);
         $loginDef = (new Definition(Login::class, [$credentials['login']]))
-            ->setPrivate(true);
+            ->setPublic(false);
 
         $baseDef->setMethodCalls([
             ['addHttpParameter', [$allowSignupDef], true],
             ['addHttpParameter', [$loginDef], true],
         ])
-        ->setPrivate(true);
+            ->setPublic(false);
 
         return $baseDef;
     }

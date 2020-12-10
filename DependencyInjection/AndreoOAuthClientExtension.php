@@ -8,19 +8,19 @@ use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessToken;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\AuthorizationUri;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
+use Andreo\OAuthClientBundle\Client\Client;
 use Andreo\OAuthClientBundle\Client\ClientContext;
 use Andreo\OAuthClientBundle\Client\ClientId;
-use Andreo\OAuthClientBundle\Client\Client;
 use Andreo\OAuthClientBundle\Client\ClientName;
 use Andreo\OAuthClientBundle\Client\ClientSecret;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
 use Andreo\OAuthClientBundle\Client\Zone;
 use Andreo\OAuthClientBundle\Http\Provider\HttpClientConfigProvider;
-use Andreo\OAuthClientBundle\Middleware\TryRestoreAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\Middleware\GetAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate;
 use Andreo\OAuthClientBundle\Middleware\StoreAccessTokenMiddleware;
+use Andreo\OAuthClientBundle\Middleware\TryRestoreAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\Storage\CookieStorage;
 use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
 use Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface;
@@ -33,7 +33,6 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
 
 class AndreoOAuthClientExtension extends Extension implements PrependExtensionInterface
 {
@@ -65,7 +64,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
 
                 $guzzleClientConfigs['clients'][$clientName] = [
                     'config_provider_id' => $apiConfigProvider,
-                    'decorator_id' => $httpClientId
+                    'decorator_id' => $httpClientId,
                 ];
             }
         }
@@ -75,7 +74,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
 
@@ -88,13 +87,13 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 $api = $config['api'];
 
                 $clientIdDef = (new Definition(ClientId::class, [$credentials['id']]))
-                    ->setPrivate(true);
+                    ->setPublic(false);
                 $clientSecretDef = (new Definition(ClientSecret::class, [$credentials['secret']]))
-                    ->setPrivate(true);
+                    ->setPublic(false);
                 $clientNameDef = (new Definition(ClientName::class, [$clientName]))
-                    ->setPrivate(true);
+                    ->setPublic(false);
                 $scopeDef = (new Definition(Scope::class, [$credentials['scope']]))
-                    ->setPrivate(true);
+                    ->setPublic(false);
 
                 $authorizationUriDef = (new Definition(AuthorizationUri::class, [
                     $api['auth_uri'],
@@ -103,21 +102,21 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                     ['addHttpParameter', [$clientIdDef], true],
                     ['addHttpParameter', [$scopeDef], true],
                 ])
-                ->setPrivate(true);
+                ->setPublic(false);
                 $authorizationUriDef = $typeExtension->getAuthorizationUriDef($container, $configForTypeExtension, $authorizationUriDef);
 
                 $redirectUriDef = (new Definition(RedirectUri::class, [
-                    'andreo.oauth.authorization'
+                    'andreo.oauth.authorization',
                 ]))
                 ->addMethodCall('addHttpParameter', [$clientNameDef], true)
-                ->setPrivate(true);
+                ->setPublic(false);
 
                 $zoneRegistry = [];
                 foreach ($config['zones'] ?? [] as $id => $zoneConfig) {
                     $zoneRegistry[$id] = (new Definition(Zone::class, [
-                        (new Definition(ZoneId::class, [$id]))->setPrivate(true),
-                        $zoneConfig['successful_response_uri']
-                    ]))->setPrivate(true);
+                        (new Definition(ZoneId::class, [$id]))->setPublic(false),
+                        $zoneConfig['successful_response_uri'],
+                    ]))->setPublic(false);
                 }
 
                 $clientContextDef = (new Definition(ClientContext::class, [
@@ -126,9 +125,9 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                     $clientNameDef,
                     $redirectUriDef,
                     $authorizationUriDef,
-                    $zoneRegistry
+                    $zoneRegistry,
                 ]))
-                ->setPrivate(true);
+                ->setPublic(false);
 
                 $clientMiddleware = [];
 
@@ -136,12 +135,12 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                     $credentials['id'],
                     $credentials['secret'],
                 ]))
-                ->setPrivate(true);
+                ->setPublic(false);
                 $accessTokenQueryDef = $typeExtension->getAccessTokenQueryDef($container, $configForTypeExtension, $accessTokenQueryDef);
 
                 $getAccessTokenMiddlewarePerClientDef = (new Definition(GetAccessTokenMiddleware::class, [
                     new Reference("andreo.oauth.http_client.$clientName"),
-                    $accessTokenQueryDef
+                    $accessTokenQueryDef,
                 ]))
                 ->setPublic(false);
 
@@ -156,22 +155,22 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 $accessTokenStorage = $accessTokenConfig['storage'];
 
                 $storageResolver = [
-                    'session' => fn() => new Reference(SessionStorage::class),
+                    'session' => fn () => new Reference(SessionStorage::class),
                     'cookie' => static function () use ($container) {
                         if (!$container->has(CookieStorage::class)) {
                             $container->register(CookieStorage::class)
                                 ->setArguments([
                                     new Reference(Encoder::class),
-                                    new Reference(SerializerInterface::class)
+                                    new Reference(SerializerInterface::class),
                                 ]);
                         }
 
                         return new Reference(CookieStorage::class);
-                    }
+                    },
                 ];
 
                 $tryRestoreMiddlewareDef = new Definition(TryRestoreAccessTokenMiddleware::class, [
-                    $storageResolver[$accessTokenStorage]()
+                    $storageResolver[$accessTokenStorage](),
                 ]);
                 $container->setDefinition(
                     $tryRestoreMiddlewareId = "andreo.oauth_client.middleware.try_restore_access_token.$clientName",
@@ -180,7 +179,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 $clientMiddleware[] = [new Reference($tryRestoreMiddlewareId), 3500];
 
                 $storeMiddlewareDef = new Definition(StoreAccessTokenMiddleware::class, [
-                    $storageResolver[$accessTokenStorage]()
+                    $storageResolver[$accessTokenStorage](),
                 ]);
                 $container->setDefinition(
                     $storeMiddlewareId = "andreo.oauth_client.middleware.store_access_token.$clientName",
@@ -191,7 +190,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
                 $clientMiddleware = $typeExtension->getMiddlewareDefs($container, $configForTypeExtension, $clientMiddleware);
 
                 $middlewareAggregatePerClientDef = (new Definition(MiddlewareAggregate::class, [
-                    new Reference("andreo.oauth_client.middleware_aggregate.$type")
+                    new Reference("andreo.oauth_client.middleware_aggregate.$type"),
                 ]))
                 ->setPublic(false)
                 ->addMethodCall('merge', [$clientMiddleware]);
@@ -203,7 +202,7 @@ class AndreoOAuthClientExtension extends Extension implements PrependExtensionIn
 
                 $clientDef = (new Definition(Client::class, [
                     new Reference($middlewareAggregatePerClientId),
-                    $clientContextDef
+                    $clientContextDef,
                 ]))
                 ->setPublic(false)
                 ->addTag('andreo.oauth_client.client', [
