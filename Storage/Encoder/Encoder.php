@@ -8,11 +8,11 @@ final class Encoder implements EncoderInterface
 {
     public static function encode(string $string): string
     {
-        return bin2hex($string);
+        return base64_encode($string);
     }
 
     public static function decode(string $string): string
     {
-        return hex2bin($string);
+        return base64_decode($string, true);
     }
 }
