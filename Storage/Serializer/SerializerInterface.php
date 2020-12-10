@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Storage\Serializer;
-
-
 
 use Andreo\OAuthClientBundle\Storage\StorableInterface;
 

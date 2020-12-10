@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Middleware;
 
 use Andreo\OAuthClientBundle\Exception\UnhandledResponseException;
@@ -66,7 +65,7 @@ final class MiddlewareAggregate implements MiddlewareAggregateInterface, Iterato
                     return $a === $b ? 0 : ($a > $b ? -1 : 1);
                 });
 
-                $this->middleware  = $middleware;
+                $this->middleware = $middleware;
             }
 
             public function next(): MiddlewareInterface

@@ -16,7 +16,7 @@ final class TypeExtensionRegistry
 
     public static function isSupported(string $type): bool
     {
-        return in_array($type, SupportedType::ALL);
+        return in_array($type, SupportedType::ALL, true);
     }
 
     public static function has(string $type): bool

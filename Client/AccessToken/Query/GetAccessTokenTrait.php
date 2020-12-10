@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client\AccessToken\Query;
-
 
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 

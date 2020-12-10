@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client;
 
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;

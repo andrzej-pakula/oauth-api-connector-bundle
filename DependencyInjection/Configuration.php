@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection NullPointerExceptionInspection */
-
 declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\DependencyInjection;

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client;
-
 
 use Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate;
 use Symfony\Component\HttpFoundation\RedirectResponse;

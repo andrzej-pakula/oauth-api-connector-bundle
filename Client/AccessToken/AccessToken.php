@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client\AccessToken;
 
 use Andreo\OAuthClientBundle\Storage\StorableInterface;

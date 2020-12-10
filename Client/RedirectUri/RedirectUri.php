@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client\RedirectUri;
-
 
 use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Client\UriComposingInterface;

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Middleware;
-
 
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Client\ClientContext;

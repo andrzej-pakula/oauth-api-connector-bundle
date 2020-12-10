@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Storage\Encoder;
-
 
 final class Encoder implements EncoderInterface
 {

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken;
-
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;

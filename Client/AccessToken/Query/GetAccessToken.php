@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client\AccessToken\Query;
-
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
@@ -25,5 +23,4 @@ final class GetAccessToken implements GetAccessTokenInterface, DataTransferInter
     {
         return $transformer->withData(DataType::single(AccessToken::class));
     }
-
 }

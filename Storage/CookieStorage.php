@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Storage;
 
-
+use Andreo\OAuthClientBundle\Client\HttpContext;
+use Andreo\OAuthClientBundle\Exception\ExpiredAccessTokenException;
+use Andreo\OAuthClientBundle\Exception\StorableNotExistException;
 use Andreo\OAuthClientBundle\Storage\Encoder\EncoderInterface;
 use Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface;
-use Andreo\OAuthClientBundle\Client\HttpContext;
-use Andreo\OAuthClientBundle\Exception\StorableNotExistException;
-use Andreo\OAuthClientBundle\Exception\ExpiredAccessTokenException;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Cookie;
 

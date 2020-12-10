@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Http\Provider;
-
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
 

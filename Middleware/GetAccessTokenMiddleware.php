@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Middleware;
-
 
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\ClientContext;

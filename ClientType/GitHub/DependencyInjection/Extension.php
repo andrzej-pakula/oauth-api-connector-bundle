@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection;
-
 
 use Andreo\OAuthClientBundle\ClientType\GitHub\Client\AllowSignup;
 use Andreo\OAuthClientBundle\ClientType\GitHub\Client\Login;

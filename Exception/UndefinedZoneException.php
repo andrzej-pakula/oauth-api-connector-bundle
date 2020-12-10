@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Exception;
-
 
 use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
 use LogicException;

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client;
-
 
 final class ClientName implements HttpParameterInterface
 {

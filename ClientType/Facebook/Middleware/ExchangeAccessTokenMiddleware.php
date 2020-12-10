@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\Middleware;
-
 
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
 use Andreo\OAuthClientBundle\Client\ClientContext;

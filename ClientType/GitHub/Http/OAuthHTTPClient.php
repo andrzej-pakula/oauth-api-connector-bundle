@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\Http;
-
 
 use Andreo\GuzzleBundle\Client\ClientDecoratorTrait;
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
@@ -18,7 +16,7 @@ final class OAuthHTTPClient implements OAuthClientInterface, ClientInterface
     public function getAccessToken(GetAccessTokenInterface $accessTokenQuery): AccessToken
     {
         return $this->get('oauth/access_token', [
-            'data' => $accessTokenQuery
+            'data' => $accessTokenQuery,
         ])->getData();
     }
 }
