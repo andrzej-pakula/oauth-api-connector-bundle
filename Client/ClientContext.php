@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\Client;
-
 
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\AuthorizationUri;
@@ -39,7 +37,7 @@ final class ClientContext
         RedirectUri $redirectUri,
         AuthorizationUri $authorizationUri,
         array $zones
-    ){
+    ) {
         $this->id = $id;
         $this->secret = $secret;
         $this->name = $name;
@@ -95,7 +93,7 @@ final class ClientContext
     public function createAuthorizationUri(RedirectUri $redirectUri): self
     {
         $new = clone $this;
-        $new->authorizationUri  = $this->authorizationUri
+        $new->authorizationUri = $this->authorizationUri
             ->createState()
             ->addHttpParameter($redirectUri)
             ->createUri();
@@ -125,10 +123,5 @@ final class ClientContext
     public function getStateStorageKey(): string
     {
         return KeyGenerator::get($this->name, State::KEY);
-    }
-
-    public function getZones(): array
-    {
-        return $this->zones;
     }
 }

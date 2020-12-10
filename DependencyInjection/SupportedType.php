@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\DependencyInjection;
-
 
 final class SupportedType
 {
@@ -13,6 +11,6 @@ final class SupportedType
 
     public const ALL = [
         self::FACEBOOK,
-        self::GITHUB
+        self::GITHUB,
     ];
 }
