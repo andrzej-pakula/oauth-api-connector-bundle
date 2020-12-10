@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andreo\OAuthClientBundle\Util;
+namespace Andreo\OAuthClientBundle\Storage;
 
 use Andreo\OAuthClientBundle\Client\ClientName;
 

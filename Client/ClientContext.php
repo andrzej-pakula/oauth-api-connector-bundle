@@ -10,7 +10,7 @@ use Andreo\OAuthClientBundle\Client\AuthorizationUri\State;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 use Andreo\OAuthClientBundle\Client\RedirectUri\ZoneId;
 use Andreo\OAuthClientBundle\Exception\UndefinedZoneException;
-use Andreo\OAuthClientBundle\Util\KeyGenerator;
+use Andreo\OAuthClientBundle\Storage\KeyGenerator;
 use Symfony\Component\Routing\RouterInterface;
 
 final class ClientContext
