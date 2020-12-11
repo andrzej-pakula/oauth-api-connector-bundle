@@ -20,6 +20,10 @@ final class ClientId implements HttpParameterInterface
         return $this->id;
     }
 
+    /**
+     * @param array<string, string|int> $httpParams
+     * @return array<string, string|int>
+     */
     public function set(array $httpParams = []): array
     {
         $httpParams[self::KEY_ID] = $this->getId();
