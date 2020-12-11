@@ -28,8 +28,11 @@ final class ClientContext
     /**
      * @var array<string, Zone>
      */
-    private iterable $zones;
+    private array $zones;
 
+    /**
+     * @param array<string, Zone> $zones
+     */
     public function __construct(
         ClientId $id,
         ClientSecret $secret,

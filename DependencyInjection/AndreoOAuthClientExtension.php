@@ -26,6 +26,7 @@ use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
 use Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface;
 use Andreo\OAuthClientBundle\Storage\SessionStorage;
 use RuntimeException;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -72,11 +73,17 @@ final class AndreoOAuthClientExtension extends Extension implements PrependExten
         $container->prependExtensionConfig('andreo_guzzle', $guzzleClientConfigs);
     }
 
+    /**
+     * @param array<array> $configs
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
+
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $this->getConfiguration([], $container);
+        $config = $this->processConfiguration($configuration, $configs);
 
         foreach ($config as $type => $options) {
             $typeExtension = TypeExtensionRegistry::get($type);

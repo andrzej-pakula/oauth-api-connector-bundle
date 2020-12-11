@@ -45,20 +45,22 @@ final class HttpContext
 
     public function getCode(): string
     {
-        if (!$this->isCallback()) {
+        if (!$this->isCallback() || empty($param = $this->request->query->get(self::CODE_PARAM))) {
             throw new InvalidCallbackResponseException();
         }
+        assert(is_string($param));
 
-        return $this->request->query->get(self::CODE_PARAM);
+        return $param;
     }
 
     public function getState(): State
     {
-        if (!$this->isCallback()) {
+        if (!$this->isCallback() || empty($param = $this->request->query->get(State::KEY))) {
             throw new InvalidCallbackResponseException();
         }
+        assert(is_string($param));
 
-        return new State($this->request->query->get(State::KEY));
+        return new State($param);
     }
 
     public function isZoneSet(): bool
@@ -68,11 +70,12 @@ final class HttpContext
 
     public function getZone(): ZoneId
     {
-        if (!$this->isZoneSet()) {
+        if (!$this->isZoneSet() || empty($param = $this->request->attributes->get(ZoneId::KEY))) {
             throw new MissingZoneException();
         }
+        assert(is_string($param));
 
-        return new ZoneId($this->request->attributes->get(ZoneId::KEY));
+        return new ZoneId($param);
     }
 
     public function isCallback(): bool

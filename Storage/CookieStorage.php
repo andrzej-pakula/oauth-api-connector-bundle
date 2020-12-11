@@ -43,8 +43,8 @@ final class CookieStorage implements StorageInterface
         }
         $request = $httpContext->getRequest();
 
+        /** @var string $string */
         $string = $request->cookies->get($key);
-
         $storable = $this->serializer->deserialize($this->encoder::decode($string));
         if ($storable->getExpiredAt() <= new DateTimeImmutable()) {
             $this->delete($httpContext, $key);
