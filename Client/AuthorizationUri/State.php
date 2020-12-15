@@ -7,10 +7,11 @@ namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
 use Andreo\OAuthClientBundle\Storage\StorableInterface;
+use Andreo\OAuthClientBundle\Storage\ThisIsExpiringInterface;
 use DateInterval;
 use DateTimeImmutable;
 
-final class State implements HttpParameterInterface, StorableInterface
+final class State implements HttpParameterInterface, StorableInterface, ThisIsExpiringInterface
 {
     public const KEY = 'state';
 
@@ -44,5 +45,10 @@ final class State implements HttpParameterInterface, StorableInterface
     public function getExpiredAt(): DateTimeImmutable
     {
         return $this->expiredAt;
+    }
+
+    public function mayBeExpired(): bool
+    {
+        return true;
     }
 }

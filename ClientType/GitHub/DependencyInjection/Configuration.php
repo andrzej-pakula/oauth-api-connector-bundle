@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection;
 
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
-use Andreo\OAuthClientBundle\ClientType\GitHub\Http\OAuthHTTPClient;
+use Andreo\OAuthClientBundle\ClientType\GitHub\Http\GithubHttpClient;
 use Andreo\OAuthClientBundle\ClientType\GitHub\Versions;
 use Andreo\OAuthClientBundle\DependencyInjection\SupportedType;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -25,12 +25,12 @@ final class Configuration implements ConfigurationInterface
                     ->arrayPrototype()
                         ->children()
                             ->append($this->getApiNode())
-                            ->scalarNode('http_client_id')->defaultValue(OAuthHTTPClient::class)->cannotBeEmpty()->end()
+                            ->scalarNode('http_client_id')->defaultValue(GithubHttpClient::class)->cannotBeEmpty()->end()
                             ->arrayNode('credentials')
                                 ->children()
                                     ->scalarNode('id')->cannotBeEmpty()->end()
                                     ->scalarNode('secret')->cannotBeEmpty()->end()
-                                    ->scalarNode('login')->defaultNull()->end()
+                                    ->scalarNode('login')->defaultValue('')->end()
                                     ->booleanNode('allow_signup')->defaultTrue()->end()
                                     ->arrayNode('scope')
                                         ->beforeNormalization()

@@ -1,0 +1,5 @@
+services:
+  andreo.oauth_client.middleware_aggregate.github:
+    class: Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate
+    arguments:
+      - '@Andreo\OAuthClientBundle\Middleware\MiddlewareAggregate'

@@ -27,7 +27,7 @@ final class SetZoneResponseMiddleware implements MiddlewareInterface
         }
 
         if (!$httpContext->isZoneSet()) {
-            throw new MissingZoneException();
+            throw new MissingZoneException('Missing zone parameter. Check your template link definition.');
         }
 
         $zone = $clientContext->getZone($httpContext->getZone());

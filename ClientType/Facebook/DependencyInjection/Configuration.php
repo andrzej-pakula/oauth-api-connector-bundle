@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
 
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
-use Andreo\OAuthClientBundle\ClientType\Facebook\Http\OAuthHTTPClient;
+use Andreo\OAuthClientBundle\ClientType\Facebook\Http\FacebookHttpClient;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Versions;
 use Andreo\OAuthClientBundle\DependencyInjection\SupportedType;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -25,7 +25,7 @@ final class Configuration implements ConfigurationInterface
                     ->arrayPrototype()
                         ->children()
                             ->append($this->getApiNode())
-                            ->scalarNode('http_client_id')->defaultValue(OAuthHTTPClient::class)->cannotBeEmpty()->end()
+                            ->scalarNode('http_client_id')->defaultValue(FacebookHttpClient::class)->cannotBeEmpty()->end()
                             ->arrayNode('credentials')
                                 ->children()
                                     ->scalarNode('id')->cannotBeEmpty()->end()

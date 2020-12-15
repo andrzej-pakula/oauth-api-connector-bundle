@@ -22,6 +22,7 @@ final class ClientId implements HttpParameterInterface
 
     /**
      * @param array<string, string|int> $httpParams
+     *
      * @return array<string, string|int>
      */
     public function set(array $httpParams = []): array

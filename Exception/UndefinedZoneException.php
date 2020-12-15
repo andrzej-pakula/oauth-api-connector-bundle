@@ -10,7 +10,7 @@ use Throwable;
 
 final class UndefinedZoneException extends LogicException implements OAuthClientException
 {
-    public function __construct(ZoneId $zoneId, $code = 0, Throwable $previous = null)
+    public function __construct(ZoneId $zoneId, int $code = 0, Throwable $previous = null)
     {
         parent::__construct("Zone=$zoneId is not defined", $code, $previous);
     }

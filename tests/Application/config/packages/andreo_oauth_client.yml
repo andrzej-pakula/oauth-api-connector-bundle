@@ -8,8 +8,17 @@ andreo_o_auth_client:
             secret: 3b36c168393dc5e236a626900238165c
             scope: email,user_friends
           access_token:
-            long_live: false
-            storage: cookie
+            storage: session
           zones:
             main:
               successful_response_uri: 'app.auth_test_successful'
+    github:
+      clients:
+        bar:
+          api: v4
+          credentials:
+            id: 637632f862428970a539
+            secret: 9d4b0b0350fecdaf09c5622ebb7b8c1235778181
+            scope: repo
+          access_token:
+            storage: session

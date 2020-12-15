@@ -1,1 +1,6 @@
-<a href="{{ path('andreo.oauth.authorization', { 'client': client, 'zone': zone_id }) }}">{{ text }}</a>
+{% set params = {'client': client} %}
+{% if zone_id is defined %}
+    {% set params = params|merge({'zone': zone_id}) %}
+{% endif %}
+
+<a href="{{ path('andreo.oauth.authorization', params) }}">{{ text }}</a>

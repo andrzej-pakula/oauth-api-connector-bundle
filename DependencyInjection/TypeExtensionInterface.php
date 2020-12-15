@@ -9,12 +9,18 @@ use Symfony\Component\DependencyInjection\Definition;
 
 interface TypeExtensionInterface
 {
+    /**
+     * @param array<string, mixed> $config
+     */
     public function getAccessTokenQueryDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition;
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function getAuthorizationUriDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition;
 
     /**
-     * @return iterable<Definition>
+     * @param array<string, mixed> $config
      */
-    public function getMiddlewareDefs(ContainerBuilder $container, array $config, array &$baseMiddlewares): iterable;
+    public function getMiddlewareDefs(ContainerBuilder $container, array $config, array $baseMiddlewares): array;
 }

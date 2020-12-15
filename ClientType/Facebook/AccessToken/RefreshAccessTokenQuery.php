@@ -9,9 +9,9 @@ use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\ResponseTransformerInterface;
 use Andreo\GuzzleBundle\DataTransfer\Type\DataType;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
-use Andreo\OAuthClientBundle\Client\ClientContext;
+use Andreo\OAuthClientBundle\Client\AccessToken\Query\RefreshAccessTokenInterface;
 
-final class ExchangeAccessTokenQuery implements DataTransferInterface
+final class RefreshAccessTokenQuery implements RefreshAccessTokenInterface, DataTransferInterface
 {
     private string $clientId;
 
@@ -27,15 +27,6 @@ final class ExchangeAccessTokenQuery implements DataTransferInterface
         $this->clientSecret = $clientSecret;
         $this->fbExchangeToken = $fbExchangeToken;
         $this->grantType = $grantType;
-    }
-
-    public static function from(ClientContext $clientContext, AccessToken $accessToken): self
-    {
-        return new self(
-            $clientContext->getId()->getId(),
-            $clientContext->getSecret()->getSecret(),
-            $accessToken->getAccessToken()
-        );
     }
 
     public function getClientId(): string

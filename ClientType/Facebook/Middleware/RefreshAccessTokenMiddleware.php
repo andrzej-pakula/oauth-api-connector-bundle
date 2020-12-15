@@ -7,17 +7,17 @@ namespace Andreo\OAuthClientBundle\ClientType\Facebook\Middleware;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
 use Andreo\OAuthClientBundle\Client\ClientContext;
 use Andreo\OAuthClientBundle\Client\HttpContext;
-use Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken\ExchangeAccessTokenQuery;
-use Andreo\OAuthClientBundle\Http\OAuthClientInterface;
+use Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken\RefreshAccessTokenQuery;
+use Andreo\OAuthClientBundle\Http\OAuthHttpClientInterface;
 use Andreo\OAuthClientBundle\Middleware\MiddlewareInterface;
 use Andreo\OAuthClientBundle\Middleware\MiddlewareStackInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ExchangeAccessTokenMiddleware implements MiddlewareInterface
+final class RefreshAccessTokenMiddleware implements MiddlewareInterface
 {
-    private OAuthClientInterface $httpClient;
+    private OAuthHttpClientInterface $httpClient;
 
-    public function __construct(OAuthClientInterface $httpClient)
+    public function __construct(OAuthHttpClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
     }
@@ -31,9 +31,13 @@ final class ExchangeAccessTokenMiddleware implements MiddlewareInterface
         /** @var AccessToken $accessToken */
         $accessToken = $httpContext->getAccessToken($clientContext->getTokenStorageKey());
 
-        $query = ExchangeAccessTokenQuery::from($clientContext, $accessToken);
+        $query = new RefreshAccessTokenQuery(
+            $clientContext->getId()->getId(),
+            $clientContext->getSecret()->getSecret(),
+            $accessToken->getAccessToken()
+        );
 
-        $accessToken = $this->httpClient->getAccessToken($query);
+        $accessToken = $this->httpClient->refreshAccessToken($query);
 
         $httpContext->saveAccessToken($clientContext->getTokenStorageKey(), $accessToken);
 

@@ -7,16 +7,16 @@ namespace Andreo\OAuthClientBundle\Middleware;
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\ClientContext;
 use Andreo\OAuthClientBundle\Client\HttpContext;
-use Andreo\OAuthClientBundle\Http\OAuthClientInterface;
+use Andreo\OAuthClientBundle\Http\OAuthHttpClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class GetAccessTokenMiddleware implements MiddlewareInterface
 {
-    private OAuthClientInterface $httpClient;
+    private OAuthHttpClientInterface $httpClient;
 
     private GetAccessTokenInterface $accessTokenQuery;
 
-    public function __construct(OAuthClientInterface $httpClient, GetAccessTokenInterface $accessTokenQuery)
+    public function __construct(OAuthHttpClientInterface $httpClient, GetAccessTokenInterface $accessTokenQuery)
     {
         $this->httpClient = $httpClient;
         $this->accessTokenQuery = $accessTokenQuery;

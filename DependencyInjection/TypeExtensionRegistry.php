@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection\Extension as FacebookExtension;
-use Andreo\OAuthClientBundle\ClientType\Github\DependencyInjection\Extension as GithubExtension;
+use Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection\Extension as GitHubExtension;
 
 final class TypeExtensionRegistry
 {
     private const REGISTRY = [
         SupportedType::FACEBOOK => FacebookExtension::class,
-        SupportedType::GITHUB => GithubExtension::class,
+        SupportedType::GITHUB => GitHubExtension::class,
     ];
 
     public static function isSupported(string $type): bool

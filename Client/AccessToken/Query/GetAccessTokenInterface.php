@@ -14,7 +14,7 @@ interface GetAccessTokenInterface
 
     public function getClientSecret(): string;
 
-    public function getCode(): string;
+    public function getCode(): ?string;
 
     public function withRedirectUri(RedirectUri $redirectUri): self;
 

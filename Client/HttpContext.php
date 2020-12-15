@@ -43,9 +43,10 @@ final class HttpContext
 
     public function getCode(): string
     {
-        if (!$this->isCallback() || empty($param = $this->request->query->get(self::CODE_PARAM))) {
+        if (!$this->isCallback()) {
             throw new InvalidCallbackResponseException();
         }
+        $param = $this->request->query->get(self::CODE_PARAM);
         assert(is_string($param));
 
         return $param;
@@ -53,9 +54,11 @@ final class HttpContext
 
     public function getState(): State
     {
-        if (!$this->isCallback() || empty($param = $this->request->query->get(State::KEY))) {
+        if (!$this->isCallback()) {
             throw new InvalidCallbackResponseException();
         }
+
+        $param = $this->request->query->get(State::KEY);
         assert(is_string($param));
 
         return new State($param);
@@ -63,22 +66,23 @@ final class HttpContext
 
     public function isZoneSet(): bool
     {
-        return $this->request->attributes->has(ZoneId::KEY);
+        return !empty($this->request->attributes->get(ZoneId::KEY));
     }
 
     public function getZone(): ZoneId
     {
-        if (!$this->isZoneSet() || empty($param = $this->request->attributes->get(ZoneId::KEY))) {
+        if (!$this->isZoneSet()) {
             throw new MissingZoneException();
         }
-        assert(is_string($param));
+
+        $param = $this->request->attributes->get(ZoneId::KEY);
 
         return new ZoneId($param);
     }
 
     public function isCallback(): bool
     {
-        return $this->request->query->has(self::CODE_PARAM) && $this->request->query->has(State::KEY);
+        return !empty($this->request->query->get(self::CODE_PARAM)) && !empty($this->request->query->has(State::KEY));
     }
 
     public function withResponse(Response $response): self

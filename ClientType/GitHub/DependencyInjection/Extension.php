@@ -12,30 +12,38 @@ use Symfony\Component\DependencyInjection\Definition;
 
 final class Extension implements TypeExtensionInterface
 {
+    /**
+     * @param array<string, mixed> $config
+     */
     public function getAuthorizationUriDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition
     {
         $credentials = $config['credentials'];
 
         $allowSignupDef = (new Definition(AllowSignup::class, [$credentials['allow_signup']]))
             ->setPublic(false);
+
         $loginDef = (new Definition(Login::class, [$credentials['login']]))
             ->setPublic(false);
 
-        $baseDef->setMethodCalls([
-            ['addHttpParameter', [$allowSignupDef], true],
-            ['addHttpParameter', [$loginDef], true],
-        ])
-            ->setPublic(false);
+        $baseDef
+            ->addMethodCall('addHttpParameter', [$allowSignupDef], true)
+            ->addMethodCall('addHttpParameter', [$loginDef], true, );
 
         return $baseDef;
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function getAccessTokenQueryDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition
     {
         return $baseDef;
     }
 
-    public function getMiddlewareDefs(ContainerBuilder $container, array $config, array &$baseMiddlewares): iterable
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function getMiddlewareDefs(ContainerBuilder $container, array $config, array $baseMiddlewares): array
     {
         return $baseMiddlewares;
     }

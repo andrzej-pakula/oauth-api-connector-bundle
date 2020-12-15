@@ -7,7 +7,12 @@
     </head>
     <body>
         {% block body %}
-            {% include '@AndreoOAuthClient/login_btn.html.twig' with { 'client': 'foo', 'zone_id': 'main', 'text': 'Zaloguj z facebook'  } %}
+            <h3>
+                {% include '@AndreoOAuthClient/login_btn.html.twig' with { 'client': 'foo', 'zone_id': 'main', 'text': 'Zaloguj z facebook'  } %}
+            </h3>
+            <h3>
+                {% include '@AndreoOAuthClient/login_btn.html.twig' with { 'client': 'bar', 'text': 'Zaloguj z github'  } %}
+            </h3>
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

@@ -1,5 +1,6 @@
 imports:
   - { resource: ../../ClientType/Facebook/Resources/config/services.yml }
+  - { resource: ../../ClientType/GitHub/Resources/config/services.yml }
 
 services:
 

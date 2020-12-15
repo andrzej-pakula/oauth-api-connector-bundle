@@ -9,7 +9,7 @@ use Throwable;
 
 final class UnhandledResponseException extends LogicException implements OAuthClientException
 {
-    public function __construct(?string $message = null, $code = 0, Throwable $previous = null)
+    public function __construct(?string $message = null, int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message ?? 'Unhandled response.', $code, $previous);
     }

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\Storage;
 
 use Andreo\OAuthClientBundle\Client\HttpContext;
-use Andreo\OAuthClientBundle\Exception\ExpiredAccessTokenException;
+use Andreo\OAuthClientBundle\Exception\ObjectExpiredException;
 use Andreo\OAuthClientBundle\Exception\StorableNotExistException;
 use Andreo\OAuthClientBundle\Storage\Encoder\EncoderInterface;
 use Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface;
 use DateTimeImmutable;
+use LogicException;
 use Symfony\Component\HttpFoundation\Cookie;
 
 final class CookieStorage implements StorageInterface
@@ -28,8 +29,11 @@ final class CookieStorage implements StorageInterface
     {
         $cookie = Cookie::create($key)
             ->withSecure(true)
-            ->withValue($this->encoder::encode($this->serializer->serialize($storable)))
-            ->withExpires($storable->getExpiredAt());
+            ->withValue($this->encoder::encode($this->serializer->serialize($storable)));
+
+        if ($storable instanceof ThisIsExpiringInterface) {
+            $cookie->withExpires($storable->getExpiredAt());
+        }
 
         $response = $httpContext->getResponse();
 
@@ -46,10 +50,16 @@ final class CookieStorage implements StorageInterface
         /** @var string $string */
         $string = $request->cookies->get($key);
         $storable = $this->serializer->deserialize($this->encoder::decode($string));
+        if (!$storable->mayBeExpired()) {
+            return $storable;
+        }
+        if (!$storable instanceof ThisIsExpiringInterface) {
+            throw new LogicException('Expiring object must implements '.ThisIsExpiringInterface::class);
+        }
         if ($storable->getExpiredAt() <= new DateTimeImmutable()) {
             $this->delete($httpContext, $key);
 
-            throw new ExpiredAccessTokenException();
+            throw new ObjectExpiredException($storable);
         }
 
         return $storable;
