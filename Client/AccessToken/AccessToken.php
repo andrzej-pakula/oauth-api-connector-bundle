@@ -26,9 +26,4 @@ final class AccessToken implements AccessTokenInterface, StorableInterface
     {
         return $this->tokenType;
     }
-
-    public function mayBeExpired(): bool
-    {
-        return false;
-    }
 }

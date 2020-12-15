@@ -46,9 +46,4 @@ final class State implements HttpParameterInterface, StorableInterface, ThisIsEx
     {
         return $this->expiredAt;
     }
-
-    public function mayBeExpired(): bool
-    {
-        return true;
-    }
 }

@@ -6,5 +6,4 @@ namespace Andreo\OAuthClientBundle\Storage;
 
 interface StorableInterface
 {
-    public function mayBeExpired(): bool;
 }

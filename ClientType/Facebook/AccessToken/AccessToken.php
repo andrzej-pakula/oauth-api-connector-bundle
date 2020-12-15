@@ -39,9 +39,4 @@ final class AccessToken implements AccessTokenInterface, ThisIsExpiringInterface
     {
         return $this->expiredAt;
     }
-
-    public function mayBeExpired(): bool
-    {
-        return true;
-    }
 }

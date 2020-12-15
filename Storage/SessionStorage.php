@@ -10,7 +10,6 @@ use Andreo\OAuthClientBundle\Exception\StorableNotExistException;
 use Andreo\OAuthClientBundle\Storage\Encoder\EncoderInterface;
 use Andreo\OAuthClientBundle\Storage\Serializer\SerializerInterface;
 use DateTimeImmutable;
-use LogicException;
 
 final class SessionStorage implements StorageInterface
 {
@@ -42,11 +41,8 @@ final class SessionStorage implements StorageInterface
         $string = $request->getSession()->get($key);
 
         $storable = $this->serializer->deserialize($this->encoder::decode($string));
-        if (!$storable->mayBeExpired()) {
-            return $storable;
-        }
         if (!$storable instanceof ThisIsExpiringInterface) {
-            throw new LogicException('Expiring object must implements '.ThisIsExpiringInterface::class);
+            return $storable;
         }
         if ($storable->getExpiredAt() <= new DateTimeImmutable()) {
             $this->delete($httpContext, $key);
