@@ -35,9 +35,7 @@ final class Configuration implements ConfigurationInterface
                                     ->arrayNode('scope')
                                         ->beforeNormalization()
                                             ->ifString()
-                                            ->then(static function (string $scope) {
-                                                return Scope::fromString($scope)->getParts();
-                                            })
+                                            ->then(static fn (string $scope) => Scope::fromString($scope)->getParts())
                                         ->end()
                                         ->scalarPrototype()->end()
                                     ->end()
@@ -71,6 +69,9 @@ final class Configuration implements ConfigurationInterface
                 'version' => $version,
                 'api_uri' => 'https://api.github.com',
                 'auth_uri' => 'https://github.com/login/oauth/authorize',
+                'headers' => [
+                    'Accept' => "application/vnd.github.$version.full+json",
+                ],
             ];
         };
 
@@ -87,6 +88,7 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('version')->cannotBeEmpty()->defaultValue($apiConfigLatest['version'])->end()
                 ->scalarNode('api_uri')->cannotBeEmpty()->defaultValue($apiConfigLatest['api_uri'])->end()
                 ->scalarNode('auth_uri')->cannotBeEmpty()->defaultValue($apiConfigLatest['auth_uri'])->end()
+                ->arrayNode('headers')->defaultValue($apiConfigLatest['headers'])->scalarPrototype()->end()
             ->end()
         ->end();
 

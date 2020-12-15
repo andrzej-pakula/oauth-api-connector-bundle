@@ -15,6 +15,9 @@ return PhpCsFixer\Config::create()
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
         'declare_strict_types' => true,
         'yoda_style' => true,
+        'date_time_immutable' => true,
+        'no_blank_lines_after_class_opening' => true,
+        'use_arrow_functions' => true,
     ])
     ->setFinder($finder)
 ;

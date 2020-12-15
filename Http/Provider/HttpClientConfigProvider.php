@@ -25,6 +25,7 @@ final class HttpClientConfigProvider implements ConfigProviderInterface
     {
         return [
             'base_uri' => $this->config['api_uri'],
+            'headers' => $this->config['headers'] ?? [],
         ];
     }
 

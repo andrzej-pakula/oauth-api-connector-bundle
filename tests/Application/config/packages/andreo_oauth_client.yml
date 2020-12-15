@@ -15,7 +15,7 @@ andreo_o_auth_client:
     github:
       clients:
         bar:
-          api: v4
+          api: v3
           credentials:
             id: 637632f862428970a539
             secret: 9d4b0b0350fecdaf09c5622ebb7b8c1235778181

@@ -215,7 +215,6 @@ final class AndreoOAuthClientExtension extends Extension implements PrependExten
                 ->addTag('andreo.oauth_client.client', [
                     'name' => $clientName,
                     'type' => $type,
-                    'api' => $api['version'],
                 ]);
 
                 $container->setDefinition("andreo.oauth_client.client.$type.$clientName", $clientDef);

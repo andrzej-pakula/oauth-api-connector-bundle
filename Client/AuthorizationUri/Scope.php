@@ -27,9 +27,7 @@ final class Scope implements HttpParameterInterface
 
     public static function fromString(string $parts): self
     {
-        $parts = array_map(static function ($part) {
-            return trim($part);
-        }, explode(',', $parts));
+        $parts = array_map(static fn ($part) => trim($part), explode(',', $parts));
 
         return new self($parts);
     }

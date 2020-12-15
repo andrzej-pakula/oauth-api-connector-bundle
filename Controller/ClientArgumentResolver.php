@@ -22,8 +22,7 @@ final class ClientArgumentResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return ClientInterface::class === $argument->getType() &&
-            $request->attributes->has('client');
+        return ClientInterface::class === $argument->getType() && !empty($request->attributes->get('client'));
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator

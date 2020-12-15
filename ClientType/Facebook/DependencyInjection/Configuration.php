@@ -33,9 +33,7 @@ final class Configuration implements ConfigurationInterface
                                     ->arrayNode('scope')
                                         ->beforeNormalization()
                                             ->ifString()
-                                            ->then(static function (string $scope) {
-                                                return Scope::fromString($scope)->getParts();
-                                            })
+                                            ->then(static fn (string $scope) => Scope::fromString($scope)->getParts())
                                         ->end()
                                         ->scalarPrototype()->end()
                                     ->end()
