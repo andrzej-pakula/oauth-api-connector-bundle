@@ -18,6 +18,8 @@ return PhpCsFixer\Config::create()
         'date_time_immutable' => true,
         'no_blank_lines_after_class_opening' => true,
         'use_arrow_functions' => true,
+        'return_type_declaration' => ['space_before' => 'none'],
+        'trailing_comma_in_multiline_array' => true,
     ])
     ->setFinder($finder)
 ;
