@@ -23,4 +23,3 @@ services:
     Tests\Andreo\OAuthClientBundle\App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
