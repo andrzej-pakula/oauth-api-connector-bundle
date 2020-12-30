@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Client\AccessToken\Query;
 
+use Andreo\OAuthClientBundle\Client\ClientId;
+use Andreo\OAuthClientBundle\Client\ClientSecret;
 use Andreo\OAuthClientBundle\Client\RedirectUri\RedirectUri;
 
 trait GetAccessTokenTrait
@@ -16,10 +18,12 @@ trait GetAccessTokenTrait
 
     private string $redirectUri;
 
-    public function __construct(string $clientId, string $clientSecret)
+    public function __construct(ClientId $clientId, ClientSecret $clientSecret, string $code, RedirectUri $redirectUri)
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
+        $this->clientId = $clientId->getId();
+        $this->clientSecret = $clientSecret->getSecret();
+        $this->code = $code;
+        $this->redirectUri = $redirectUri->getUri();
     }
 
     public function getClientId(): string
@@ -40,23 +44,5 @@ trait GetAccessTokenTrait
     public function getRedirectUri(): string
     {
         return $this->redirectUri;
-    }
-
-    public function withCode(string $code): GetAccessTokenInterface
-    {
-        /** @var self&GetAccessTokenInterface $new */
-        $new = clone $this;
-        $new->code = $code;
-
-        return $new;
-    }
-
-    public function withRedirectUri(RedirectUri $redirectUri): GetAccessTokenInterface
-    {
-        /** @var self&GetAccessTokenInterface $new */
-        $new = clone $this;
-        $new->redirectUri = $redirectUri->getUri();
-
-        return $new;
     }
 }

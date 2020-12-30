@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\Middleware;
 
-use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
+use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenProviderInterface;
 use Andreo\OAuthClientBundle\Client\ClientContext;
 use Andreo\OAuthClientBundle\Client\HttpContext;
-use Andreo\OAuthClientBundle\Http\OAuthHttpClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class GetAccessTokenMiddleware implements MiddlewareInterface
 {
-    private OAuthHttpClientInterface $httpClient;
+    private AccessTokenProviderInterface $accessTokenProvider;
 
-    private GetAccessTokenInterface $accessTokenQuery;
-
-    public function __construct(OAuthHttpClientInterface $httpClient, GetAccessTokenInterface $accessTokenQuery)
+    public function __construct(AccessTokenProviderInterface $accessTokenProvider)
     {
-        $this->httpClient = $httpClient;
-        $this->accessTokenQuery = $accessTokenQuery;
+        $this->accessTokenProvider = $accessTokenProvider;
     }
 
     public function __invoke(HttpContext $httpContext, ClientContext $clientContext, MiddlewareStackInterface $stack): Response
@@ -28,11 +24,7 @@ final class GetAccessTokenMiddleware implements MiddlewareInterface
             return $stack->next()($httpContext, $clientContext, $stack);
         }
 
-        $query = $this->accessTokenQuery
-            ->withRedirectUri($clientContext->getRedirectUri())
-            ->withCode($httpContext->getCode());
-
-        $accessToken = $this->httpClient->getAccessToken($query);
+        $accessToken = $this->accessTokenProvider->getAccessToken($httpContext, $clientContext);
 
         $httpContext->saveAccessToken($clientContext->getTokenStorageKey(), $accessToken);
 

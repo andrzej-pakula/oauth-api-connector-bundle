@@ -16,10 +16,15 @@ use Symfony\Component\Routing\RouterInterface;
 final class ClientContext
 {
     private ClientId $id;
+
     private ClientSecret $secret;
+
     private ClientName $name;
+
     private RedirectUri $redirectUri;
+
     private AuthorizationUri $authorizationUri;
+
     /**
      * @var array<string, Zone>
      */

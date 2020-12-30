@@ -7,11 +7,11 @@ namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
 use Andreo\OAuthClientBundle\Storage\StorableInterface;
-use Andreo\OAuthClientBundle\Storage\ThisIsExpiringInterface;
+use Andreo\OAuthClientBundle\Storage\ExpiringInterface;
 use DateInterval;
 use DateTimeImmutable;
 
-final class State implements HttpParameterInterface, StorableInterface, ThisIsExpiringInterface
+final class State implements HttpParameterInterface, StorableInterface, ExpiringInterface
 {
     public const KEY = 'state';
 

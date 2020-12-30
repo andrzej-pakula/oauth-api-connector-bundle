@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 final class HttpContext
 {
     private const CODE_PARAM = 'code';
+
     private Request $request;
+
     private Response $response;
 
     public function __construct(Request $request, Response $response)

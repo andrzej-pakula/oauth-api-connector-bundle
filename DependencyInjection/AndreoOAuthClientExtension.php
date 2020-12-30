@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Andreo\OAuthClientBundle\DependencyInjection;
 
 use Andreo\GuzzleBundle\Configurator\ConfigProviderInterface;
-use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessToken;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\AuthorizationUri;
 use Andreo\OAuthClientBundle\Client\AuthorizationUri\Scope;
 use Andreo\OAuthClientBundle\Client\Client;
@@ -138,16 +137,9 @@ final class AndreoOAuthClientExtension extends Extension implements PrependExten
 
                 $clientMiddleware = [];
 
-                $accessTokenQueryDef = (new Definition(GetAccessToken::class, [
-                    $credentials['id'],
-                    $credentials['secret'],
-                ]))
-                ->setPublic(false);
-                $accessTokenQueryDef = $typeExtension->getAccessTokenQueryDef($container, $configForTypeExtension, $accessTokenQueryDef);
-
+                $accessTokenProviderDef = $typeExtension->getAccessTokenProviderDef($container, $configForTypeExtension);
                 $getAccessTokenMiddlewarePerClientDef = (new Definition(GetAccessTokenMiddleware::class, [
-                    new Reference("andreo.oauth.http_client.$clientName"),
-                    $accessTokenQueryDef,
+                    $accessTokenProviderDef,
                 ]))
                 ->setPublic(false);
 

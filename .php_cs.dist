@@ -20,6 +20,7 @@ return PhpCsFixer\Config::create()
         'use_arrow_functions' => true,
         'return_type_declaration' => ['space_before' => 'none'],
         'trailing_comma_in_multiline_array' => true,
+        'class_attributes_separation' => ['elements' => ['property' => 'one', 'method' => 'one']],
     ])
     ->setFinder($finder)
 ;

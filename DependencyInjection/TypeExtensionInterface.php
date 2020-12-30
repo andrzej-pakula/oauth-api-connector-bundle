@@ -12,7 +12,7 @@ interface TypeExtensionInterface
     /**
      * @param array<string, mixed> $config
      */
-    public function getAccessTokenQueryDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition;
+    public function getAccessTokenProviderDef(ContainerBuilder $container, array $config): Definition;
 
     /**
      * @param array<string, mixed> $config

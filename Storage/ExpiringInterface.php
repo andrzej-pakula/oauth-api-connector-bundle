@@ -6,7 +6,7 @@ namespace Andreo\OAuthClientBundle\Storage;
 
 use DateTimeImmutable;
 
-interface ThisIsExpiringInterface
+interface ExpiringInterface
 {
     public function getExpiredAt(): DateTimeImmutable;
 }

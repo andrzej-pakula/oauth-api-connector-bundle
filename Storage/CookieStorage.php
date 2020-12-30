@@ -30,7 +30,7 @@ final class CookieStorage implements StorageInterface
             ->withSecure(true)
             ->withValue($this->encoder::encode($this->serializer->serialize($storable)));
 
-        if ($storable instanceof ThisIsExpiringInterface) {
+        if ($storable instanceof ExpiringInterface) {
             $cookie->withExpires($storable->getExpiredAt());
         }
 
@@ -49,7 +49,7 @@ final class CookieStorage implements StorageInterface
         /** @var string $string */
         $string = $request->cookies->get($key);
         $storable = $this->serializer->deserialize($this->encoder::decode($string));
-        if (!$storable instanceof ThisIsExpiringInterface) {
+        if (!$storable instanceof ExpiringInterface) {
             return $storable;
         }
         if ($storable->getExpiredAt() <= new DateTimeImmutable()) {

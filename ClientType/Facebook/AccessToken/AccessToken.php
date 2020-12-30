@@ -6,15 +6,18 @@ namespace Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken;
 
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessTokenInterface;
 use Andreo\OAuthClientBundle\Storage\StorableInterface;
-use Andreo\OAuthClientBundle\Storage\ThisIsExpiringInterface;
+use Andreo\OAuthClientBundle\Storage\ExpiringInterface;
+use Andreo\OAuthClientBundle\User\UserInterface;
 use DateInterval;
 use DateTimeImmutable;
 
-final class AccessToken implements AccessTokenInterface, ThisIsExpiringInterface, StorableInterface
+final class AccessToken implements AccessTokenInterface, ExpiringInterface, StorableInterface
 {
     private string $accessToken;
 
     private string $tokenType;
+
+    private UserInterface $user;
 
     private ?DateTimeImmutable $expiredAt;
 
@@ -23,6 +26,19 @@ final class AccessToken implements AccessTokenInterface, ThisIsExpiringInterface
         $this->accessToken = $accessToken;
         $this->tokenType = $tokenType;
         $this->expiredAt = (new DateTimeImmutable())->add(new DateInterval("PT{$expiresIn}S"));
+    }
+
+    public function withUser(UserInterface $user): AccessTokenInterface
+    {
+        $new = clone $this;
+        $new->user = $user;
+
+        return $new;
+    }
+
+    public function getUser(): UserInterface
+    {
+        return $this->user;
     }
 
     public function getAccessToken(): string

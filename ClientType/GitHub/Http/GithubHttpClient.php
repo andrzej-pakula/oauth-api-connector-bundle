@@ -8,7 +8,9 @@ use Andreo\GuzzleBundle\Client\ClientDecoratorTrait;
 use Andreo\OAuthClientBundle\Client\AccessToken\AccessToken;
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\GetAccessTokenInterface;
 use Andreo\OAuthClientBundle\Client\AccessToken\Query\RefreshAccessTokenInterface;
+use Andreo\OAuthClientBundle\ClientType\GitHub\User\User;
 use Andreo\OAuthClientBundle\Http\OAuthHttpClientInterface;
+use Andreo\OAuthClientBundle\User\Query\GetUserInterface;
 
 final class GithubHttpClient implements OAuthHttpClientInterface
 {
@@ -23,8 +25,18 @@ final class GithubHttpClient implements OAuthHttpClientInterface
 
     public function refreshAccessToken(RefreshAccessTokenInterface $refreshAccessToken): AccessToken
     {
-        return $this->get('https://github.com/login/oauth/access_token', [
+        return $this->post('https://github.com/login/oauth/access_token', [
             'data' => $refreshAccessToken,
+        ])->getData();
+    }
+
+    public function getUser(GetUserInterface $getUser): User
+    {
+        return $this->get('user', [
+            'data' => $getUser,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $getUser->getAccessToken(),
+            ]
         ])->getData();
     }
 }

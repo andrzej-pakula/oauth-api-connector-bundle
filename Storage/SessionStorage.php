@@ -41,7 +41,7 @@ final class SessionStorage implements StorageInterface
         $string = $request->getSession()->get($key);
 
         $storable = $this->serializer->deserialize($this->encoder::decode($string));
-        if (!$storable instanceof ThisIsExpiringInterface) {
+        if (!$storable instanceof ExpiringInterface) {
             return $storable;
         }
         if ($storable->getExpiredAt() <= new DateTimeImmutable()) {

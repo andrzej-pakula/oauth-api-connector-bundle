@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\ClientType\Facebook\DependencyInjection;
 
-use Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken\GetAccessToken;
+use Andreo\OAuthClientBundle\ClientType\Facebook\AccessToken\AccessTokenProvider;
 use Andreo\OAuthClientBundle\ClientType\Facebook\Middleware\RefreshAccessTokenMiddleware;
 use Andreo\OAuthClientBundle\DependencyInjection\TypeExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,9 +18,11 @@ final class Extension implements TypeExtensionInterface
         return $baseDef;
     }
 
-    public function getAccessTokenQueryDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition
+    public function getAccessTokenProviderDef(ContainerBuilder $container, array $config): Definition
     {
-        return new Definition(GetAccessToken::class, $baseDef->getArguments());
+        return new Definition(AccessTokenProvider::class, [
+            new Reference("andreo.oauth.http_client.{$config['client_name']}")
+        ]);
     }
 
     public function getMiddlewareDefs(ContainerBuilder $container, array $config, array $baseMiddlewares): array

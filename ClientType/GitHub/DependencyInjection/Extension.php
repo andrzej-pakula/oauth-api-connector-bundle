@@ -4,14 +4,26 @@ declare(strict_types=1);
 
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\DependencyInjection;
 
+use Andreo\OAuthClientBundle\ClientType\GitHub\AccessToken\AccessTokenProvider;
 use Andreo\OAuthClientBundle\ClientType\GitHub\Client\AllowSignup;
 use Andreo\OAuthClientBundle\ClientType\GitHub\Client\Login;
 use Andreo\OAuthClientBundle\DependencyInjection\TypeExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 final class Extension implements TypeExtensionInterface
 {
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function getAccessTokenProviderDef(ContainerBuilder $container, array $config): Definition
+    {
+        return new Definition(AccessTokenProvider::class, [
+            new Reference("andreo.oauth.http_client.{$config['client_name']}")
+        ]);
+    }
+
     /**
      * @param array<string, mixed> $config
      */
@@ -29,14 +41,6 @@ final class Extension implements TypeExtensionInterface
             ->addMethodCall('addHttpParameter', [$allowSignupDef], true)
             ->addMethodCall('addHttpParameter', [$loginDef], true, );
 
-        return $baseDef;
-    }
-
-    /**
-     * @param array<string, mixed> $config
-     */
-    public function getAccessTokenQueryDef(ContainerBuilder $container, array $config, Definition $baseDef): Definition
-    {
         return $baseDef;
     }
 
