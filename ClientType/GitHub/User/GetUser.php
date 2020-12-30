@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\OAuthClientBundle\ClientType\GitHub\User;
-
 
 use Andreo\GuzzleBundle\DataTransfer\DataTransferInterface;
 use Andreo\GuzzleBundle\DataTransfer\RequestTransformerInterface;
@@ -18,7 +16,8 @@ final class GetUser implements GetUserInterface, DataTransferInterface
 
     public function __construct(string $accessToken)
     {
-        $this->accessToken = $accessToken;}
+        $this->accessToken = $accessToken;
+    }
 
     public function getAccessToken(): ?string
     {
@@ -28,6 +27,7 @@ final class GetUser implements GetUserInterface, DataTransferInterface
     public function transfer(RequestTransformerInterface $transformer): RequestTransformerInterface
     {
         $this->accessToken = null;
+
         return $transformer->withQuery($this);
     }
 

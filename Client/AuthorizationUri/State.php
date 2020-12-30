@@ -6,8 +6,8 @@ namespace Andreo\OAuthClientBundle\Client\AuthorizationUri;
 
 use Andreo\OAuthClientBundle\Client\HttpParameterInterface;
 use Andreo\OAuthClientBundle\Storage\Encoder\Encoder;
-use Andreo\OAuthClientBundle\Storage\StorableInterface;
 use Andreo\OAuthClientBundle\Storage\ExpiringInterface;
+use Andreo\OAuthClientBundle\Storage\StorableInterface;
 use DateInterval;
 use DateTimeImmutable;
 

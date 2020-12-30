@@ -35,8 +35,8 @@ final class GithubHttpClient implements OAuthHttpClientInterface
         return $this->get('user', [
             'data' => $getUser,
             'headers' => [
-                'Authorization' => 'Bearer ' . $getUser->getAccessToken(),
-            ]
+                'Authorization' => 'Bearer '.$getUser->getAccessToken(),
+            ],
         ])->getData();
     }
 }

@@ -21,7 +21,7 @@ final class Extension implements TypeExtensionInterface
     public function getAccessTokenProviderDef(ContainerBuilder $container, array $config): Definition
     {
         return new Definition(AccessTokenProvider::class, [
-            new Reference("andreo.oauth.http_client.{$config['client_name']}")
+            new Reference("andreo.oauth.http_client.{$config['client_name']}"),
         ]);
     }
 
